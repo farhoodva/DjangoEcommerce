@@ -47,6 +47,11 @@ class Item(models.Model):
     def __str__(self):
         return self.title
 
+    def get_item_detail_url(self):
+        return reverse('core:product_detail', kwargs={
+            'slug': self.slug
+        })
+
 
 class OrderItem(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
