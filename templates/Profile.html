@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+
+{% block head_title %}{{ userprofile.user }}'Profile{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+<div class="text-center">
+    <h2 class="">{% trans "Update Your Profile" %}</h2>
+   </div>
+        <br>
+    <form class="col-md-4 mx-auto" method="Post" action="">
+    {% csrf_token %}
+    {{ form.as_p }}
+{#        {% for field in form %}#}
+{#        <div class="my-md-4 ">#}
+{#        {{ field }}#}
+{##}
+{#            </div>#}
+{##}
+{#        {% endfor %}#}
+
+         <br>
+            <input class="btn-sm btn-dark btn-block rounded" type="submit" name="submit" value="Update">
+    </form>
+    </div>
+    <br><br>
+{% endblock %}

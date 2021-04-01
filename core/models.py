@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 import random, string
 
+from django.urls import reverse
+
 
 def slug_generator():
     return ''.join(random.choices(string.ascii_lowercase + string.digits + string.ascii_uppercase, k=20))
@@ -61,4 +63,5 @@ class ShoppingCart(models.Model):
 
     def __str__(self):
         return self.user.username
+
 

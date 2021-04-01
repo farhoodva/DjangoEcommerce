@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
 from .models import Item, Categories
 
@@ -10,7 +11,7 @@ class HomeView(generic.ListView):
     paginate_by = 8
 
     def get_context_data(self, *args, **kwargs):
-        categories= Categories.objects.all()
+        categories = Categories.objects.all()
         context = super(HomeView, self).get_context_data(**kwargs)
         context['categories'] = categories
         return context
@@ -18,4 +19,8 @@ class HomeView(generic.ListView):
 
 class ProductDetailView(generic.DetailView):
     model = Item
+    context_object_name = 'item'
     template_name = 'detail.html'
+
+
+

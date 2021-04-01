@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'users',
     'core',
     'allauth',
     'allauth.account',
@@ -137,3 +138,4 @@ AUTHENTICATION_BACKENDS = [
    ]
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+

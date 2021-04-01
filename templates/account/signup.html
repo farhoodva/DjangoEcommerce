@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Signup" %}{% endblock %}
+
+{% block content %}
+<div class="container">
+<div class="text-center">
+    <h2 class="">{% trans "Sign Up" %}</h2>
+    <br>
+    <h6>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>
+        {% endblocktrans %}</h6>
+</div>
+    <br>
+    <div class="col-md-4 mx-auto">
+        <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
+            {% csrf_token %}
+
+             <h6>Username</h6>
+            <div class="mb-3 mt-2 ">
+
+
+                <input class="form-control form-control-lg rounded" type="text" name="username" placeholder="Username" autocomplete="username" maxlength="100" required="" id="id_username">
+            </div>
+            <h6>Email</h6>
+            <div class="mb-3 mt-2 ">
+                <input class="form-control form-control-lg rounded" type="email" name="email" placeholder="E-mail address" autocomplete="email" id="id_email">
+            </div>
+
+            <h6 >Password</h6>
+            <div class="mb-3 mt-2">
+
+                <input class="form-control form-control-lg rounded" type="password" name="password1" placeholder="Password" autocomplete="current-password" maxlength="100" required="" id="id_password1">
+            </div>
+
+            <h6>Password Agian</h6>
+          <div class="mb-3 mt-2">
+                <input class="form-control form-control-lg rounded" type="password" name="password2" placeholder="Password (again)" required="" id="id_password2">
+
+            </div>
+            {% if form.non_field_errors %}
+
+            <div class="text-danger font-weight-bold">{{ form.non_field_errors }}</div>
+          {% endif %}
+          {% for field in form %}
+            {% if field.errors %}
+              <li class="navbar-nav">
+                <div class="text-danger font-weight-bold">{{ field.label }} :</div>
+                <div class="errorlist navbar-nav">
+                  {% for error in field.errors %}
+                  {{ error }}
+                  {% endfor %}
+                </div>
+              </li>
+                <br>
+            {% endif %}
+          {% endfor %}
+            {% if redirect_field_value %}
+                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+            {% endif %}
+            <button type="submit" class="btn btn-dark btn-block rounded">{% trans "Sign Up" %} &raquo;</button>
+        </form>
+    </div>
+</div>
+<br><br>
+{% endblock %}
