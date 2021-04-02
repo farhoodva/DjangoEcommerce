@@ -61,10 +61,10 @@
 
               </div>
             {% if not request.user in item.wishlist.iterator %}
-                <a id="wishlist" class="btn btn-link text-dark p-0 mb-4" href={% url 'core:add_remove_to_wishlist' item.slug %}><i class="fa fa-heart mr-2"></i>Add to wish list</a><br>
+                <a id="wishlist" class="nav-link text-dark p-0 mb-4" href={% url 'core:add_remove_to_wishlist' item.slug %}><i class="fa fa-heart mr-2"></i>Add to wish list</a><br>
 
             {% else %}
-                <a id="wishlist" class="btn btn-link text-dark p-0 mb-4" href={% url 'core:add_remove_to_wishlist' item.slug %}><i class="fa fa-heart text-danger mr-2"></i>Remove from wish list</a><br>
+                <a id="wishlist" class="nav-link text-dark p-0 mb-4" href={% url 'core:add_remove_to_wishlist' item.slug %}><i class="fa fa-heart text-danger mr-2"></i>Remove from wish list</a><br>
 
                 {% endif %}
               <ul class="list-unstyled small d-inline-block">
@@ -145,7 +145,8 @@
             </div>
             {% endfor %}
           </div>
-     </section>
+        </div>
+      </section>
     </div>
 
 
@@ -163,7 +164,7 @@
             $('#wishlist').html(`<i class="fa fa-heart text-danger mr-2"></i> Remove from wishlist`)
             }
             else if(data.added_to_wishlist===false)
-            $('#wishlist').html('<i class="fa fa-heart mr-2"></i> Add to wishlist')
+            $('#wishlist').html('<i class="fa fa-heart  mr-2"></i> Add to wishlist')
 
             }
 
