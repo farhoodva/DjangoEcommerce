@@ -32,13 +32,15 @@ class SubCategories(models.Model):
 class Item(models.Model):
     title = models.CharField(max_length=100)
     price = models.FloatField()
-    image = models.ImageField(upload_to='img/Items', null=True, blank=True)
+    image = models.ImageField(upload_to='img/Items')
     image_2 = models.ImageField(upload_to='img/Items', null=True, blank=True)
     image_3 = models.ImageField(upload_to='img/Items', null=True, blank=True)
     image_4 = models.ImageField(upload_to='img/Items', null=True, blank=True)
     discount_price = models.FloatField(blank=True, null=True)
     warehouse_quantity = models.PositiveIntegerField()
+    description = models.CharField(max_length=255, null=True)
     category = models.ForeignKey(SubCategories, on_delete=models.SET_DEFAULT, default=1)
+    wishlist = models.ManyToManyField(User, related_name='wishlist', blank=True)
     slug = models.SlugField(blank=True, null=True)
 
     def save(self, *args, **kwargs):

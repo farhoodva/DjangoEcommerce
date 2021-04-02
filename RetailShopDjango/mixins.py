@@ -16,5 +16,3 @@ class ProfileUpdateMixin(AccessMixin):
             return redirect('core:home')
         return super().dispatch(request, *args, **kwargs)
 
- # messages.warning(request, "You don't have permission")
- #            return redirect('blog:home')
