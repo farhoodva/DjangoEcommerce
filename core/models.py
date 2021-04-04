@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 import random, string
-
 from django.urls import reverse
 
 
@@ -57,12 +56,23 @@ class Item(models.Model):
             'slug': self.slug
         })
 
+    def get_add_to_cart_url(self):
+        return reverse('core:add_to_cart', kwargs={
+            'slug': self.slug
+        })
+
 
 class OrderItem(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1)
+    order_completed = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['-id']
 
     def __str__(self):
-        return self.item.title
+        return f"{self.quantity} of {self.item.title}"
 
 
 class ShoppingCart(models.Model):
@@ -73,5 +83,4 @@ class ShoppingCart(models.Model):
 
     def __str__(self):
         return self.user.username
-
 
