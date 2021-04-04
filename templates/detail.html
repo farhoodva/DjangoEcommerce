@@ -58,10 +58,9 @@
             <div class="col-sm-3 pl-sm-0">
                     <a class="btn btn-dark btn-sm btn-block h-100 d-flex align-items-center justify-content-center px-0" href="cart.html">Add to cart</a>
                 </div>
-
               </div>
             {% if not request.user in item.wishlist.iterator %}
-                <a id="wishlist" class="nav-link text-dark p-0 mb-4" href={% url 'core:add_remove_to_wishlist' item.slug %}><i class="fa fa-heart mr-2"></i>Add to wish list</a><br>
+                <a id="wishlist" class="nav-link text-dark p-0 mb-4" href={% url 'core:add_remove_to_wishlist' item.slug %}><i class="far fa-heart mr-2"></i>Add to wish list</a><br>
 
             {% else %}
                 <a id="wishlist" class="nav-link text-dark p-0 mb-4" href={% url 'core:add_remove_to_wishlist' item.slug %}><i class="fa fa-heart text-danger mr-2"></i>Remove from wish list</a><br>
@@ -133,7 +132,14 @@
                 <div class="d-block mb-3 position-relative"><a class="d-block" href={{ related_item.get_item_detail_url }}><img class="img-fluid w-100" src={{ related_item.image.url }} alt="..."></a>
                   <div class="product-overlay">
                     <ul class="mb-0 list-inline">
-                      <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#"><i class="far fa-heart"></i></a></li>
+                      <li  class="list-inline-item m-0 p-0"><a  class="wish btn-lg " id="id{{ related_item.pk }}" href={% url 'core:add_remove_to_wishlist' related_item.slug %}>
+                          {% if request.user in related_item.wishlist.iterator %}
+                            <i class="fa fa-heart text-danger"></i>
+                          {% else %}
+                             <i class="far fa-heart text-dark"></i>
+                          {% endif %}
+                      </a>
+                      </li>
                       <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" href="#">Add to cart</a></li>
                       <li class="list-inline-item mr-0"><a class="btn btn-sm btn-outline-dark" href="#productView" data-toggle="modal"><i class="fas fa-expand"></i></a></li>
                     </ul>
@@ -152,6 +158,8 @@
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script>
+    $(document).ready(function (){
+
     $('#wishlist').on('click', function (e) {
         e.preventDefault()
         const url = $(this).attr('href')
@@ -159,18 +167,37 @@
         $.ajax({
             url:url,
             success:function (data){
-                console.log(data)
+                {#console.log(data)#}
             if(data.added_to_wishlist===true){
             $('#wishlist').html(`<i class="fa fa-heart text-danger mr-2"></i> Remove from wishlist`)
+
             }
             else if(data.added_to_wishlist===false)
-            $('#wishlist').html('<i class="fa fa-heart  mr-2"></i> Add to wishlist')
+            $('#wishlist').html('<i class="far fa-heart  mr-2"></i> Add to wishlist')
 
             }
-
-
         })
     })
+    
+    $('.wish').on('click', function (e) {
+        e.preventDefault()
+        const url = $(this).attr('href')
+        const item_id = $(this).attr('id')
+        $.ajax({
+                url: url,
+                success: function (data) {
+                console.log(data)
+                if (data.added_to_wishlist === true) {
+                    $('#'+item_id).html(`<i class="fa fa-heart text-danger "></i>`)
+
+                } else if (data.added_to_wishlist === false)
+                    $('#'+item_id).html(`<i class="far fa-heart text-dark  "></i>`)
+            }
+        }
+    )
+})
+
+ })
 
     </script>
 {% endblock %}

@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% block head_title %}{{ request.user.username.title }}'s Wishlist {% endblock %}
+{% block content %}
+
+
+
+<div class="container">
+
+{% if items %}
+        <div>
+        <h5 class="mx-auto text-center">Items currently in your wishlist</h5>
+    </div>
+        <br><br>
+    <div class="row">
+{% for item in items %}
+
+     <div id="id{{ item.pk }}" class="prod col-xl-3 col-lg-4 col-sm-6">
+        <div class="product text-center">
+            <div class="position-relative mb-3">
+                <div class="badge text-white badge-">
+                </div>
+                <a class="d-block" href={% url 'core:product_detail' item.slug %}>
+                    <img class="img-fluid w-100" src={{ item.image.url }} alt="...">
+                </a>
+                <div class="product-overlay">
+                    <ul class="mb-0 list-inline">
+
+                  <li  class="list-inline-item m-0 p-0">
+                      <a   class="wish btn-lg "  href={% url 'core:add_remove_to_wishlist' item.slug %}>
+                            <i class="fa fa-heart text-danger"></i>
+                       </a>
+                  </li>
+                        <li class="list-inline-item m-0 p-0">
+                            <a class="btn btn-sm btn-dark" href="cart.html">Add to cart</a>
+                        </li>
+                        <li class="list-inline-item mr-0">
+                            <a class="btn btn-sm btn-outline-dark" href="#productView"
+                               data-toggle="modal">
+                                <i class="fas fa-expand"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <h6><a class="reset-anchor" href="detail.html">{{ item.title}}</a></h6>
+            <p class="small text-muted">${{ item.price }}</p>
+            <hr>
+        </div>
+    </div>
+
+
+{% endfor %}
+    </div>
+        {% else %}
+
+     <h5 class="mx-auto text-center">There are not items currently in your wishlist</h5>
+    <br><br>
+
+    {% endif %}
+
+    </div>
+        <br><br>
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+
+
+    $('.wish').on('click', function (e) {
+        e.preventDefault()
+        const url = $(this).attr('href')
+        const item_id = $('.prod').attr('id')
+        $.ajax({
+                url: url,
+                success: function () {
+                $('#'+item_id).hide()
+                location.reload()
+
+            }
+        }
+    )
+})
+
+
+    </script>
+{% endblock %}

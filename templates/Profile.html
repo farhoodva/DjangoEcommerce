@@ -11,7 +11,7 @@
     <h2 class="">{% trans "Update Your Profile" %}</h2>
    </div>
         <br>
-    <form class="col-md-4 mx-auto" method="Post" action="">
+    <form class="col-md-4 mx-auto" method="Post"  enctype="multipart/form-data" action="">
     {% csrf_token %}
     {{ form.as_p }}
 {#        {% for field in form %}#}

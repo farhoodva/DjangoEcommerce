@@ -12,7 +12,6 @@ class ItemAdmin(admin.ModelAdmin):
     search_fields = ['title']
 
 
-
 admin.site.register(Item, ItemAdmin)
 admin.site.register(OrderItem)
 admin.site.register(ShoppingCart)

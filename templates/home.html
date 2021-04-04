@@ -52,9 +52,18 @@
                         </a>
                         <div class="product-overlay">
                             <ul class="mb-0 list-inline">
-                                <li class="list-inline-item m-0 p-0">
-                                    <a class="btn btn-sm btn-outline-dark" href="#"><i class="far fa-heart"></i></a>
-                                </li>
+{#                                <li class="list-inline-item m-0 p-0">#}
+{#                                    <a class="btn btn-sm btn-outline-dark" href="#"><i class="far fa-heart"></i></a>#}
+{#                                </li>#}
+                          <li  class="list-inline-item m-0 p-0">
+                              <a  class="wish btn-lg " id="id{{ item.pk }}" href={% url 'core:add_remove_to_wishlist' item.slug %}>
+                                  {% if request.user in item.wishlist.iterator %}
+                                    <i class="fa fa-heart text-danger"></i>
+                                  {% else %}
+                                     <i class="far fa-heart text-dark"></i>
+                                  {% endif %}
+                              </a>
+                          </li>
                                 <li class="list-inline-item m-0 p-0">
                                     <a class="btn btn-sm btn-dark" href="cart.html">Add to cart</a>
                                 </li>
@@ -74,6 +83,8 @@
             {% endfor %}
 
         </div>
+
+{#    pagination#}
     {% if is_paginated %}
             <nav class="d-flex justify-content-center wow  fadeIn ">
                 <ul class="pagination primary mb-0">
@@ -178,4 +189,30 @@
 {#</div>#}
 </div>
 </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+    $(document).ready(function (){
+
+    $('.wish').on('click', function (e) {
+        e.preventDefault()
+        const url = $(this).attr('href')
+        const item_id = $(this).attr('id')
+        $.ajax({
+                url: url,
+                success: function (data) {
+                console.log(data)
+                if (data.added_to_wishlist === true) {
+                    $('#'+item_id).html(`<i class="fa fa-heart text-danger "></i>`)
+
+                } else if (data.added_to_wishlist === false)
+                    $('#'+item_id).html(`<i class="far fa-heart text-dark  "></i>`)
+            }
+        }
+    )
+})
+
+ })
+
+    </script>
 {% endblock %}
