@@ -17,8 +17,8 @@
                     </tr>
                   </thead>
                   <tbody>
-                  {% if cart %}
 
+                  {% if cart.items%}
                    {% for item in cart.items.all %}
                     <tr class="border-bottom solid primary-color">
                       <th class="pl-0 border-0" scope="row">
@@ -32,16 +32,16 @@
                       <td class="align-middle border-0">
                         <div class="border d-flex align-items-center justify-content-between px-3"><span class="small text-uppercase text-gray headings-font-family">Quantity</span>
                           <div class="quantity">
-                            <a class="text-danger p-0 mr-1" href=""><i class="fas fa-caret-left" ></i></a>
+                            <a class="text-danger p-0 mr-1" href="{{ item.item.get_remove_from_cart_url }}"><i class="fas fa-caret-left" ></i></a>
                               {{item.quantity}}
                             <a class="text-success p-0 ml-1" href="{{ item.item.get_add_to_cart_url }}"><i class="fas fa-caret-right" ></i></a>
                           </div>
                         </div>
                       </td>
                       <td class="align-middle border-0">
-                        <p class="mb-0 small">$250</p>
+                        <p class="mb-0 small">${{ item.total_price }}</p>
                       </td>
-                      <td class="align-middle border-0"><a class="reset-anchor" href="#"><i class="fas fa-trash-alt small text-danger"></i></a></td>
+                      <td class="align-middle border-0"><a onclick="return confirm('Remove item completely?')" class="reset-anchor" href="{{ item.item.get_remove_order_item_url }}"><i class="fas fa-trash-alt small text-danger"></i></a></td>
 
                     </tr>
 
@@ -67,14 +67,35 @@
                 <div class="card-body">
                   <h5 class="text-uppercase mb-4">Cart total</h5>
                   <ul class="list-unstyled mb-0">
-                    <li class="d-flex align-items-center justify-content-between"><strong class="text-uppercase small font-weight-bold">Subtotal</strong><span class="text-muted small">$250</span></li>
+                      {% if cart.coupon %}
+
+                       <li class="d-flex align-items-center justify-content-between mb-4">
+                           <strong class="text-uppercase small font-weight-bold">Applied coupon</strong>
+                           <span>
+                               ${{ cart.coupon.amount }}
+                               <a onclick="return confirm('Remove coupon?')" class="reset-anchor ml-4" href="{% url 'core:remove_coupon' %}">
+                                   <i class="fas fa-trash-alt small text-danger"></i>
+                               </a>
+                           </span>
+                       </li>
+
+                      {% else %}
+                      <li class="d-flex align-items-center justify-content-between mb-4"><strong class="text-uppercase small font-weight-bold">Applied coupon</strong><span>None</span></li>
+                      {% endif %}
+{#                    <li class="d-flex align-items-center justify-content-between"><strong class="text-uppercase small font-weight-bold">Subtotal</strong><span class="text-muted small">${{ cart.get_total_order_price }}</span></li>#}
                     <li class="border-bottom my-2"></li>
-                    <li class="d-flex align-items-center justify-content-between mb-4"><strong class="text-uppercase small font-weight-bold">Total</strong><span>$250</span></li>
+                    <li class="d-flex align-items-center justify-content-between mb-4"><strong class="text-uppercase small font-weight-bold">Total</strong><span>${{ cart.get_total_order_price }}</span></li>
                     <li>
-                      <form action="#">
+                      <form method="post" action={% url 'core:add_coupon' %}>
+                          {% csrf_token %}
                         <div class="form-group mb-0">
-                          <input class="form-control" type="text" placeholder="Enter your coupon">
-                          <button class="btn btn-dark btn-sm btn-block" type="submit"> <i class="fas fa-gift mr-2"></i>Apply coupon</button>
+                          <input class="form-control rounded-top" name="code" type="text" placeholder="Enter your coupon">
+                          <button class="btn btn-primary btn-sm btn-block rounded-bottom" type="submit">
+                              {% if cart.coupon %}
+                              <i class="fas fa-gift mr-2"></i>Change coupon</button>
+                              {% else %}
+                              <i class="fas fa-gift mr-2"></i>Apply coupon</button>
+                              {% endif %}
                         </div>
                       </form>
                     </li>

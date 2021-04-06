@@ -1,4 +1,5 @@
 {% load static %}
+{% load tags %}
 <header class="header bg-white">
 <div class="container px-0 px-lg-3">
 <nav class="navbar navbar-expand-lg navbar-light border-bottom border-primary sticky py-3 px-lg-0">
@@ -33,19 +34,30 @@
                 </div>
             </li>
         </ul>
-        {#            right nabvar#}
 
+        {#right nabvar#}
         <ul class="navbar-nav ml-auto">
 
             <li class="nav-item">
                 <a class="nav-link" href={% url 'core:cart_view' %}> <i
-                        class="fas fa-dolly-flatbed mr-1 text-gray"></i>Cart<small class="text-gray">(2)</small></a>
+                        class="fas fa-dolly-flatbed mr-1 text-gray"></i>Cart
+                    {% if request.user.is_authenticated %}
+                    <span class="text-danger ml-1">({{ request.user|count_order }})</span>
+                        {% else %}
+                        <span class="text-grey">(0)</span>
+                    {% endif %}
+                </a>
             </li>
 
-            <li class="nav-item">
-                <a class="nav-link" href="#"> <i class="far fa-heart mr-1"></i><small class="text-gray">
-                    (0)</small></a>
-            </li>
+{#            <li class="nav-item">#}
+{#                <a class="nav-link" href="#"> <i class="far fa-heart mr-1 mb-0" ></i>#}
+{#                     {% if request.user.is_authenticated %}#}
+{#                    <span class="text-danger">({{ request.user|count_wishlist }})</span>#}
+{#                     {% else %}#}
+{#                    <small class="text-grey">(0)</small>#}
+{#                    {% endif %}#}
+{#                </a>#}
+{#            </li>#}
 
             <li class="nav-item">
 
@@ -71,7 +83,7 @@
                     <div class="dropdown-divider"></div>
 
                     <a class="dropdown-item border-0 transition-link" href={% url 'user_wishlist' %}>
-                        Wishlist
+                        <i class="far fa-heart mr-1 mb-0" ></i> <span class="text-danger ml-2">({{ request.user|count_wishlist }})</span>
                     </a>
 
                     <div class="dropdown-divider"></div>
@@ -81,14 +93,16 @@
                     </a>
                 </div>
 
-            {% else %}
+                </div>
+                {% else %}
+
                 <a class="nav-link" href={% url 'account_login' %}>
-                    <i class="fas fa-user-alt mr-1 text-gray"></i>
+                    <i class="fas fa-user-alt text-gray"></i>
                     Login
                 </a>
-            {% endif %}
-                </div>
 
+
+                {% endif %}
             </li>
 
         </ul>

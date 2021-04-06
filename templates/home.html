@@ -52,9 +52,7 @@
                         </a>
                         <div class="product-overlay">
                             <ul class="mb-0 list-inline">
-{#                                <li class="list-inline-item m-0 p-0">#}
-{#                                    <a class="btn btn-sm btn-outline-dark" href="#"><i class="far fa-heart"></i></a>#}
-{#                                </li>#}
+
                           <li  class="list-inline-item m-0 p-0">
                               <a  class="wish btn-lg " id="id{{ item.pk }}" href={% url 'core:add_remove_to_wishlist' item.slug %}>
                                   {% if request.user in item.wishlist.iterator %}
@@ -64,13 +62,14 @@
                                   {% endif %}
                               </a>
                           </li>
-                                <li class="list-inline-item m-0 p-0">
-                                    <a class="btn btn-sm btn-dark" href="{{ item.get_add_to_cart_url }}">Add to cart</a>
-                                </li>
+{#                                <li class="list-inline-item m-0 p-0">#}
+{#                                    <a class="btn btn-sm btn-dark" href="{{ item.get_add_to_cart_url }}">Add to cart</a>#}
+{#                                </li>#}
                                 <li class="list-inline-item mr-0">
-                                    <a class="btn btn-sm btn-outline-dark" href="#productView"
-                                       data-toggle="modal">
-                                        <i class="fas fa-expand"></i></a>
+                                    <a class="btn btn-sm btn-outline-dark" href={% url 'core:product_detail' item.slug %}>
+{#                                       data-toggle="modal">#}
+                                        <i class="fas fa-expand"></i>
+                                    </a>
                                 </li>
                             </ul>
                         </div>
@@ -84,7 +83,8 @@
 
         </div>
 
-{#    pagination#}
+    {#pagination#}
+    {#TODO: fix pagination scroll to top#}
     {% if is_paginated %}
             <nav class="d-flex justify-content-center wow  fadeIn ">
                 <ul class="pagination primary mb-0">
