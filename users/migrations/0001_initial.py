@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('firstname', models.CharField(blank=True, max_length=255, null=True)),
                 ('lastname', models.CharField(blank=True, max_length=255, null=True)),
-                ('address', models.CharField(blank=True, max_length=255, null=True)),
+                ('address_line1', models.CharField(blank=True, max_length=255, null=True)),
                 ('profile_pic', models.ImageField(blank=True, null=True, upload_to='img/profile_pics')),
                 ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],

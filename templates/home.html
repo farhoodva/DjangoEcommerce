@@ -3,20 +3,7 @@
 {% block content %}
 <div class="page-holder">
 
-
-<!-- HERO SECTION-->
 <div class="container">
-    {#        <section class="hero pb-3 bg-cover bg-center d-flex align-items-center" style="background:url({% static 'img/hero-banner.jpg' %})">#}
-    {#          <div class="container py-5" >#}
-    {#            <div class="row px-4 px-lg-5">#}
-    {#              <div class="col-lg-6">#}
-    {#                <p class="text-muted small text-uppercase mb-2">New Inspiration 2020</p>#}
-    {#                <h1 class="h2 text-uppercase mb-3">20% off on new season</h1><a class="btn btn-dark" href="shop.html">Browse collections</a>#}
-    {#              </div>#}
-    {#            </div>#}
-    {#          </div>#}
-    {#        </section>#}
-    <!-- CATEGORIES SECTION-->
     <section class="pt-5">
         <header class="text-center">
             <p class="small text-muted small text-uppercase mb-1">Carefully created collections</p>
@@ -25,7 +12,7 @@
         <div class="row">
         {% for category in categories %}
             <div class="col-md-4 mb-4 mb-md-3"><a class="category-item" href="shop.html">
-                <img class="img-fluid w-100"  src={{ category.image.url }} alt="">
+                <img class="img-fluid w-100 rounded"  src={{ category.image.url }} alt="">
                 <strong class="category-item-title">{{ category.name }}</strong></a>
             </div>
 
@@ -39,16 +26,17 @@
             <h2 class="h5 text-uppercase mb-4">Products</h2>
         </header>
         <div class="row">
+
             <!-- PRODUCT-->
             {% for item in items %}
                 {% if item %}
-            <div class="col-xl-3 col-lg-4 col-sm-6">
+            <div class="col-xl-3 col-lg-4 col-sm-6 ">
                 <div class="product text-center">
                     <div class="position-relative mb-3">
                         <div class="badge text-white badge-">
                         </div>
                         <a class="d-block" href={% url 'core:product_detail' item.slug %}>
-                            <img class="img-fluid w-100" src={{ item.image.url }} alt="...">
+                            <img class="img-fluid w-100 rounded" src={{ item.image.url }} alt="...">
                         </a>
                         <div class="product-overlay">
                             <ul class="mb-0 list-inline">

@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import JsonResponse, HttpResponseRedirect
+from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
@@ -56,7 +56,7 @@ def add_remove_to_wishlist(request, slug):
         added_to_wishlist = False
         data = {
             'added_to_wishlist': added_to_wishlist,
-       }
+             }
         return JsonResponse(data, safe=False)
     else:
         item.wishlist.add(request.user)
@@ -103,8 +103,6 @@ def remove_from_cart(request, slug):
     if order_item.quantity > 1:
         order_item.quantity -= 1
         order_item.save()
-        post_data=request.GET.get('trash')
-        print(post_data)
     else:
         cart = cart_qs[0]
         cart.items.remove(order_item)
@@ -140,9 +138,19 @@ def add_coupon(request):
 
 
 def remove_coupon(request):
-    # coupon= Coupons.objects.get(name=name)
     order = ShoppingCart.objects.get(user=request.user, ordered=False)
     order.coupon = None
     order.save()
     return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
 
+
+def ajax_search(request):
+    searchstr = request.GET.get('searchTxt')
+    print(searchstr)
+    search_result = Item.objects.filter(title__icontains=searchstr) \
+        | Item.objects.filter(price__startswith=searchstr) \
+        | Item.objects.filter(description__icontains=searchstr) \
+        | Item.objects.filter(category__name__icontains=searchstr)
+    data = search_result.values()
+    return render(request, 'search_results.html', {'results':search_result})
+    # return JsonResponse(list(data), safe=False)

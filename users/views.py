@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
 from .forms import UserProfileEditForm
-from .models import UserProfile
+from .models import UserProfile, City
 from core.models import Item
 from RetailShopDjango.mixins import ProfileUpdateMixin
 
@@ -22,3 +22,9 @@ class UserWishlistView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         return Item.objects.all().filter(wishlist__username=self.request.user.username)
+
+
+def load_cities(request):
+    state_id = request.GET.get('state')
+    cities = City.objects.filter(state_id=state_id)
+    return render(request,'load_cities.html', {'cities': cities})

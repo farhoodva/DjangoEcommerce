@@ -5,26 +5,121 @@
 {% block head_title %}{{ userprofile.user.username.title }}'Profile{% endblock %}
 
 {% block content %}
-
     <div class="container">
 <div class="text-center">
-    <h2 class="">{% trans "Update Your Profile" %}</h2>
+    <h4 class="">{% trans "UPDATE YOUR PROFILE" %}</h4>
    </div>
         <br>
-    <form class="col-md-4 mx-auto" method="Post"  enctype="multipart/form-data" action="">
-    {% csrf_token %}
-    {{ form.as_p }}
-{#        {% for field in form %}#}
-{#        <div class="my-md-4 ">#}
-{#        {{ field }}#}
-{##}
-{#            </div>#}
-{##}
-{#        {% endfor %}#}
 
-         <br>
-            <input class="btn-sm btn-dark btn-block rounded" type="submit" name="submit" value="Update">
+        <div class="col-lg-8 col-sm-10 col-11 mx-auto py-5 px-lg-4 ">
+    <form id="form" method="Post"  enctype="multipart/form-data" cities-url={% url 'load_cities' %} action="">
+
+    {% csrf_token %}
+        <div class="row">
+        {% for field in form %}
+        <div class="col-lg-6 form-group ">
+        <label class="text-small text-dark" >{{ field.label.upper }}</label>
+        {{ field }}
+        <span class="text-primary ">{{ field.errors }}</span>
+
+            </div>
+
+        {% endfor %}
+
+
+            <div class="col-lg-12 form-group">
+            <button class="btn btn-block btn-primary rounded" type="submit">Update</button>
+             </div>
+
+        </div>
+
     </form>
     </div>
+    </div>
     <br><br>
+{#    <div class="container">#}
+{#    <h2 class="h5 text-uppercase mb-4">UPDATE YOUR PROFILE</h2>#}
+{#          <div class="row ">#}
+{#            <div class="col-lg-8 mx-auto">#}
+{#              <form action="" method="Post"  enctype="multipart/form-data">#}
+{#                  {% csrf_token %}#}
+{#                <div class="row">#}
+{#                  <div class="col-lg-6 form-group">#}
+{#                    <label class="text-small text-uppercase" for="firstName">First name</label>#}
+{#                    <input class="form-control form-control-lg rounded" id="firstName" type="text" placeholder="Enter your first name">#}
+{#                  </div>#}
+{#                  <div class="col-lg-6 form-group">#}
+{#                    <label class="text-small text-uppercase" for="lastName">Last name</label>#}
+{#                    <input class="form-control form-control-lg rounded" id="lastName" type="text" placeholder="Enter your last name">#}
+{#                  </div>#}
+{#                  <div class="col-lg-6 form-group">#}
+{#                    <label class="text-small text-uppercase" for="email">Email address</label>#}
+{#                    <input class="form-control form-control-lg rounded" id="email" type="email" placeholder="e.g. Jason@example.com">#}
+{#                  </div>#}
+{#                  <div class="col-lg-6 form-group">#}
+{#                    <label class="text-small text-uppercase" for="phone">Phone number</label>#}
+{#                    <input class="form-control form-control-lg rounded" id="phone" type="tel" placeholder="e.g. +02 245354745">#}
+{#                  </div>#}
+{#                  <div class="col-lg-6 form-group">#}
+{#                    <label class="text-small text-uppercase" for="company">Company name (optional)</label>#}
+{#                    <input class="form-control form-control-lg rounded" id="company" type="text" placeholder="Your company name">#}
+{#                  </div>#}
+{#                  <div class="col-lg-6 form-group">#}
+{#                    <label class="text-small text-uppercase" for="country">Country</label>#}
+{#                    <select class="selectpicker country" id="country" data-width="fit" data-style="form-control form-control-lg" data-title="Select your country"></select>#}
+{#                  </div>#}
+{#                  <div class="col-lg-12 form-group">#}
+{#                    <label class="text-small text-uppercase" for="address">Address line 1</label>#}
+{#                    <input class="form-control form-control-lg rounded" id="address" type="text" placeholder="House number and street name">#}
+{#                  </div>#}
+{#                  <div class="col-lg-12 form-group">#}
+{#                    <label class="text-small text-uppercase" for="address">Address line 2</label>#}
+{#                    <input class="form-control form-control-lg rounded" id="addressalt" type="text" placeholder="Apartment, Suite, Unit, etc (optional)">#}
+{#                  </div>#}
+{#                  <div class="col-lg-6 form-group">#}
+{#                    <label class="text-small text-uppercase" for="city">Town/City</label>#}
+{#                    <input class="form-control form-control-lg rounded" id="city" type="text">#}
+{#                  </div>#}
+{#                  <div class="col-lg-6 form-group">#}
+{#                    <label class="text-small text-uppercase" for="state">State/County</label>#}
+{#                    <input class="form-control form-control-lg rounded" id="state" type="text">#}
+{#                  </div>#}
+{##}
+{#                  <div class="col-lg-12 form-group">#}
+{#                    <button class="btn btn-block btn-primary rounded" type="submit">Update</button>#}
+{#                  </div>#}
+{#                </div>#}
+{#              </form>#}
+{#            </div>#}
+{##}
+{##}
+{#          </div>#}
+{#    </div>#}
+{#    <br><br>#}
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+    $(document).ready(function (){
+
+    $('#id_state').change(function () {
+        const url = $('#form').attr('cities-url')
+        const state_id = $('#id_state').val()
+
+        $.ajax({
+                url: url,
+                data:{
+                    'state': state_id
+                       },
+                success: function (data) {
+                    $('#id_city').html(data)
+
+
+            }
+        }
+    )
+})
+
+ })
+
+    </script>
 {% endblock %}

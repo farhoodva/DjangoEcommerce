@@ -8,7 +8,12 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     firstname = models.CharField(max_length=255, null=True, blank=True)
     lastname = models.CharField(max_length=255, null=True, blank=True)
-    address = models.CharField(max_length=255, null=True, blank=True)
+    address_line1 = models.CharField(max_length=255, null=True, blank=True)
+    address_line2 = models.CharField(max_length=255, null=True, blank=True)
+    email = models.EmailField(null=True,blank=True)
+    phone_number = models.CharField(max_length=12, null=True, blank=True)
+    state = models.ForeignKey('State', on_delete=models.SET_NULL, null=True, blank=True, )
+    city = models.ForeignKey('City', on_delete=models.SET_NULL, null=True, blank=True)
     profile_pic = models.ImageField(blank=True, null=True, upload_to='img/profile_pics')
 
     def __str__(self):
@@ -19,6 +24,28 @@ class UserProfile(models.Model):
         return reverse('profile_update', kwargs={
             'pk': str(self.user_id)
         })
+
+
+class State(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+
+    class Meta:
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
+
+class City(models.Model):
+    name = models.CharField(max_length=50)
+    state = models.ForeignKey('State', on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ['state']
+        verbose_name_plural = 'Cities'
+
+    def __str__(self):
+        return self.name
 
 
 # django signals => Profile creation

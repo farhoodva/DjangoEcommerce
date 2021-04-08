@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import OrderItem, ShoppingCart, Item, Categories, SubCategories, Coupons
-from users.models import UserProfile
+from users.models import UserProfile, State, City
 
 
 class SubCategoryAdmin(admin.ModelAdmin):
@@ -26,7 +26,10 @@ class CouponAdmin(admin.ModelAdmin):
     list_display = ['name', 'amount', 'percentage', 'valid']
     search_fields = ['name', 'amount', 'percentage', 'valid']
 
+
 admin.site.register(UserProfile)
+admin.site.register(State)
+admin.site.register(City)
 admin.site.register(Categories)
 admin.site.register(OrderItem, OrderItemAdmin)
 admin.site.register(SubCategories,SubCategoryAdmin)
