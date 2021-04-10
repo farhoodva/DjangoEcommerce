@@ -105,14 +105,15 @@
     </div>
 </nav>
         {#live search#}
-        <div id="searchForm" class="col-lg-6 col-sm-8 mx-auto mb-1 " url={% url 'core:ajax_search' %} action="">
-            <input id="search" class="form-control rounded text-center " placeholder= "Type to search " type="text"><span class="d-inline mx-0 px-0"></span>
+        <div id="searchForm" class="result col-lg-6 col-sm-8 mx-auto mb-1 mt-1" tabindex="0" url={% url 'core:ajax_search' %} action="">
 
-             <div id="search-results" class="card  rounded ">
+            <input id="search" class="form-control rounded text-center mb-1" autocomplete="off" placeholder= "Type to search " type="text"><span class="d-inline mx-0 px-0"></span>
+
+             <div id="search-results" class="card rounded  position-absolute shadow z-index-50" style="width: 94.5%">
 
              </div>
+            </div>
 
-        </div>
 
 </div>
     <hr class="container mt-0">
@@ -120,34 +121,40 @@
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script>
-    $(document).ready(function () {
 
-        $('#search').on('keyup', function () {
-            const url = $('#searchForm').attr('url')
-            const searchTxt = $(this).val().trim()
-            {#console.log(searchTxt)#}
-            if(searchTxt !=='') {
-                $.ajax({
-                    url: url,
-                    data: {
-                        searchTxt: searchTxt,
-                    },
-                    success: function (data) {
-                        $('#search-results').html(data)
-                    }
-                })
-            }else {
-                location.reload()
-                {#$('#search-results').hide()#}
-            }
-        })
+    $('#search').on('keyup focus ', function () {
+        $('#search-results').show()
+        $('#search').css({"outline": "none","border-color":"white","box-shadow":"0 0 4px grey"})
 
+        const url = $('#searchForm').attr('url')
+        const searchTxt = $(this).val().trim()
+        {#console.log(searchTxt)#}
+        if(searchTxt !=='') {
+            $.ajax({
+                url: url,
+                data: {
+                    searchTxt: searchTxt,
+                },
+                success: function (data) {
+                    $('#search-results').html(data)
+                    $('#search-results').css({"outline": "none","border-color":"white","border-top-style":"none" })
+                }
+            })
+        }
+        else {
+            $('#search-results').hide()
+        }
     })
-        {#$('#search').blur( function (){#}
-        {#    location.reload()#}
-        {#    $('#search-results').hide()#}
-        {#})#}
 
+    $(document).click(function(e) {
+    const container = $(".result");
+    // if the target of the click isn't the container nor a descendant of the container
+    if (!container.is(e.target) && container.has(e.target).length === 0)
+    {
+        $('#search-results').hide();
+        $('#search').css({"outline": "","border-color":"","box-shadow":""})
+    }
+})
 
     </script>
 
