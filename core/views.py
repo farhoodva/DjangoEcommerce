@@ -10,17 +10,11 @@ from .models import Item, Categories, OrderItem, ShoppingCart, Coupons
 
 
 class HomeView(generic.ListView):
-    model = Item
-    context_object_name = 'items'
+    model = Categories
+    context_object_name = 'categories'
     template_name = 'home.html'
-    paginate_by = 8
+     # paginate_by = 8
     ordering = 'pk'
-
-    def get_context_data(self, *args, **kwargs):
-        categories = Categories.objects.all()
-        context = super(HomeView, self).get_context_data(**kwargs)
-        context['categories'] = categories
-        return context
 
 
 class CartView(LoginRequiredMixin, generic.ListView):
@@ -47,7 +41,7 @@ class ProductDetailView(generic.DetailView):
         return context
 
 
-@login_required
+@login_required()
 def add_remove_to_wishlist(request, slug):
     item = get_object_or_404(Item, slug=slug)
     if request.user in item.wishlist.all():
@@ -65,8 +59,7 @@ def add_remove_to_wishlist(request, slug):
         data = {
             'added_to_wishlist': added_to_wishlist,
         }
-        return JsonResponse(data, safe=False)\
-
+        return JsonResponse(data, safe=False)
 
 
 @login_required()
@@ -152,5 +145,11 @@ def ajax_search(request):
         | Item.objects.filter(description__icontains=searchstr) \
         | Item.objects.filter(category__name__icontains=searchstr)
     data = search_result.values()
-    return render(request, 'search_results.html', {'results':search_result})
+    return render(request, 'search_results.html', {'results': search_result})
     # return JsonResponse(list(data), safe=False)
+
+
+def ajax_load_products(request, display):
+    display = int(request.GET.get('display'))
+    items = Item.objects.all().order_by('pk')[0:display]
+    return render(request, 'product_loader.html', {'items': items})

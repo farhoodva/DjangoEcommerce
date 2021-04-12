@@ -25,182 +25,161 @@
             <p class="small text-muted small text-uppercase mb-1">Made the hard way</p>
             <h2 class="h5 text-uppercase mb-4">Products</h2>
         </header>
-        <div class="row">
 
             <!-- PRODUCT-->
-            {% for item in items %}
-                {% if item %}
-            <div class="col-xl-3 col-lg-4 col-sm-6 ">
-                <div class="product text-center">
-                    <div class="position-relative mb-3">
-                        <div class="badge text-white badge-">
-                        </div>
-                        <a class="d-block" href={% url 'core:product_detail' item.slug %}>
-                            <img class="img-fluid w-100 rounded" src={{ item.image.url }} alt="...">
-                        </a>
-                        <div class="product-overlay">
-                            <ul class="mb-0 list-inline">
+            <div id="productlist" class="row">
+{#AJAX-generated#}
+        </div>
 
-                          <li  class="list-inline-item m-0 p-0">
-                              <a  class="wish btn-lg " id="id{{ item.pk }}" href={% url 'core:add_remove_to_wishlist' item.slug %}>
-                                  {% if request.user in item.wishlist.iterator %}
-                                    <i class="fa fa-heart text-danger"></i>
-                                  {% else %}
-                                     <i class="far fa-heart text-dark"></i>
-                                  {% endif %}
-                              </a>
-                          </li>
-{#                                <li class="list-inline-item m-0 p-0">#}
-{#                                    <a class="btn btn-sm btn-dark" href="{{ item.get_add_to_cart_url }}">Add to cart</a>#}
-{#                                </li>#}
-                                <li class="list-inline-item mr-0">
-                                    <a class="btn btn-sm btn-outline-dark" href={% url 'core:product_detail' item.slug %}>
-{#                                       data-toggle="modal">#}
-                                        <i class="fas fa-expand"></i>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <h6><a class="reset-anchor" href="detail.html">{{ item.title}}</a></h6>
-                    <p class="small text-muted">${{ item.price }}</p>
-                </div>
-            </div>
-                {% endif %}
-            {% endfor %}
-
+        <div class="text-center ">
+        <button id="pr-loadmore" class="btn btn-dark rounded " style="width: 50%">Load More </button>
         </div>
 
     {#pagination#}
     {#TODO: fix pagination scroll to top#}
-    {% if is_paginated %}
-            <nav class="d-flex justify-content-center wow  fadeIn ">
-                <ul class="pagination primary mb-0">
-
-                    <!--Arrow left-->
-                    {% if page_obj.has_previous %}
-                    <li class="page-item ">
-                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
-                            <span aria-hidden="true">&laquo; </span>
-                            <span class="sr-only">Previous</span>
-                        </a>
-                    </li>
-                    {% endif %}
-                    <li class="page-item active">
-                        <a class="page-link ">
-                            <span >{{ page_obj.number }}</span>
-                        </a>
-                    </li>
-
-                    {% if page_obj.has_next %}
-                    <li class="page-item ">
-                        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                            <span class="sr-only">Next</span>
-                        </a>
-                    </li>
-                    {% endif %}
-                </ul>
-            </nav>
-        {% endif %}
+{#    {% if is_paginated %}#}
+{#            <nav class="d-flex justify-content-center wow  fadeIn ">#}
+{#                <ul class="pagination primary mb-0">#}
+{##}
+{#                    <!--Arrow left-->#}
+{#                    {% if page_obj.has_previous %}#}
+{#                    <li class="page-item ">#}
+{#                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">#}
+{#                            <span aria-hidden="true">&laquo; </span>#}
+{#                            <span class="sr-only">Previous</span>#}
+{#                        </a>#}
+{#                    </li>#}
+{#                    {% endif %}#}
+{#                    <li class="page-item active">#}
+{#                        <a class="page-link ">#}
+{#                            <span >{{ page_obj.number }}</span>#}
+{#                        </a>#}
+{#                    </li>#}
+{##}
+{#                    {% if page_obj.has_next %}#}
+{#                    <li class="page-item ">#}
+{#                        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">#}
+{#                            <span aria-hidden="true">&raquo;</span>#}
+{#                            <span class="sr-only">Next</span>#}
+{#                        </a>#}
+{#                    </li>#}
+{#                    {% endif %}#}
+{#                </ul>#}
+{#            </nav>#}
+{#        {% endif %}#}
     </section>
     <!-- SERVICES-->
-    <section class="py-5 bg-light">
-        <div class="container">
-            <div class="row text-center">
-                <div class="col-lg-4 mb-3 mb-lg-0">
-                    <div class="d-inline-block">
-                        <div class="media align-items-end">
-                            <svg class="svg-icon svg-icon-big svg-icon-light">
-                                <use xlink:href="#delivery-time-1"></use>
-                            </svg>
-                            <div class="media-body text-left ml-3">
-                                <h6 class="text-uppercase mb-1">Free shipping</h6>
-                                <p class="text-small mb-0 text-muted">Free shipping worlwide</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 mb-3 mb-lg-0">
-                    <div class="d-inline-block">
-                        <div class="media align-items-end">
-                            <svg class="svg-icon svg-icon-big svg-icon-light">
-                                <use xlink:href="#helpline-24h-1"></use>
-                            </svg>
-                            <div class="media-body text-left ml-3">
-                                <h6 class="text-uppercase mb-1">24 x 7 service</h6>
-                                <p class="text-small mb-0 text-muted">Free shipping worlwide</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="d-inline-block">
-                        <div class="media align-items-end">
-                            <svg class="svg-icon svg-icon-big svg-icon-light">
-                                <use xlink:href="#label-tag-1"></use>
-                            </svg>
-                            <div class="media-body text-left ml-3">
-                                <h6 class="text-uppercase mb-1">Festival offer</h6>
-                                <p class="text-small mb-0 text-muted">Free shipping worlwide</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- NEWSLETTER-->
-{#    <section class="py-5">#}
-{#        <div class="container p-0">#}
-{#            <div class="row">#}
-{#                <div class="col-lg-6 mb-3 mb-lg-0">#}
-{#                    <h5 class="text-uppercase">Let's be friends!</h5>#}
-{#                    <p class="text-small text-muted mb-0">Enter your email for Newsletter </p>#}
-{#                </div>#}
-{#                <div class="col-lg-6">#}
-{#                    <form action="#">#}
-{#                        <div class="input-group flex-column flex-sm-row mb-3">#}
-{#                            <input class="form-control form-control-lg py-3" type="email"#}
-{#                                   placeholder="Enter your email address" aria-describedby="button-addon2">#}
-{#                            <div class="input-group-append">#}
-{#                                <button class="btn btn-dark btn-block" id="button-addon2" type="submit">#}
-{#                                    Subscribe#}
-{#                                </button>#}
+{#    <section class="py-5 bg-light">#}
+{#        <div class="container">#}
+{#            <div class="row text-center">#}
+{#                <div class="col-lg-4 mb-3 mb-lg-0">#}
+{#                    <div class="d-inline-block">#}
+{#                        <div class="media align-items-end">#}
+{#                            <svg class="svg-icon svg-icon-big svg-icon-light">#}
+{#                                <use xlink:href="#delivery-time-1"></use>#}
+{#                            </svg>#}
+{#                            <div class="media-body text-left ml-3">#}
+{#                                <h6 class="text-uppercase mb-1">Free shipping</h6>#}
+{#                                <p class="text-small mb-0 text-muted">Free shipping worlwide</p>#}
 {#                            </div>#}
 {#                        </div>#}
-{#                    </form>#}
+{#                    </div>#}
+{#                </div>#}
+{#                <div class="col-lg-4 mb-3 mb-lg-0">#}
+{#                    <div class="d-inline-block">#}
+{#                        <div class="media align-items-end">#}
+{#                            <svg class="svg-icon svg-icon-big svg-icon-light">#}
+{#                                <use xlink:href="#helpline-24h-1"></use>#}
+{#                            </svg>#}
+{#                            <div class="media-body text-left ml-3">#}
+{#                                <h6 class="text-uppercase mb-1">24 x 7 service</h6>#}
+{#                                <p class="text-small mb-0 text-muted">Free shipping worlwide</p>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#                <div class="col-lg-4">#}
+{#                    <div class="d-inline-block">#}
+{#                        <div class="media align-items-end">#}
+{#                            <svg class="svg-icon svg-icon-big svg-icon-light">#}
+{#                                <use xlink:href="#label-tag-1"></use>#}
+{#                            </svg>#}
+{#                            <div class="media-body text-left ml-3">#}
+{#                                <h6 class="text-uppercase mb-1">Festival offer</h6>#}
+{#                                <p class="text-small mb-0 text-muted">Free shipping worlwide</p>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
 {#                </div>#}
 {#            </div>#}
 {#        </div>#}
 {#    </section>#}
-{#</div>#}
+
 </div>
 </div>
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script>
-    $(document).ready(function (){
 
-    $('.wish').on('click', function (e) {
+    $(document).on('click', '.wish', function (e) {
         e.preventDefault()
         const url = $(this).attr('href')
         const item_id = $(this).attr('id')
         $.ajax({
                 url: url,
                 success: function (data) {
-                console.log(data)
+
                 if (data.added_to_wishlist === true) {
                     $('#'+item_id).html(`<i class="fa fa-heart text-danger "></i>`)
 
-                } else if (data.added_to_wishlist === false)
+                }
+                else if (data.added_to_wishlist === false){
                     $('#'+item_id).html(`<i class="far fa-heart text-dark  "></i>`)
+                    }
+                else {
+                    var login =  window.confirm('YOU MUST BE LOGGED IN, LOGIN NOW?')
+                    console.log(login)
+                    if(login) {
+                      window.location.href = 'accounts/login'
+                        }
+
+                }
             }
+
         }
     )
 })
 
- })
+
+{#product laoder with back-end function#}
+        let display = 8 //initial loaded number of items
+     $.ajax({
+        type: 'GET',
+        url: `/ajax_load_products/${display}`,
+        data:{
+            'display':display
+        },
+        success: function(data) {
+            $('#productlist').html(data)
+        }
+    })
+
+
+        $('#pr-loadmore').on('click',()=>{
+        display += 4
+        $.ajax({
+        type: 'GET',
+        url: `/ajax_load_products/${display}`,
+        data:{
+            'display':display
+        },
+            success: function(data) {
+                $('#productlist').html(data)
+            }
+    })
+
+    })
+
 
     </script>
 {% endblock %}
