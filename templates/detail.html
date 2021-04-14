@@ -167,15 +167,20 @@
         $.ajax({
             url:url,
             success:function (data){
-                {#console.log(data)#}
             if(data.added_to_wishlist===true){
             $('#wishlist').html(`<i class="fa fa-heart text-danger mr-2"></i> Remove from wishlist`)
 
             }
-            else if(data.added_to_wishlist===false)
+            else if(data.added_to_wishlist===false){
             $('#wishlist').html('<i class="far fa-heart  mr-2"></i> Add to wishlist')
-
             }
+            else {
+                const login = window.confirm('YOU MUST BE LOGGED IN, LOGIN NOW?')
+                if (login) {
+                    window.location.href = '/accounts/login'
+                }
+            }
+              }
         })
     })
     
@@ -190,8 +195,15 @@
                 if (data.added_to_wishlist === true) {
                     $('#'+item_id).html(`<i class="fa fa-heart text-danger "></i>`)
 
-                } else if (data.added_to_wishlist === false)
-                    $('#'+item_id).html(`<i class="far fa-heart text-dark  "></i>`)
+                } else if (data.added_to_wishlist === false) {
+                    $('#' + item_id).html(`<i class="far fa-heart text-dark  "></i>`)
+                }
+                else {
+                    const login = window.confirm('YOU MUST BE LOGGED IN, LOGIN NOW?')
+                    if (login) {
+                        window.location.href = '/accounts/login'
+                    }
+                }
             }
         }
     )

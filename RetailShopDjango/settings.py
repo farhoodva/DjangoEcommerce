@@ -136,6 +136,12 @@ AUTHENTICATION_BACKENDS = [
     # `allauth` specific authentication methods, such as login by e-mail
     'allauth.account.auth_backends.AuthenticationBackend',
    ]
+
+ACCOUNT_FORMS = {
+    'signup': 'users.forms.CustomSignupForm'
+}
+
+# ACCOUNT_ADAPTER = 'users.adapter.MyAccountAdapter'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 

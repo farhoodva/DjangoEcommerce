@@ -1,11 +1,15 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views import generic
+from RetailShopDjango.mixins import ProfileUpdateMixin
+from users.forms import  UserBillingEditForm
+from users.models import UserProfile
 from .models import Item, Categories, OrderItem, ShoppingCart, Coupons
 
 
@@ -23,9 +27,11 @@ class CartView(LoginRequiredMixin, generic.ListView):
     template_name = 'cart.html'
 
     def get_queryset(self):
-
-        qs = ShoppingCart.objects.get(user_id=self.request.user.id, ordered=False)
-        return qs
+        try:
+            qs = ShoppingCart.objects.get(user_id=self.request.user.id, ordered=False)
+            return qs
+        except ObjectDoesNotExist:
+            messages.info(self.request, 'No items in cart')
 
 
 class ProductDetailView(generic.DetailView):
@@ -122,11 +128,11 @@ def add_coupon(request):
             order.coupon = coupon
             order.save()
             messages.success(request, 'Code Confirmed')
-            return redirect('core:cart_view')
+            return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
 
         except ObjectDoesNotExist:
             messages.warning(request, 'Invalid Coupon code')
-            return redirect('core:cart_view')
+            return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
     pass
 
 
@@ -138,12 +144,11 @@ def remove_coupon(request):
 
 
 def ajax_search(request):
-    searchstr = request.GET.get('searchTxt')
-    print(searchstr)
-    search_result = Item.objects.filter(title__icontains=searchstr) \
-        | Item.objects.filter(price__startswith=searchstr) \
-        | Item.objects.filter(description__icontains=searchstr) \
-        | Item.objects.filter(category__name__icontains=searchstr)
+    search_string = request.GET.get('searchTxt')
+    search_result = Item.objects.filter(title__icontains=search_string) \
+        | Item.objects.filter(price__startswith=search_string) \
+        | Item.objects.filter(description__icontains=search_string) \
+        | Item.objects.filter(category__name__icontains=search_string)
     data = search_result.values()
     return render(request, 'search_results.html', {'results': search_result})
     # return JsonResponse(list(data), safe=False)
@@ -153,3 +158,42 @@ def ajax_load_products(request, display):
     display = int(request.GET.get('display'))
     items = Item.objects.all().order_by('pk')[0:display]
     return render(request, 'product_loader.html', {'items': items})
+
+
+class UserBillingView(ProfileUpdateMixin, SuccessMessageMixin, generic.UpdateView,):
+    model = UserProfile
+    form_class = UserBillingEditForm
+    success_url = reverse_lazy('core:home')
+    template_name = 'checkout.html'
+
+    # def get_success_url(self, **kwargs):
+    #     return reverse('core:checkout', kwargs={
+    #         'pk': str(self.request.user.id)
+    #     })
+
+    def get_context_data(self, **kwargs):
+        try:
+            cart = ShoppingCart.objects.get(user_id=self.request.user.id, ordered=False)
+            context = super(UserBillingView, self).get_context_data(**kwargs)
+            context['cart'] = cart
+            return context
+        except ObjectDoesNotExist:
+            context = super(UserBillingView, self).get_context_data(**kwargs)
+            return context
+
+    def form_valid(self, form):
+        try:
+            cart = ShoppingCart.objects.get(user_id=self.request.user.id, ordered=False)
+            cart.ordered = True
+            cart.save()
+            order_item_qs = OrderItem.objects.filter(user=self.request.user, order_completed=False)
+            # order_items = order_item_qs.values()
+            for order_item in order_item_qs:
+                order_item.order_completed = True
+                order_item.save()
+            messages.info(self.request, "Order Confirmed")
+            return super().form_valid(form)
+        except ObjectDoesNotExist:
+            messages.info(self.request, "You don't have an active order")
+            return redirect('core:home')
+

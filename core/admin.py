@@ -18,7 +18,7 @@ class ShoppingCartAdmin(admin.ModelAdmin):
 
 
 class OrderItemAdmin(admin.ModelAdmin):
-    list_display = ['user', 'item', 'quantity']
+    list_display = ['user', 'item', 'quantity', 'order_completed']
     search_fields = ['user']
 
 

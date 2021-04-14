@@ -12,7 +12,7 @@
               <div class="col-lg-6 text-lg-right">
                 <nav aria-label="breadcrumb">
                   <ol class="breadcrumb justify-content-lg-end mb-0 px-0">
-                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Cart</li>
                   </ol>
                 </nav>
@@ -67,7 +67,7 @@
 
                       {% endfor %}
                   {% else %}
-                      <h5 class="mx-auto text-center">Your cart is <span class="text-danger">empty !!! </span></h5>
+{#                      <h5 class="mx-auto text-center">Your cart is <span class="text-danger">empty !!! </span></h5>#}
 
                   {% endif %}
                   </tbody>
@@ -115,11 +115,12 @@
                 </div>
               </div>
             </div>
+
               <!-- CART NAV-->
-              <div class="container bg-light px-4 py-3 mb-5">
+              <div class="container bg-light px-4 py-3 my-5">
                 <div class="row align-items-center text-center">
                   <div class="col-md-6 mb-3 mb-md-0 text-md-left"><a class="btn btn-link p-0 text-dark btn-sm" href="shop.html"><i class="fas fa-long-arrow-alt-left mr-2"> </i>Continue shopping</a></div>
-                  <div class="col-md-6 text-md-right"><a class="btn btn-outline-dark btn-sm" href="checkout.html">Procceed to checkout<i class="fas fa-long-arrow-alt-right ml-2"></i></a></div>
+                  <div class="col-md-6 text-md-right"><a class="btn btn-outline-dark btn-sm" href={{ user.userprofile.get_billing_url }}>Procceed to checkout<i class="fas fa-long-arrow-alt-right ml-2"></i></a></div>
                 </div>
               </div>
 

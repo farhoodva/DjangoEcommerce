@@ -1,9 +1,8 @@
 import secrets
-
+import random, string
 from django.db import models
 from django.contrib.auth.models import User
-import random, string
-
+from users.models import UserProfile
 from django.db.models.signals import post_save
 from django.urls import reverse
 
@@ -99,10 +98,17 @@ class OrderItem(models.Model):
 
 class ShoppingCart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    shipping_info = models.ForeignKey('users.UserProfile', on_delete=models.SET_NULL, null=True, blank=True)
     items = models.ManyToManyField(OrderItem)
     coupon = models.ForeignKey('core.Coupons', on_delete=models.SET_NULL, null=True, blank=True)
     ordered_date = models.DateTimeField(auto_now_add=True)
     ordered = models.BooleanField(default=False)
+
+    def save(self, *args, **kwargs):
+        if not self.shipping_info:
+            self.shipping_info = UserProfile.objects.get(user=self.user)
+            super(ShoppingCart, self).save()
+        super(ShoppingCart, self).save()
 
     def __str__(self):
         return self.user.username
@@ -148,3 +154,4 @@ class Coupons (models.Model):
 
 
 post_save.connect(Coupons.post_create, sender=Coupons)
+

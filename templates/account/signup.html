@@ -6,35 +6,66 @@
 
 {% block content %}
 <div class="container">
+<section class="py-5 bg-light">
+          <div class="container">
+            <div class="row px-4 px-lg-5 py-lg-4 align-items-center">
+              <div class="col-lg-6">
+                <h1 class="h2 text-uppercase mb-0">{% trans "Sign Up" %}</h1>
+              </div>
+              <div class="col-lg-6 text-lg-right">
+                <nav aria-label="breadcrumb">
+                  <ol class="breadcrumb justify-content-lg-end mb-0 px-0">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{% trans "Sign Up" %}</li>
+                  </ol>
+                </nav>
+              </div>
+            </div>
+          </div>
+        </section>
+        <br>
+        <br>
 <div class="text-center">
-    <h2 class="">{% trans "Sign Up" %}</h2>
+
     <br>
     <h6>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>
         {% endblocktrans %}</h6>
 </div>
     <br>
-    <div class="col-md-4 mx-auto">
+    <div class="col-5 mx-auto">
         <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
             {% csrf_token %}
-
-             <h6>Username</h6>
+{#        {{ form }}#}
+             <h6 class="text-small">Username</h6>
             <div class="mb-3 mt-2 ">
 
 
-                <input class="form-control form-control-lg rounded" type="text" name="username" placeholder="Username" autocomplete="username" maxlength="100" required="" id="id_username">
+                <input class="form-control form-control-lg rounded" type="text" name="username" placeholder="Username" autocomplete='off'  maxlength="100" required="" id="id_username">
             </div>
-            <h6>Email</h6>
+             <h6 class="text-small">Firstname</h6>
             <div class="mb-3 mt-2 ">
-                <input class="form-control form-control-lg rounded" type="email" name="email" placeholder="E-mail address" autocomplete="email" id="id_email">
+
+                <input class="form-control form-control-lg rounded" type="text" name="first_name" placeholder="Firstname" maxlength="30" required="" id="id_first_name">
+            </div>
+            <h6 class="text-small">Lastname</h6>
+            <div class="mb-3 mt-2 ">
+
+                <input class="form-control form-control-lg rounded" type="text" name="last_name" placeholder="Lastname"  maxlength="100" required="" id="id_last_name">
+
             </div>
 
-            <h6 >Password</h6>
+            <h6 class="text-small">Email</h6>
+            <div class="mb-3 mt-2 ">
+                <input class="form-control form-control-lg rounded" type="email" name="email" placeholder="E-mail address" autocomplete="off" id="id_email">
+            </div>
+
+            <h6 class="text-small" >Password</h6>
             <div class="mb-3 mt-2">
 
-                <input class="form-control form-control-lg rounded" type="password" name="password1" placeholder="Password" autocomplete="current-password" maxlength="100" required="" id="id_password1">
+                <input class="form-control form-control-lg rounded" type="password" name="password1" placeholder="Password" autocomplete="off" maxlength="100" required="" id="id_password1">
             </div>
 
-            <h6>Password Agian</h6>
+            <h6 class="text-small">Password Again</h6>
           <div class="mb-3 mt-2">
                 <input class="form-control form-control-lg rounded" type="password" name="password2" placeholder="Password (again)" required="" id="id_password2">
 
@@ -59,7 +90,7 @@
             {% if redirect_field_value %}
                 <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
             {% endif %}
-            <button type="submit" class="btn btn-dark btn-block rounded">{% trans "Sign Up" %} &raquo;</button>
+            <button type="submit" class="btn btn-dark btn-block rounded mt-4">{% trans "Sign Up" %} &raquo;</button>
         </form>
     </div>
 </div>

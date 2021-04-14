@@ -67,12 +67,18 @@
                 </a>
 
                 <div class="dropdown-menu mt-3" aria-labelledby="pagesDropdown">
+                    <div class="dropdown-item">Welcome
+                        {% if not user.userprofile.firstname  %}
+                        {{ user.username.title }}
+                            {% else %}
+                            {{ user.userprofile.firstname.title }}
+                            {% endif %}
+                            </div>
+                    <div class="dropdown-divider"></div>
                     <a class="dropdown-item border-0 transition-link"
                        href={{ user.userprofile.get_profile_update_url }}>
-{#                        <i class="fas fa-user-alt mr-1 text-gray"></i>#}
-                        Welcome {{ user.username.title }}
-                        <br>
-                        <div class="dropdown-divider"></div>
+                        <i class="fas fa-user-alt mr-1 text-primary"></i>
+
                         Manage your profile
                     </a>
 

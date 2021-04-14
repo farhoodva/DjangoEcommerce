@@ -16,12 +16,19 @@ class UserProfile(models.Model):
     city = models.ForeignKey('City', on_delete=models.SET_NULL, null=True, blank=True)
     profile_pic = models.ImageField(blank=True, null=True, upload_to='img/profile_pics')
 
+    class Meta:
+        verbose_name_plural = 'Shipping info'
+
     def __str__(self):
         return self.user.username
 
     def get_profile_update_url(self):
-
         return reverse('profile_update', kwargs={
+            'pk': str(self.user_id)
+        })
+
+    def get_billing_url(self):
+        return reverse('core:checkout', kwargs={
             'pk': str(self.user_id)
         })
 
@@ -51,7 +58,12 @@ class City(models.Model):
 # django signals => Profile creation
 def profile_creation_signal(sender, instance, created, **kwargs):
     if created:
-        UserProfile.objects.create(pk=instance.id, user=instance)
+        UserProfile.objects.create(
+            pk=instance.id,
+            user=instance,
+            firstname=instance.first_name,
+            lastname=instance.last_name,
+        )
 
 
 post_save.connect(profile_creation_signal, sender=User)

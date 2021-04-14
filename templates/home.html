@@ -137,8 +137,7 @@
                     $('#'+item_id).html(`<i class="far fa-heart text-dark  "></i>`)
                     }
                 else {
-                    var login =  window.confirm('YOU MUST BE LOGGED IN, LOGIN NOW?')
-                    console.log(login)
+                    const login =  window.confirm('YOU MUST BE LOGGED IN, LOGIN NOW?')
                     if(login) {
                       window.location.href = 'accounts/login'
                         }
