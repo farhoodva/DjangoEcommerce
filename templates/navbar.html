@@ -3,11 +3,12 @@
 <header class="header bg-white">
 <div class="container px-0 px-lg-3 " >
 <nav class="navbar navbar-expand-lg navbar-light  sticky py-3 px-lg-0">
-<a class="navbar-brand" href="/"><span class="font-weight-bold text-uppercase text-dark">FSTORE</span></a>
 
-    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+    <button class="navbar-toggler navbar-toggler-right " type="button" data-toggle="collapse"
             data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
             aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+    <a class="navbar-brand ml-3 mx-lg-auto mx-md-auto mx-sm-auto " href="/"><span class="font-weight-bold text-uppercase text-dark">FSTORE</span></a>
+
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
@@ -16,16 +17,13 @@
             <li class="nav-item">
                 <!-- Link--><a class="nav-link" href="shop.html">Shop</a>
             </li>
-{#            <li class="nav-item">#}
-{#                <!-- Link--><a class="nav-link" href="detail.html">Product detail</a>#}
-{#            </li>#}
+
             <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="pagesDropdown" href="#"
                                              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pages</a>
                 <div class="dropdown-menu mt-3" aria-labelledby="pagesDropdown">
                     <a class="dropdown-item border-0 transition-link" href="home.html">Homepage</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item border-0 transition-link" href="shop.html">Category</a>
-{#                    <a class="dropdown-item border-0 transition-link" href="detail.html">Product detail</a>#}
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item border-0 transition-link" href="cart.html">Shopping cart</a>
                     <div class="dropdown-divider"></div>
@@ -52,13 +50,70 @@
             </li>
 
 
-            <li class="nav-item">
+{#            <li class="nav-item">#}
+{##}
+{#            {% if request.user.is_authenticated %}#}
+{##}
+{#                <div class="nav-item dropdown">#}
+{##}
+{#                <a class="nav-link dropdown-toggle" id="pagesDropdown" href="#" data-toggle="dropdown"#}
+{#                   aria-haspopup="true" aria-expanded="false">#}
+{#                    {% if user.userprofile.profile_pic %}#}
+{#                    <img class="rounded-circle mx-1" width="25px" height="25px" src={{ user.userprofile.profile_pic.url }} alt="">#}
+{#                    {% endif %}#}
+{##}
+{#                </a>#}
+{##}
+{#                <div class="dropdown-menu mt-3" aria-labelledby="pagesDropdown">#}
+{#                    <div class="dropdown-item">Welcome#}
+{#                        {% if not user.userprofile.firstname  %}#}
+{#                        {{ user.username.title }}#}
+{#                            {% else %}#}
+{#                            {{ user.userprofile.firstname.title }}#}
+{#                            {% endif %}#}
+{#                            </div>#}
+{#                    <div class="dropdown-divider"></div>#}
+{#                    <a class="dropdown-item border-0 transition-link"#}
+{#                       href={{ user.userprofile.get_profile_update_url }}>#}
+{#                        <i class="fas fa-user-alt mr-1 text-primary"></i>#}
+{##}
+{#                        Manage your profile#}
+{#                    </a>#}
+{##}
+{#                    <div class="dropdown-divider"></div>#}
+{##}
+{#                    <a class="dropdown-item border-0 transition-link" href={% url 'user_wishlist' %}>#}
+{#                        <i class="far fa-heart mr-1 mb-0" ></i> <span class="text-danger ml-2">({{ request.user|count_wishlist }})</span>#}
+{#                    </a>#}
+{##}
+{#                    <div class="dropdown-divider"></div>#}
+{##}
+{#                    <a class="dropdown-item border-0 transition-link" href={% url 'account_logout' %}>#}
+{#                        Logout#}
+{#                    </a>#}
+{#                </div>#}
+{##}
+{#                </div>#}
+{#                {% else %}#}
+{##}
+{#                <a class="nav-link" href={% url 'account_login' %}>#}
+{#                    <i class="fas fa-user-alt text-gray"></i>#}
+{#                    Login#}
+{#                </a>#}
+{##}
+{##}
+{#                {% endif %}#}
+{#            </li>#}
+
+        </ul>
+    </div>
+            <span class="nav-item">
 
             {% if request.user.is_authenticated %}
 
-                <div class="nav-item dropdown">
+                <div class="nav-item dropdown ">
 
-                <a class="nav-link dropdown-toggle" id="pagesDropdown" href="#" data-toggle="dropdown"
+                <a class="nav-link dropdown-toggle px-0" id="pagesDropdown" href="#" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">
                     {% if user.userprofile.profile_pic %}
                     <img class="rounded-circle mx-1" width="25px" height="25px" src={{ user.userprofile.profile_pic.url }} alt="">
@@ -98,17 +153,14 @@
                 </div>
                 {% else %}
 
-                <a class="nav-link" href={% url 'account_login' %}>
+                <a class="nav-link pl-0" href={% url 'account_login' %}>
                     <i class="fas fa-user-alt text-gray"></i>
                     Login
                 </a>
 
 
                 {% endif %}
-            </li>
-
-        </ul>
-    </div>
+            </span>
 </nav>
         {#live search#}
         <div id="searchForm" class="result col-lg-6 col-sm-8 mx-auto mb-1 mt-1" tabindex="0" url={% url 'core:ajax_search' %} action="">
