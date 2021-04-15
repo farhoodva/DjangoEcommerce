@@ -6,9 +6,11 @@ from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse, reverse_lazy
+from django.utils import timezone
 from django.views import generic
 from RetailShopDjango.mixins import ProfileUpdateMixin
 from users.forms import  UserBillingEditForm
+from .forms import AddToCartForm
 from users.models import UserProfile
 from .models import Item, Categories, OrderItem, ShoppingCart, Coupons
 
@@ -40,10 +42,12 @@ class ProductDetailView(generic.DetailView):
     template_name = 'detail.html'
 
     def get_context_data(self, *args, **kwargs):
+        form = AddToCartForm()
         item = Item.objects.get(slug=self.kwargs['slug'])
         items = Item.objects.filter(category__pk=item.category.pk).exclude(pk=item.pk)
         context = super(ProductDetailView, self).get_context_data(**kwargs)
         context['items'] = items
+        context['form'] = form
         return context
 
 
@@ -66,6 +70,38 @@ def add_remove_to_wishlist(request, slug):
             'added_to_wishlist': added_to_wishlist,
         }
         return JsonResponse(data, safe=False)
+
+
+@login_required()
+def add_to_cart_multiple(request, slug):
+    number = request.POST['item_quantity']
+    item = get_object_or_404(Item, slug=slug)
+    order_item, created = OrderItem.objects.get_or_create(
+        user=request.user,
+        item=item,
+        order_completed=False,
+        )
+    cart_qs = ShoppingCart.objects.filter(user=request.user, ordered=False)
+
+    if cart_qs.exists():
+        cart = cart_qs[0]
+        if not created:
+            order_item.quantity += int(number)
+            order_item.save()
+            messages.info(request, f"{order_item.item.title.title()} added, {order_item.quantity} in cart ")
+        else:
+            order_item.quantity = int(number)
+            order_item.save()
+            cart.items.add(order_item)
+            cart.save()
+            messages.info(request, f"{order_item.item.title.title()} added, {order_item.quantity} in cart ")
+    else:
+        cart = ShoppingCart.objects.create(user=request.user)
+        cart.items.add(order_item)
+        cart.save()
+        messages.info(request, f"{order_item.item.title.title()} added, {order_item.quantity} in cart ")
+    return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
+
 
 
 @login_required()
@@ -185,10 +221,12 @@ class UserBillingView(ProfileUpdateMixin, SuccessMessageMixin, generic.UpdateVie
         try:
             cart = ShoppingCart.objects.get(user_id=self.request.user.id, ordered=False)
             cart.ordered = True
+            cart.ordered_date = timezone.now()
             cart.save()
             order_item_qs = OrderItem.objects.filter(user=self.request.user, order_completed=False)
-            # order_items = order_item_qs.values()
             for order_item in order_item_qs:
+                order_item.item.warehouse_quantity -= order_item.quantity
+                order_item.item.save()
                 order_item.order_completed = True
                 order_item.save()
             messages.info(self.request, "Order Confirmed")

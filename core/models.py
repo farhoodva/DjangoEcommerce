@@ -64,6 +64,11 @@ class Item(models.Model):
             'slug': self.slug
         })
 
+    def add_to_cart_multiple(self):
+        return reverse('core:add_to_cart_multiple', kwargs={
+            'slug': self.slug
+        })
+
     def get_add_to_cart_url(self):
         return reverse('core:add_to_cart', kwargs={
             'slug': self.slug
@@ -101,7 +106,8 @@ class ShoppingCart(models.Model):
     shipping_info = models.ForeignKey('users.UserProfile', on_delete=models.SET_NULL, null=True, blank=True)
     items = models.ManyToManyField(OrderItem)
     coupon = models.ForeignKey('core.Coupons', on_delete=models.SET_NULL, null=True, blank=True)
-    ordered_date = models.DateTimeField(auto_now_add=True)
+    start_date = models.DateTimeField(auto_now_add=True)
+    ordered_date = models.DateTimeField(null=True, blank=True)
     ordered = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):

@@ -13,7 +13,7 @@ class ItemAdmin(admin.ModelAdmin):
 
 
 class ShoppingCartAdmin(admin.ModelAdmin):
-    list_display = ['user', 'ordered']
+    list_display = ['user', 'start_date', 'ordered', 'ordered_date']
     search_fields = ['user', 'ordered']
 
 

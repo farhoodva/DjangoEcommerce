@@ -44,20 +44,31 @@
               <p class="text-muted lead">${{item.price}}</p>
                 {% endif %}
 {#              <p class="text-small mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ut ullamcorper leo, eget euismod orci. Cum sociis natoque penatibus et magnis dis parturient montes nascetur ridiculus mus. Vestibulum ultricies aliquam convallis.</p>#}
-              <div class="row align-items-stretch mb-4">
+               <form method="post" action={{ item.add_to_cart_multiple }}>
+                   {% csrf_token %}
+                <div class="row align-items-stretch mb-4">
                 <div class="col-sm-5 pr-sm-0">
                   <div class="border d-flex align-items-center justify-content-between py-1 px-3 bg-white border-white"><span class="small text-uppercase text-gray mr-4 no-select">Quantity</span>
-                    <div class="quantity">
-                      <button class="dec-btn p-0"><i class="fas fa-caret-left"></i></button>
-                      <input class="form-control border-0 shadow-0 p-0" type="text" value="1">
-                      <button class="inc-btn p-0"><i class="fas fa-caret-right"></i></button>
+{#                    <div class="quantity">#}
+{#                      <button class="dec-btn p-0"><i class="fas fa-caret-left"></i></button>#}
+{#                      <input class="form-control border-0 shadow-0 p-0" type="text" value="1">#}
+{#                      <button class="inc-btn p-0"><i class="fas fa-caret-right"></i></button>#}
+{#                    </div>#}
+
+                      <div class="quantity">
+
+                          {{form.item_quantity}}
                     </div>
                   </div>
                 </div>
             <div class="col-sm-3 pl-sm-0">
-                    <a class="btn btn-dark btn-sm btn-block h-100 d-flex align-items-center justify-content-center px-0" href="{{ item.get_add_to_cart_url }}">Add to cart</a>
+                    <button type="submit" class="btn btn-dark btn-sm btn-block h-100 d-flex align-items-center justify-content-center px-0" >Add to cart</button>
                 </div>
+{#            <div class="col-sm-3 pl-sm-0">#}
+{#                    <a class="btn btn-dark btn-sm btn-block h-100 d-flex align-items-center justify-content-center px-0" href="{{ item.get_add_to_cart_url }}">Add to cart</a>#}
+{#                </div>#}
               </div>
+            </form>
             {% if not request.user in item.wishlist.iterator %}
                 <a id="wishlist" class="nav-link text-dark p-0 mb-4" href={% url 'core:add_remove_to_wishlist' item.slug %}><i class="far fa-heart mr-2"></i>Add to wish list</a><br>
 
@@ -69,7 +80,7 @@
                   {% if item.warehouse_quantity >= 1 %}
                 <li class="px-3 py-2 mb-1 bg-white"><strong class="text-uppercase text-success">In stock</strong></li>
                   {% else %}
-                <li class="px-3 py-2 mb-1 bg-white"><strong class="text-uppercase text-danger">Currently Unavailable</strong></span></li>
+                <li class="px-3 py-2 mb-1 bg-white"><strong class="text-uppercase text-danger">Currently Unavailable</strong></li>
                   {% endif %}
                 <li class="px-3 py-2 mb-1 bg-white text-muted"><strong class="text-uppercase text-dark">Category:</strong><a class="reset-anchor ml-2" href="#">{{ item.category}}</a></li>
                 <li class="px-3 py-2 mb-1 bg-white text-muted"><strong class="text-uppercase text-dark">Tags:</strong><a class="reset-anchor ml-2" href="#">Innovation</a></li>
@@ -162,7 +173,12 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script>
     $(document).ready(function (){
-
+        //form item quantity based on available stock
+    const vq= `{{ item.warehouse_quantity }}`
+    for (let i=1; i<=vq; i++){
+    $('select').append(`<option value="${i}">${i}</option>`)
+        }
+    //wishlist
     $('#wishlist').on('click', function (e) {
         e.preventDefault()
         const url = $(this).attr('href')
@@ -186,7 +202,8 @@
               }
         })
     })
-    
+
+        //wishlist on related items section
     $('.wish').on('click', function (e) {
         e.preventDefault()
         const url = $(this).attr('href')
@@ -213,6 +230,7 @@
 })
 
  })
+
 
     </script>
 {% endblock %}

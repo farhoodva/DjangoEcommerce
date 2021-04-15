@@ -42,8 +42,8 @@
                    {% for item in cart.items.all %}
                     <tr class="border-bottom solid primary-color">
                       <th class="pl-0 border-0" scope="row">
-                        <div class="media align-items-center"><a class="reset-anchor d-block animsition-link" href="detail.html"><img src={{ item.item.image.url }} alt="..." width="70"/></a>
-                          <div class="media-body ml-3"><strong class="h6"><a class="reset-anchor animsition-link" href="detail.html">{{ item.item.title }}</a></strong></div>
+                        <div class="media align-items-center"><a class="reset-anchor d-block animsition-link" href="{{ item.item.get_item_detail_url }}"><img src={{ item.item.image.url }} alt="..." width="70"/></a>
+                          <div class="media-body ml-3"><strong class="h6"><a class="reset-anchor animsition-link" href="{{ item.item.get_item_detail_url }}">{{ item.item.title }}</a></strong></div>
                         </div>
                       </th>
                       <td class="align-middle border-0">
