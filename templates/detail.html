@@ -54,7 +54,6 @@
                     </div>
                   </div>
                 </div>
-{#              add to cart#}
             <div class="col-sm-3 pl-sm-0">
                     <a class="btn btn-dark btn-sm btn-block h-100 d-flex align-items-center justify-content-center px-0" href="{{ item.get_add_to_cart_url }}">Add to cart</a>
                 </div>
@@ -67,7 +66,11 @@
 
                 {% endif %}
               <ul class="list-unstyled small d-inline-block">
-                <li class="px-3 py-2 mb-1 bg-white"><strong class="text-uppercase">SKU:</strong><span class="ml-2 text-muted">039</span></li>
+                  {% if item.warehouse_quantity >= 1 %}
+                <li class="px-3 py-2 mb-1 bg-white"><strong class="text-uppercase text-success">In stock</strong></li>
+                  {% else %}
+                <li class="px-3 py-2 mb-1 bg-white"><strong class="text-uppercase text-danger">Currently Unavailable</strong></span></li>
+                  {% endif %}
                 <li class="px-3 py-2 mb-1 bg-white text-muted"><strong class="text-uppercase text-dark">Category:</strong><a class="reset-anchor ml-2" href="#">{{ item.category}}</a></li>
                 <li class="px-3 py-2 mb-1 bg-white text-muted"><strong class="text-uppercase text-dark">Tags:</strong><a class="reset-anchor ml-2" href="#">Innovation</a></li>
               </ul>
