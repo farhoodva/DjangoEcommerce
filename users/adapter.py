@@ -9,6 +9,6 @@ class MyAccountAdapter(DefaultAccountAdapter):
     #     return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
 
     def get_login_redirect_url(self, request):
-        print(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
-        path = request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found')
+        path = request.get_full_path()
+        print(path)
         return path

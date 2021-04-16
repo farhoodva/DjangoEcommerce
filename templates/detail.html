@@ -25,7 +25,6 @@
             </div>
             <!-- PRODUCT DETAILS-->
             <div class="col-lg-6">
-
 {#            TODO : user rating#}
               <ul class="list-inline mb-2">
                 <li class="list-inline-item m-0"><i class="fas fa-star small text-warning"></i></li>
@@ -34,8 +33,6 @@
                 <li class="list-inline-item m-0"><i class="fas fa-star small text-warning"></i></li>
                 <li class="list-inline-item m-0"><i class="fas fa-star small text-warning"></i></li>
               </ul>
-{#        dynamic rating#}
-
 
               <h1>{{ item.title}}</h1>
                 {% if item.discount_price %}
@@ -48,21 +45,17 @@
                    {% csrf_token %}
                 <div class="row align-items-stretch mb-4">
                 <div class="col-sm-5 pr-sm-0">
-                  <div class="border d-flex align-items-center justify-content-between py-1 px-3 bg-white border-white"><span class="small text-uppercase text-gray mr-4 no-select">Quantity</span>
-{#                    <div class="quantity">#}
-{#                      <button class="dec-btn p-0"><i class="fas fa-caret-left"></i></button>#}
-{#                      <input class="form-control border-0 shadow-0 p-0" type="text" value="1">#}
-{#                      <button class="inc-btn p-0"><i class="fas fa-caret-right"></i></button>#}
-{#                    </div>#}
+                  <div class="border d-flex align-items-center justify-content-between py-1 px-3 bg-white border-white rounded-left"><span class="small text-uppercase text-gray mr-4 no-select">Quantity</span>
 
-                      <div class="quantity">
+
+                      <div class="quantity roun">
 
                           {{form.item_quantity}}
                     </div>
                   </div>
                 </div>
             <div class="col-sm-3 pl-sm-0">
-                    <button type="submit" class="btn btn-dark btn-sm btn-block h-100 d-flex align-items-center justify-content-center px-0" >Add to cart</button>
+                    <button type="submit" class="btn btn-dark btn-sm btn-block h-100 d-flex align-items-center rounded-right justify-content-center px-0" >Add to cart</button>
                 </div>
 {#            <div class="col-sm-3 pl-sm-0">#}
 {#                    <a class="btn btn-dark btn-sm btn-block h-100 d-flex align-items-center justify-content-center px-0" href="{{ item.get_add_to_cart_url }}">Add to cart</a>#}
@@ -172,65 +165,11 @@
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script>
-    $(document).ready(function (){
         //form item quantity based on available stock
     const vq= `{{ item.warehouse_quantity }}`
     for (let i=1; i<=vq; i++){
     $('select').append(`<option value="${i}">${i}</option>`)
         }
-    //wishlist
-    $('#wishlist').on('click', function (e) {
-        e.preventDefault()
-        const url = $(this).attr('href')
-
-        $.ajax({
-            url:url,
-            success:function (data){
-            if(data.added_to_wishlist===true){
-            $('#wishlist').html(`<i class="fa fa-heart text-danger mr-2"></i> Remove from wishlist`)
-
-            }
-            else if(data.added_to_wishlist===false){
-            $('#wishlist').html('<i class="far fa-heart  mr-2"></i> Add to wishlist')
-            }
-            else {
-                const login = window.confirm('YOU MUST BE LOGGED IN, LOGIN NOW?')
-                if (login) {
-                    window.location.href = '/accounts/login'
-                }
-            }
-              }
-        })
-    })
-
-        //wishlist on related items section
-    $('.wish').on('click', function (e) {
-        e.preventDefault()
-        const url = $(this).attr('href')
-        const item_id = $(this).attr('id')
-        $.ajax({
-                url: url,
-                success: function (data) {
-                console.log(data)
-                if (data.added_to_wishlist === true) {
-                    $('#'+item_id).html(`<i class="fa fa-heart text-danger "></i>`)
-
-                } else if (data.added_to_wishlist === false) {
-                    $('#' + item_id).html(`<i class="far fa-heart text-dark  "></i>`)
-                }
-                else {
-                    const login = window.confirm('YOU MUST BE LOGGED IN, LOGIN NOW?')
-                    if (login) {
-                        window.location.href = '/accounts/login'
-                    }
-                }
-            }
-        }
-    )
-})
-
- })
-
 
     </script>
 {% endblock %}

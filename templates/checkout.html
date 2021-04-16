@@ -110,33 +110,5 @@
 </div>
     <br>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script>
-
-    $('#id_state').change(function () {
-        const url = $('#form').attr('cities-url')
-        const state_id = $('#id_state').val()
-
-        $.ajax({
-                url: url,
-                data:{
-                    'state': state_id
-                       },
-                success: function (data) {
-                    $('#id_city').html(data)
-
-
-            }
-        }
-    )
-    })
-
-    $('#orderConfirm').on('click',()=>{
-        $.ajax(
-
-        )
-    })
-
-    </script>
 
 {% endblock %}

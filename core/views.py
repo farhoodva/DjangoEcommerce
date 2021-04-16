@@ -7,6 +7,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
+from django.utils.datastructures import MultiValueDictKeyError
 from django.views import generic
 from RetailShopDjango.mixins import ProfileUpdateMixin
 from users.forms import  UserBillingEditForm
@@ -72,36 +73,40 @@ def add_remove_to_wishlist(request, slug):
         return JsonResponse(data, safe=False)
 
 
-@login_required()
+# @login_required()
 def add_to_cart_multiple(request, slug):
-    number = request.POST['item_quantity']
-    item = get_object_or_404(Item, slug=slug)
-    order_item, created = OrderItem.objects.get_or_create(
-        user=request.user,
-        item=item,
-        order_completed=False,
-        )
-    cart_qs = ShoppingCart.objects.filter(user=request.user, ordered=False)
+    if  request.user.is_authenticated:
+        try:
+            number = request.POST['item_quantity']
+        except MultiValueDictKeyError:
+            number = 1
+        item = get_object_or_404(Item, slug=slug)
+        order_item, created = OrderItem.objects.get_or_create(
+            user=request.user,
+            item=item,
+            order_completed=False,
+            )
+        cart_qs = ShoppingCart.objects.filter(user=request.user, ordered=False)
 
-    if cart_qs.exists():
-        cart = cart_qs[0]
-        if not created:
-            order_item.quantity += int(number)
-            order_item.save()
-            messages.info(request, f"{order_item.item.title.title()} added, {order_item.quantity} in cart ")
+        if cart_qs.exists():
+            cart = cart_qs[0]
+            if not created:
+                order_item.quantity += int(number)
+                order_item.save()
+                messages.info(request, f"{order_item.item.title.title()} added, {order_item.quantity} in cart ")
+            else:
+                order_item.quantity = int(number)
+                order_item.save()
+                cart.items.add(order_item)
+                cart.save()
+                messages.info(request, f"{order_item.item.title.title()} added, {order_item.quantity} in cart ")
         else:
-            order_item.quantity = int(number)
-            order_item.save()
+            cart = ShoppingCart.objects.create(user=request.user)
             cart.items.add(order_item)
             cart.save()
             messages.info(request, f"{order_item.item.title.title()} added, {order_item.quantity} in cart ")
-    else:
-        cart = ShoppingCart.objects.create(user=request.user)
-        cart.items.add(order_item)
-        cart.save()
-        messages.info(request, f"{order_item.item.title.title()} added, {order_item.quantity} in cart ")
-    return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
-
+        return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
+    return redirect('account_login')
 
 
 @login_required()
