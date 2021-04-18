@@ -9,12 +9,11 @@
                 success: function (data) {
 
                 if (data.added_to_wishlist === true) {
-                    $('#'+item_id).html(`<i class="fa fa-heart text-danger "></i>`)
-
+                    $('#'+item_id).html(`<i data-toggle="tooltip" data-trigger="hover" data-placement="top" title="Remove from wishlist" class="fa fa-heart text-danger "></i>`)
                 }
                 else if (data.added_to_wishlist === false){
-                    $('#'+item_id).html(`<i class="far fa-heart text-dark  "></i>`)
-                    }
+                    $('#'+item_id).html(`<i data-toggle="tooltip" data-trigger="hover" data-placement="top" title="Add to wishlist" class="far fa-heart text-dark  "></i>`)
+                }
                 else {
                     $('#modal').fadeIn()
                     // {#const login =  window.confirm('YOU MUST BE LOGGED IN, LOGIN NOW?')#}
@@ -171,3 +170,5 @@
  })
 
 // detail page scripts end
+
+

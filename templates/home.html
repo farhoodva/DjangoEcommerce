@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+    
 <div class="page-holder">
 
 <div class="container">
@@ -21,14 +22,14 @@
     </section>
     <!-- TRENDING PRODUCTS-->
     <section class="py-5">
-        <header>
-            <p class="small text-muted small text-uppercase mb-1">Made the hard way</p>
-            <h2 class="h5 text-uppercase mb-4">Products</h2>
-        </header>
+    <header>
+        <p class="small text-muted small text-uppercase mb-1">Made the hard way</p>
+        <h2 class="h5 text-uppercase mb-4">Products</h2>
+    </header>
 
-            <!-- PRODUCT-->
-            <div id="productlist" class="row">
-{#AJAX-generated#}
+        <!-- PRODUCT-->
+        <div  id="productlist" class="row">
+        {#AJAX-generated#}
         </div>
 
         <div class="text-center ">
@@ -36,7 +37,7 @@
         </div>
 
     {#pagination#}
-    {#TODO: fix pagination scroll to top#}
+
 {#    {% if is_paginated %}#}
 {#            <nav class="d-flex justify-content-center wow  fadeIn ">#}
 {#                <ul class="pagination primary mb-0">#}
@@ -118,6 +119,5 @@
 </div>
 </div>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
 {% endblock %}

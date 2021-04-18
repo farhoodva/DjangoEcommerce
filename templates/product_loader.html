@@ -1,4 +1,5 @@
-  {% if items %}
+
+{% if items %}
 {% for item in items %}
 
             <div class="prods col-xl-3 col-lg-4 col-sm-6  ">
@@ -12,12 +13,12 @@
                         <div class="product-overlay">
                             <ul class="mb-0 list-inline">
 
-                          <li  class="list-inline-item m-0 p-0">
-                              <a  class="wish btn-lg "  id="id{{ item.pk }}"  href={% url 'core:add_remove_to_wishlist' item.slug %} >
+                          <li class="list-inline-item m-0 p-0">
+                              <a class="wish btn-lg "  id="id{{ item.pk }}"  href={% url 'core:add_remove_to_wishlist' item.slug %} >
                                   {% if request.user in item.wishlist.iterator %}
-                                    <i class="fa fa-heart text-danger"></i>
+                                    <i data-toggle="tooltip" data-trigger="hover" data-placement="top" title="Remove from wishlist" class="fa fa-heart text-danger"></i>
                                   {% else %}
-                                     <i class="far fa-heart text-dark"></i>
+                                     <i data-toggle="tooltip" data-trigger="hover" data-placement="top" title="Add to wishlist" class="far fa-heart text-dark"></i>
                                   {% endif %}
                               </a>
                           </li>
@@ -26,7 +27,6 @@
 {#                                </li>#}
                                 <li class="list-inline-item mr-0">
                                     <a class="btn btn-sm btn-outline-dark" href={% url 'core:product_detail' item.slug %}>
-{#                                       data-toggle="modal">#}
                                         <i class="fas fa-expand"></i>
                                     </a>
                                 </li>
@@ -41,4 +41,12 @@
             {% endfor %}
     {% endif %}
 
+ <script>
+$( document ).ajaxComplete(function() {
+    $('[data-toggle="tooltip"]').tooltip();
+ $('.fa-heart').on('click', function () {
+    $(this).tooltip('hide')
+})
 
+});
+</script>

@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load socialaccount %}
 
 {% load i18n %}
 
@@ -6,23 +7,38 @@
 {% block content %}
 
 <div class="container ">
-   <h2 class="text-center">Login</h2>
+ <section class="py-5 bg-light">
+          <div class="container">
+            <div class="row px-4 px-lg-5 py-lg-4 align-items-center">
+              <div class="col-lg-6">
+                <h1 class="h2 text-uppercase mb-0">Login</h1>
+              </div>
+              <div class="col-lg-6 text-lg-right">
+                <nav aria-label="breadcrumb">
+                  <ol class="breadcrumb justify-content-lg-end mb-0 px-0">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Login</li>
+                  </ol>
+                </nav>
+              </div>
+            </div>
+          </div>
+        </section>
 
         <div class="col-md-4 mx-auto">
 
         <form class="login" method="POST" action="{% url 'account_login' %}">
             {% csrf_token %}
-
         <h6>Username</h6>
             <div class="mb-3 mt-2 ">
 
-                <input class="form-control form-control-lg rounded" type="text" name="login" placeholder="Username" autocomplete="username" maxlength="100" required="" id="id_login">
+                <input class="form-control form-control-lg rounded shadow" type="text" name="login" placeholder="Username" autocomplete="username" maxlength="100" required="" id="id_login">
             </div>
 
             <h6 >Password</h6>
             <div class="mb-3 mt-2">
 
-                <input class="form-control form-control-lg rounded" type="password" name="password" placeholder="Password" autocomplete="current-password" maxlength="100" required="" id="id_password">
+                <input class="form-control form-control-lg rounded shadow" type="password" name="password" placeholder="Password" autocomplete="current-password" maxlength="100" required="" id="id_password">
             </div>
 
             <label  for="id_remember" class="form-check-label active mr-2 mb-3"><h6> Remember Me </h6> </label>
@@ -50,14 +66,16 @@
           {% endfor %}
 
             <div class="input-group">
-            <button type="submit" class="btn btn-dark btn-block rounded mb-1 ">Login</button>
-            <a type="button" class="btn btn-primary btn-block rounded " href="{% url 'account_reset_password' %}">Password Recovery</a>
+            <button type="submit" class="btn btn-dark btn-block rounded mb-1 shadow">Login</button>
+            <a type="button" class="btn btn-primary btn-block rounded shadow" href="{% url 'account_reset_password' %}">Password Recovery</a>
 
                 <div class="mt-4">
                  <h6 class="d-inline mr-5">Don't have an account? </h6> <a  href={% url 'account_signup' %}> Register Here</a>
                 </div>
             </div>
         </form>
+            <h6 class="text-center my-3">OR</h6>
+            <a class="btn btn-block btn-grey rounded shadow" href="{% provider_login_url 'google' %}">Login with Google <i class="fab fa-google text-danger ml-2" ></i></a>
     </div>
     </div>
     <br><br>

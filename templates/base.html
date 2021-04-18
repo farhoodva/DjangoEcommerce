@@ -22,6 +22,33 @@
     <link rel="stylesheet" href={% static "js/countries.json"%}>
     <link rel="shortcut icon" href={% static "img/favicon.png"%}>
 
+<style>
+      .tooltip-inner {
+      background-color: whitesmoke !important;
+      /*!important is not necessary if you place custom.css at the end of your css calls. For the purpose of this demo, it seems to be required in SO snippet*/
+      color: grey;
+      box-shadow:lightgrey 1px 5px 5px;
+        }
+    .bs-tooltip-top .arrow::before, .bs-tooltip-auto[x-placement^="top"] .arrow::before {
+      border-top-color: whitesmoke !important;
+        box-shadow:lightgrey 1px 5px 5px;
+        display: none;
+    }
+
+    .bs-tooltip-right .arrow::before, .bs-tooltip-auto[x-placement^="right"] .arrow::before {
+      border-right-color: whitesmoke !important;
+    }
+
+
+    .bs-tooltip-bottom .arrow::before, .bs-tooltip-auto[x-placement^="bottom"] .arrow::before {
+      border-bottom-color: whitesmoke !important;
+    }
+
+
+    .bs-tooltip-left .arrow::before, .bs-tooltip-auto[x-placement^="left"] .arrow::before {
+      border-left-color: whitesmoke !important;
+    }
+</style>
 
 </head>
 {% include 'navbar.html' %}
@@ -29,7 +56,7 @@
 <body>
 {% if messages  %}
     {% for message in messages %}
-<div id="alert"  class="alert btn-primary alert-dismissible fade show  container " >
+<div id="alert"  class="alert alert-dark alert-dismissible fade show  container " style="position: absolute; top: 8em; right: 0; left: 0" >
    {{ message|safe }}
   <button  type="button" class="close flex-center"  data-dismiss="alert" aria-label="Close">
     <span aria-hidden="true" >&times;</span>

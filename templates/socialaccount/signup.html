@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Signup" %}{% endblock %}
+
+{% block content %}
+    <div class="container">
+   <section class="py-5 bg-light">
+          <div class="container">
+            <div class="row px-4 px-lg-5 py-lg-4 align-items-center">
+              <div class="col-lg-6">
+                <h1 class="h2 text-uppercase mb-0">Sign Up</h1>
+              </div>
+              <div class="col-lg-6 text-lg-right">
+                <nav aria-label="breadcrumb">
+                  <ol class="breadcrumb justify-content-lg-end mb-0 px-0">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Sign Up</li>
+                  </ol>
+                </nav>
+              </div>
+            </div>
+          </div>
+        </section>
+        <br>
+    <h5 class=" text-center col-12">{% blocktrans with provider_name=account.get_provider.name site_name=site.name %}You are about to use your {{provider_name}} account to login to
+{{site_name}}. As a final step, please complete the following form:{% endblocktrans %}</h5>
+
+    <div class="mx-auto my-4 col-md-4">
+
+
+<form class="signup" id="signup_form" method="post" action="{% url 'socialaccount_signup' %}">
+  {% csrf_token %}
+    <h6>Username</h6>
+    <div class="mb-3 mt-2 ">
+
+        <input class="form-control form-control-lg rounded shadow" type="text" name="login" placeholder="Username" autocomplete="off" maxlength="100" required="" id="id_login">
+    </div>
+
+    <h6 >Password</h6>
+    <div class="mb-3 mt-2">
+
+        <input class="form-control form-control-lg rounded shadow" type="email" name="email" placeholder="Example@gmail.com" autocomplete="off" maxlength="100" required="" id="id_email">
+    </div>
+  {% if redirect_field_value %}
+  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+  {% endif %}
+  <button class="btn btn-block btn-dark rounded shadow mt-5" type="submit">{% trans "Sign Up" %} &raquo;</button>
+</form>
+</div>
+</div>
+    <br><br>
+
+{% endblock %}

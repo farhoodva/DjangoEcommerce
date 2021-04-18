@@ -1,129 +1,178 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block head_title %}{{ user.username.title }}'s Cart{% endblock %}
 {% block content %}
 
-    <div class="page-holder container">
-         <section class="py-5 bg-light">
-          <div class="container">
-            <div class="row px-4 px-lg-5 py-lg-4 align-items-center">
-              <div class="col-lg-6">
-                <h1 class="h2 text-uppercase mb-0">Cart</h1>
-              </div>
-              <div class="col-lg-6 text-lg-right">
-                <nav aria-label="breadcrumb">
-                  <ol class="breadcrumb justify-content-lg-end mb-0 px-0">
-                    <li class="breadcrumb-item"><a href="/">Home</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Cart</li>
-                  </ol>
-                </nav>
-              </div>
-            </div>
-          </div>
-        </section>
-        <br>
-        <br>
-            <div class="row">
-              <!-- CART TABLE-->
+<div class="page-holder container">
+ <section class="py-5 bg-light">
+  <div class="container">
+    <div class="row px-4 px-lg-5 py-lg-4 align-items-center">
+      <div class="col-lg-6">
+        <h1 class="h2 text-uppercase mb-0">Cart</h1>
+      </div>
+      <div class="col-lg-6 text-lg-right">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-lg-end mb-0 px-0">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Cart</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+</section>
+<br>
+<br>
+    <div class="row">
+      <!-- CART TABLE-->
 
-              <div class="table-responsive mb-4 col-lg-8">
-                <table class="table">
-                  <thead class="bg-light">
-                    <tr>
-                      <th class="border-0" scope="col"> <strong class="text-small text-uppercase">Product</strong></th>
-                      <th class="border-0" scope="col"> <strong class="text-small text-uppercase">Price</strong></th>
-                      <th class="border-0" scope="col"> <strong class="text-small text-uppercase">Quantity</strong></th>
-                      <th class="border-0" scope="col"> <strong class="text-small text-uppercase">Total</strong></th>
-                      <th class="border-0" scope="col"> </th>
-                    </tr>
-                  </thead>
-                  <tbody>
+      <div class="table-responsive mb-4 col-lg-8">
+        <table class="table">
+          <thead class="bg-light">
+            <tr>
+              <th class="border-0" scope="col"> <strong class="text-small text-uppercase">Product</strong></th>
+              <th class="border-0" scope="col"> <strong class="text-small text-uppercase">Price</strong></th>
+              <th class="border-0" scope="col"> <strong class="text-small text-uppercase">Quantity</strong></th>
+              <th class="border-0" scope="col"> <strong class="text-small text-uppercase">Total</strong></th>
+              <th class="border-0" scope="col"> </th>
+            </tr>
+          </thead>
+          <tbody>
 
-                  {% if cart.items%}
-                   {% for item in cart.items.all %}
-                    <tr class="border-bottom solid primary-color">
-                      <th class="pl-0 border-0" scope="row">
-                        <div class="media align-items-center"><a class="reset-anchor d-block animsition-link" href="{{ item.item.get_item_detail_url }}"><img src={{ item.item.image.url }} alt="..." width="70"/></a>
-                          <div class="media-body ml-3"><strong class="h6"><a class="reset-anchor animsition-link" href="{{ item.item.get_item_detail_url }}">{{ item.item.title }}</a></strong></div>
-                        </div>
-                      </th>
-                      <td class="align-middle border-0">
-                        <p class="mb-0 small "><span class="text-success">$</span>{{item.item.price}}</p>
-                      </td>
-                      <td class="align-middle border-0">
-                        <div class="border d-flex align-items-center justify-content-between px-3"><span class="small text-uppercase text-gray headings-font-family">Quantity</span>
-                          <div class="quantity">
-                            <a class="text-danger p-0 mr-1" href="{{ item.item.get_remove_from_cart_url }}"><i class="fas fa-caret-left" ></i></a>
-                              {{item.quantity}}
-                            <a class="text-success p-0 ml-1" href="{{ item.item.get_add_to_cart_url }}"><i class="fas fa-caret-right" ></i></a>
-                          </div>
-                        </div>
-                      </td>
-                      <td class="align-middle border-0">
-                        <p class="mb-0 small">${{ item.total_price }}</p>
-                      </td>
-                      <td class="align-middle border-0"><a onclick="return confirm('Remove item completely?')" class="reset-anchor" href="{{ item.item.get_remove_order_item_url }}"><i class="fas fa-trash-alt small text-danger"></i></a></td>
+          {% if cart.items%}
+           {% for item in cart.items.all %}
+            <tr class="border-bottom solid primary-color">
+              <th class="pl-0 border-0" scope="row">
+                <div class="media align-items-center"><a class="reset-anchor d-block animsition-link" href="{{ item.item.get_item_detail_url }}"><img src={{ item.item.image.url }} alt="..." width="70"/></a>
+                  <div class="media-body ml-3"><strong class="h6"><a class="reset-anchor animsition-link" href="{{ item.item.get_item_detail_url }}">{{ item.item.title }}</a></strong></div>
+                </div>
+              </th>
+              <td class="align-middle border-0">
+                <p class="mb-0 small "><span class="text-success">$</span>{{item.item.price}}</p>
+              </td>
+              <td class="align-middle border-0">
+                <div class="border d-flex align-items-center justify-content-between px-3 rounded"><span class="small text-uppercase text-gray headings-font-family">Quantity</span>
+                  <div class="quantity">
+                    <a class="text-danger p-0 mr-1" href="{{ item.item.get_remove_from_cart_url }}"><i class="fas fa-caret-left" ></i></a>
+                      {{item.quantity}}
+                    <a  class="text-success p-0 ml-1" href="{{ item.item.get_add_to_cart_url }}"><i class="fas fa-caret-right" ></i></a>
+                  </div>
+                </div>
+              </td>
+              <td class="align-middle border-0">
+                <p class="mb-0 small">${{ item.total_price }}</p>
+              </td>
+              <td class="align-middle border-0">
+                <a id='{{ item.item.pk }}' class="trash reset-anchor" href="{{ item.item.get_remove_order_item_url }}">
+                    <i data-toggle="tooltip" data-placement="top" title="Delete item" class="fas fa-trash-alt small text-danger"></i>
+                </a>
+              </td>
 
-                    </tr>
+            </tr>
 
-                      {% endfor %}
-                  {% else %}
-{#                      <h5 class="mx-auto text-center">Your cart is <span class="text-danger">empty !!! </span></h5>#}
+              {% endfor %}
+          {% else %}
 
-                  {% endif %}
-                  </tbody>
-                </table>
-              </div>
-                        <!-- ORDER TOTAL-->
-              <div class="container col-lg-4">
-              <div class="card border-0 rounded-0 p-lg-4 bg-light">
-                <div class="card-body">
-                  <h5 class="text-uppercase mb-4">Cart total</h5>
-                  <ul class="list-unstyled mb-0">
+          {% endif %}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ORDER TOTAL-->
+      <div class="container col-lg-4">
+      <div class="card border-0 rounded-0 p-lg-4 bg-light">
+        <div class="card-body">
+          <h5 class="text-uppercase mb-4">Cart total</h5>
+          <ul class="list-unstyled mb-0">
+
+              {% if cart.coupon %}
+               <li class="d-flex align-items-center justify-content-between mb-4">
+                   <strong class="text-uppercase small font-weight-bold">Applied coupon</strong>
+                   <span>
+                       ${{ cart.coupon.amount }}
+                       <a onclick="return confirm('Remove coupon?')" class="reset-anchor ml-4" href="{% url 'core:remove_coupon' %}">
+                           <i data-toggle="tooltip" data-placement="top" title="Remove Coupon" class="fas fa-trash-alt small text-danger"></i>
+                       </a>
+                   </span>
+               </li>
+
+              {% else %}
+              <li class="d-flex align-items-center justify-content-between mb-4"><strong class="text-uppercase small font-weight-bold">Applied coupon</strong><span>None</span></li>
+              {% endif %}
+            <li class="border-bottom my-2"></li>
+            <li class="d-flex align-items-center justify-content-between mb-4"><strong class="text-uppercase small font-weight-bold">Total</strong><span>${{ cart.get_total_order_price }}</span></li>
+            <li>
+              <form method="post" action={% url 'core:add_coupon' %}>
+                  {% csrf_token %}
+                <div class="form-group mb-0">
+                  <input class="form-control rounded-top" name="code" type="text" placeholder="Enter your coupon">
+                  <button class="btn btn-primary btn-sm btn-block rounded-bottom" type="submit">
                       {% if cart.coupon %}
-
-                       <li class="d-flex align-items-center justify-content-between mb-4">
-                           <strong class="text-uppercase small font-weight-bold">Applied coupon</strong>
-                           <span>
-                               ${{ cart.coupon.amount }}
-                               <a onclick="return confirm('Remove coupon?')" class="reset-anchor ml-4" href="{% url 'core:remove_coupon' %}">
-                                   <i class="fas fa-trash-alt small text-danger"></i>
-                               </a>
-                           </span>
-                       </li>
-
+                      <i class="fas fa-gift mr-2"></i>Change coupon</button>
                       {% else %}
-                      <li class="d-flex align-items-center justify-content-between mb-4"><strong class="text-uppercase small font-weight-bold">Applied coupon</strong><span>None</span></li>
+                      <i class="fas fa-gift mr-2"></i>Apply coupon</button>
                       {% endif %}
-{#                    <li class="d-flex align-items-center justify-content-between"><strong class="text-uppercase small font-weight-bold">Subtotal</strong><span class="text-muted small">${{ cart.get_total_order_price }}</span></li>#}
-                    <li class="border-bottom my-2"></li>
-                    <li class="d-flex align-items-center justify-content-between mb-4"><strong class="text-uppercase small font-weight-bold">Total</strong><span>${{ cart.get_total_order_price }}</span></li>
-                    <li>
-                      <form method="post" action={% url 'core:add_coupon' %}>
-                          {% csrf_token %}
-                        <div class="form-group mb-0">
-                          <input class="form-control rounded-top" name="code" type="text" placeholder="Enter your coupon">
-                          <button class="btn btn-primary btn-sm btn-block rounded-bottom" type="submit">
-                              {% if cart.coupon %}
-                              <i class="fas fa-gift mr-2"></i>Change coupon</button>
-                              {% else %}
-                              <i class="fas fa-gift mr-2"></i>Apply coupon</button>
-                              {% endif %}
-                        </div>
-                      </form>
-                    </li>
-                  </ul>
                 </div>
-              </div>
-            </div>
+              </form>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
 
-              <!-- CART NAV-->
-              <div class="container bg-light px-4 py-3 my-5">
-                <div class="row align-items-center text-center">
-                  <div class="col-md-6 mb-3 mb-md-0 text-md-left"><a class="btn btn-link p-0 text-dark btn-sm" href="shop.html"><i class="fas fa-long-arrow-alt-left mr-2"> </i>Continue shopping</a></div>
-                  <div class="col-md-6 text-md-right"><a class="btn btn-outline-dark btn-sm" href={{ user.userprofile.get_billing_url }}>Procceed to checkout<i class="fas fa-long-arrow-alt-right ml-2"></i></a></div>
-                </div>
-              </div>
+      <!-- CART NAV-->
+      <div class="container bg-light px-4 py-3 my-5">
+        <div class="row align-items-center text-center">
+          <div class="col-md-6 mb-3 mb-md-0 text-md-left"><a class="btn btn-link p-0 text-dark btn-sm" href="shop.html"><i class="fas fa-long-arrow-alt-left mr-2"> </i>Continue shopping</a></div>
+          <div class="col-md-6 text-md-right"><a class="btn btn-outline-dark btn-sm" href={{ user.userprofile.get_billing_url }}>Procceed to checkout<i class="fas fa-long-arrow-alt-right ml-2"></i></a></div>
+        </div>
+      </div>
+    </div>
 
-            </div>
+     <!-- Delete Modal -->
+<div id="deleteModal" class="modal  fade"  tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title mx-auto">Confirm</h5>
+        </div>
+        <div class="modal-body text-center text-small">
+        <h6>Delete item from cart?</h6>
+        </div>
+        <div class="text-center my-3" >
+    <button id="itemDelete" type="button" class="btn btn-dark mx-auto rounded col-5 shadow" >Delete</button>
+    <button id="modalClose" type="button" class="btn btn-primary mx-auto rounded col-5 shadow" data-dismiss ='modal'>Close</button>
 </div>
+</div>
+</div>
+</div>
+
+
+</div>
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+<script>
+    $('.trash').click((a)=>{
+        a.preventDefault()
+        const url = $(a.currentTarget).attr('href')
+        $('#deleteModal').modal('show')
+        $('#itemDelete').click(()=>{
+            window.location.href=url
+         })
+
+    })
+
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+
+
+
+</script>
+
      {% endblock %}
+

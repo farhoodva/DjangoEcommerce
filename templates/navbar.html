@@ -1,3 +1,4 @@
+{% load socialaccount %}
 {% load static %}
 {% load tags %}
 <header class="header bg-white">
@@ -116,7 +117,7 @@
     </div>
 
     <!-- Login modal-->
-    <div id="modalLogin" class="modal fade"  tabindex="-1">
+    <div id="modalLogin" class="modal fade" style="border-radius: 15px"  tabindex="-1">
         <div class="modal-dialog">
         <div class="modal-content">
         <div class="modal-header">
@@ -132,7 +133,7 @@
                     <h6>Username</h6>
                     <div class="mb-3 mt-2 ">
 
-                        <input class="form-control form-control-lg rounded" type="text" name="login"
+                        <input class="form-control form-control-lg rounded shadow" type="text" name="login"
                                placeholder="Username" autocomplete="username" maxlength="100" required=""
                                id="id_login">
                     </div>
@@ -140,7 +141,7 @@
                     <h6>Password</h6>
                     <div class="mb-3 mt-2">
 
-                        <input class="form-control form-control-lg rounded" type="password" name="password"
+                        <input class="form-control form-control-lg rounded shadow" type="password" name="password"
                                placeholder="Password" autocomplete="current-password" maxlength="100"
                                required="" id="id_password">
                     </div>
@@ -172,8 +173,8 @@
                     {% endfor %}
 
                     <div class="input-group">
-                        <button type="submit" class="btn btn-dark btn-block rounded mb-1 ">Login</button>
-                        <a type="button" class="btn btn-primary btn-block rounded "
+                        <button type="submit" class="btn btn-dark btn-block rounded-pill mb-1 shadow">Login</button>
+                        <a type="button" class="btn btn-primary btn-block rounded-pill shadow"
                            href="{% url 'account_reset_password' %}">Password Recovery</a>
 
                         <div class="mt-4">
@@ -182,10 +183,13 @@
                         </div>
                     </div>
                 </form>
+                      <h6 class="text-center my-3">OR</h6>
+            <a class="btn btn-block btn-grey rounded-pill shadow" href="{% provider_login_url 'google' %}">Login with Google <i class="fab fa-google text-danger ml-2" ></i></a>
             </div>
+
         </div>
         <div class="modal-footer ">
-            <button id="modalClose" type="button" class="btn btn-block btn-danger mx-auto rounded col-11" data-dismiss ='modal'>Close</button>
+            <button id="modalClose" type="button" class="btn btn-block btn-danger mx-auto rounded-pill col-11 shadow" data-dismiss ='modal'>Close</button>
         </div>
     </div>
 </div>
@@ -208,8 +212,8 @@
                 <h4 class="my-xl-5">Are You Sure?</h4>
                 <br><br>
                 <div class="input-group">
-                <button  class="btn btn-dark btn-block rounded px-4" type="submit">Log Out</button>
-                     <button  class="mx-auto btn btn-info btn-block rounded  mt-2" data-dismiss ='modal'>Close</button>
+                <button  class="btn btn-dark btn-block rounded-pill px-4" type="submit">Log Out</button>
+                     <button  class="mx-auto btn btn-primary btn-block rounded-pill  mt-2" data-dismiss ='modal'>Close</button>
 
                 </div>
             </form>
