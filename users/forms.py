@@ -24,7 +24,8 @@ class CustomSignupForm(SignupForm):
 class UserProfileEditForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ['firstname', 'lastname', 'email', 'phone_number','state', 'city', 'address_line1', 'address_line2', 'profile_pic']
+        fields = ['firstname', 'lastname', 'email', 'phone_number','state', 'city', 'address_line1', 'address_line2',
+                  'profile_pic']
         widgets = {
             'firstname': forms.TextInput(attrs={
                     'placeholder': 'Firstname',
@@ -36,15 +37,15 @@ class UserProfileEditForm(forms.ModelForm):
                     }),
             'address_line1': forms.TextInput(attrs={
                     'placeholder': 'Address Line 1',
-                    'class': 'form-control ,form-control-lg,  rounded',
+                    'class': 'form-control ,form-control-lg, no-border',
                     }),
             'address_line2': forms.TextInput(attrs={
                     'placeholder': 'Address line 2',
-                    'class': 'form-control ,form-control-lg,  rounded',
+                    'class': 'form-control ,form-control-lg, no-border',
                     }),
             'profile_pic': forms.FileInput(attrs={
                     'placeholder': 'profile_pic',
-                    'class': 'form-control ,form-control-lg, rounded',
+                    'class': 'form-control, form-control-lg, rounded',
                     }),
             'phone_number': forms.NumberInput(attrs={
                     'placeholder': 'e.g 912********',
@@ -66,7 +67,6 @@ class UserProfileEditForm(forms.ModelForm):
         self.fields['state'].widget.attrs.update({
             'placeholder': 'State',
             'class': 'form-control ,form-control-lg, rounded',
-            'empty_label': ' Select State'
         })
         self.fields['state'].queryset = State.objects.all()
         self.fields['state'].empty_label = 'Select State'
@@ -105,11 +105,11 @@ class UserBillingEditForm(forms.ModelForm):
                     }),
             'address_line1': forms.TextInput(attrs={
                     'placeholder': 'Address Line 1',
-                    'class': 'form-control ,form-control-lg,  rounded',
+                    'class': 'form-control ,form-control-lg, no-border',
                     }),
             'address_line2': forms.TextInput(attrs={
                     'placeholder': 'Address line 2',
-                    'class': 'form-control ,form-control-lg,  rounded',
+                    'class': 'form-control ,form-control-lg, no-border',
                     }),
             'phone_number': forms.NumberInput(attrs={
                     'placeholder': 'e.g 912********',

@@ -3,230 +3,248 @@
 {% load tags %}
 <header class="header bg-white">
     <div class="container px-0 px-lg-3 ">
-    <nav class="navbar navbar-expand-lg navbar-light  sticky py-3 px-lg-0">
+        <nav class="navbar navbar-expand-lg navbar-light  sticky py-3 px-lg-0">
 
-        <button class="navbar-toggler navbar-toggler-right " type="button" data-toggle="collapse"
-                data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-        <a class="navbar-brand ml-3 mx-lg-auto mx-md-auto mx-sm-auto " href="/"><span
-                class="font-weight-bold text-uppercase text-dark">FSTORE</span></a>
+            <button class="navbar-toggler navbar-toggler-right " type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <a class="navbar-brand ml-3 mx-lg-auto mx-md-auto mx-sm-auto " href="/"><span
+                    class="font-weight-bold text-uppercase text-dark">FSTORE</span></a>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <!-- Link--><a class="nav-link active" href="/">Home</a>
-                </li>
-                <li class="nav-item">
-                    <!-- Link--><a class="nav-link" href="shop.html">Shop</a>
-                </li>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <!-- Link--><a class="nav-link active" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <!-- Link--><a class="nav-link" href="shop.html">Shop</a>
+                    </li>
 
-                <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="pagesDropdown" href="#"
-                                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pages</a>
-                    <div class="dropdown-menu mt-3" aria-labelledby="pagesDropdown">
-                        <a class="dropdown-item border-0 transition-link" href="home.html">Homepage</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item border-0 transition-link" href="shop.html">Category</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item border-0 transition-link" href="cart.html">Shopping cart</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item border-0 transition-link" href="checkout.html">Checkout</a>
-                    </div>
-                </li>
+                    <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="pagesDropdown" href="#"
+                                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pages</a>
+                        <div class="dropdown-menu mt-3" aria-labelledby="pagesDropdown">
+                            <a class="dropdown-item border-0 transition-link" href="home.html">Homepage</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item border-0 transition-link" href="shop.html">Category</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item border-0 transition-link" href="cart.html">Shopping cart</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item border-0 transition-link" href="checkout.html">Checkout</a>
+                        </div>
+                    </li>
 
-            </ul>
+                </ul>
 
 
-            {#right nabvar#}
-            <ul class="navbar-nav ml-auto">
+                {#right nabvar#}
+                <ul class="navbar-nav ml-auto">
 
-                <li class="nav-item">
-                    <a class="nav-link" href={% url 'core:cart_view' %}> <i
-                            class="fas fa-dolly-flatbed mr-1 text-gray"></i>Cart
-                        {% if request.user.is_authenticated %}
-                            <span class="text-danger ml-1">({{ request.user|count_order }})</span>
-                        {% else %}
-                            <span class="text-grey">(0)</span>
-                        {% endif %}
-                    </a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href={% url 'core:cart_view' %}> <i
+                                class="fas fa-dolly-flatbed mr-1 text-gray"></i>Cart
+                            {% if request.user.is_authenticated %}
+                                <span class="text-danger ml-1">({{ request.user|count_order }})</span>
+                            {% else %}
+                                <span class="text-grey">(0)</span>
+                            {% endif %}
+                        </a>
+                    </li>
 
                 </ul>
             </div>
-    <span class="nav-item">
+            <span class="nav-item">
 
     {% if request.user.is_authenticated %}
 
         <div class="nav-item dropdown ">
 
-    <a class="nav-link dropdown-toggle px-0" id="pagesDropdown" href="#" data-toggle="dropdown"
-       aria-haspopup="true" aria-expanded="false">
-    {% if user.userprofile.profile_pic %}
-        <img class="rounded-circle mx-1" width="25px" height="25px" src={{ user.userprofile.profile_pic.url }} alt="">
-    {% endif %}
+        <a class="nav-link dropdown-toggle px-0" id="pagesDropdown" href="#" data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false">
+        {% if user.userprofile.profile_pic %}
+            <img class="rounded-circle mx-1" width="25px" height="25px" src={{ user.userprofile.profile_pic.url }} alt="">
+         {% endif %}
+        </a>
 
-    </a>
-
-    <div class="dropdown-menu mt-3" aria-labelledby="pagesDropdown">
-    <div class="dropdown-item">Welcome
+        <div class="dropdown-menu mt-3" aria-labelledby="pagesDropdown">
+        <div class="dropdown-item">Welcome
         {% if not user.userprofile.firstname %}
             {{ user.username.title }}
         {% else %}
             {{ user.userprofile.firstname.title }}
-        {% endif %}
+    {% endif %}
     </div>
     <div class="dropdown-divider"></div>
-    <a class="dropdown-item border-0 transition-link"
-       href={{ user.userprofile.get_profile_update_url }}>
-    Manage your profile
+        <a class="dropdown-item border-0 transition-link"
+        href={{ user.userprofile.get_profile_update_url }}>
+        Manage your profile
         <i class="fas fa-user-alt ml-1 text-primary"></i>
-    </a>
+        </a>
 
     <div class="dropdown-divider"></div>
 
-    <a class="dropdown-item border-0 transition-link" href={% url 'user_wishlist' %}>
-    <i class="far fa-heart mr-1 mb-0"></i> <span class="text-danger ml-2">({{ request.user|count_wishlist }})</span>
-    </a>
+        <a class="dropdown-item border-0 transition-link" href={% url 'user_wishlist' %}>
+        <i class="far fa-heart mr-1 mb-0"></i> <span class="text-danger ml-2">({{ request.user|count_wishlist }})</span>
+        </a>
 
     <div class="dropdown-divider"></div>
 
-    <a id="logOut" class="dropdown-item border-0 transition-link" href={% url 'account_logout' %}>
-    Logout
-    </a>
+        <a id="logOut" class="dropdown-item border-0 transition-link" href={% url 'account_logout' %}>
+        Logout
+        </a>
     </div>
 
     </div>
     {% else %}
-        <a id="login" class="nav-link font-weight-bold text-black-50 text-hover-info pr-0" href={% url 'account_login' %}>
-        <i class="pr-1 fas fa-user-alt text-gray"></i>
-        Login
-         </a>
+    <a id="login" class="nav-link font-weight-bold text-black-50 text-hover-info pr-0" href={% url 'account_login' %}>
+    <i class="pr-1 fas fa-user-alt text-gray"></i>
+    Login
+    </a>
     {% endif %}
-  </span>
-    </nav>
+    </span>
+        </nav>
 
-    {#live search#}
-    <div id="searchForm" class="result col-lg-6 col-sm-8 mx-auto mb-1 mt-1" tabindex="0"
-         url={% url 'core:ajax_search' %} action="">
 
-        <input id="search" class="form-control rounded text-center mb-1" autocomplete="off"
-               placeholder="Type to search " type="text"><span class="d-inline mx-0 px-0"></span>
+        {#live search#}
+        <div id="searchForm" class="result col-lg-6 col-sm-8 mx-auto mb-1 mt-1" tabindex="0"
+             url={% url 'core:search' %} >
+            <form method="post" action={% url 'core:search' %}>
+                {% csrf_token %}
+            <div class="input-group">
 
-        <div id="search-results" class="card rounded  position-absolute shadow z-index-50" style="width: 94.5%">
+                <input id="search" name="searchTxt" class="form-control rounded-left text-center mb-1 " style="border-top-left-radius: 50%;border-bottom-left-radius: 50%" autocomplete="off"
+                       placeholder="Type to search " type="text"><span class="d-inline mx-0 px-0"></span>
+                <div class="input-group-append">
+                    <button id="searchBtn" class="btn-sm alert-primary rounded-right mb-1 " disabled type="submit" style="border: 0">Search</button>
+                </div>
 
+            </div>
+                </form>
+            <div id="search-results" class="card rounded  position-absolute shadow z-index-50" style="width: 94.0%; display: none">
+
+            </div>
+        </div>
+
+
+<!-- Login modal-->
+<div id="modalLogin" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title mx-auto">LOGIN</h4>
+            </div>
+            <div class="modal-body">
+                <!-- Login form -->
+                <div class="col-12 mx-auto">
+
+                    <form class="login" method="POST" action="{% url 'account_login' %}">
+                        {% csrf_token %}
+
+                        <h6>Username</h6>
+                        <div class="mb-3 mt-2 ">
+
+                            <input class="form-control form-control-lg rounded-pill shadow" type="text"
+                                   name="login"
+                                   placeholder="Username" autocomplete="username" maxlength="100" required=""
+                                   id="id_login">
+                        </div>
+
+                        <h6>Password</h6>
+                        <div class="mb-3 mt-2">
+
+                            <input class="form-control form-control-lg rounded-pill shadow" type="password"
+                                   name="password"
+                                   placeholder="Password" autocomplete="current-password" maxlength="100"
+                                   required="" id="id_password">
+                        </div>
+
+                        <label for="id_remember" class="form-check-label active mr-2 mb-3"><h6> Remember
+                            Me </h6></label>
+                        <input type="checkbox" class="form-check-inline" name="remember" id="id_remember">
+
+                        {% if redirect_field_value %}
+                            <input type="hidden" name="{{ redirect_field_name }}"
+                                   value="{{ redirect_field_value }}"/>
+                        {% endif %}
+
+                        {% if form.non_field_errors %}
+                            <div class=" text-danger font-weight-bold">{{ form.non_field_errors }}</div>
+                        {% endif %}
+                        {% for field in form %}
+                            {% if field.errors %}
+                                <li class="navbar-nav">
+                                    <div class="text-danger font-weight-bold">{{ field.label }} :</div>
+                                    <div class="errorlist navbar-nav">
+                                        {% for error in field.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                </li>
+                                <br>
+                            {% endif %}
+                        {% endfor %}
+
+                        <div class="input-group">
+                            <button type="submit" class="btn btn-dark btn-block rounded-pill mb-1 shadow">
+                                Login
+                            </button>
+                            <a type="button" class="btn btn-primary btn-block rounded-pill shadow"
+                               href="{% url 'account_reset_password' %}">Password Recovery</a>
+
+                            <div class="mt-4">
+                                <h6 class="d-inline mr-5">Don't have an account? </h6> <a
+                                    href={% url 'account_signup' %}> Register Here</a>
+                            </div>
+                        </div>
+                    </form>
+                    <h6 class="text-center my-3">OR</h6>
+                    <a class="btn btn-block btn-grey rounded-pill shadow"
+                       href="{% provider_login_url 'google' %}">Login with Google <i
+                            class="fab fa-google text-danger ml-2"></i></a>
+                </div>
+
+            </div>
+            <div class="modal-footer ">
+                <button id="modalClose" type="button"
+                        class="btn btn-block btn-danger mx-auto rounded-pill col-11 shadow"
+                        data-dismiss='modal'>Close
+                </button>
+            </div>
         </div>
     </div>
+</div>
 
-    <!-- Login modal-->
-    <div id="modalLogin" class="modal fade" style="border-radius: 15px"  tabindex="-1">
-        <div class="modal-dialog">
+<!-- Logout modal-->
+<div id="modalLogout" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
         <div class="modal-content">
-        <div class="modal-header">
-            <h4 class="modal-title mx-auto">LOGIN</h4>
-        </div>
-        <div class="modal-body">
-            <!-- Login form -->
-          <div class="col-12 mx-auto">
-
-                <form class="login" method="POST" action="{% url 'account_login'  %}" >
+            <div class="modal-header">
+                <h4 class="modal-title mx-auto">Logout</h4>
+            </div>
+            <div class="modal-body">
+                <!-- Logout form -->
+                <form class="col-10 mx-auto" method="post" action="{% url 'account_logout' %}">
                     {% csrf_token %}
-
-                    <h6>Username</h6>
-                    <div class="mb-3 mt-2 ">
-
-                        <input class="form-control form-control-lg rounded shadow" type="text" name="login"
-                               placeholder="Username" autocomplete="username" maxlength="100" required=""
-                               id="id_login">
-                    </div>
-
-                    <h6>Password</h6>
-                    <div class="mb-3 mt-2">
-
-                        <input class="form-control form-control-lg rounded shadow" type="password" name="password"
-                               placeholder="Password" autocomplete="current-password" maxlength="100"
-                               required="" id="id_password">
-                    </div>
-
-                    <label for="id_remember" class="form-check-label active mr-2 mb-3"><h6> Remember
-                        Me </h6></label>
-                    <input type="checkbox" class="form-check-inline" name="remember" id="id_remember">
-
                     {% if redirect_field_value %}
                         <input type="hidden" name="{{ redirect_field_name }}"
                                value="{{ redirect_field_value }}"/>
                     {% endif %}
-
-                    {% if form.non_field_errors %}
-                        <div class=" text-danger font-weight-bold">{{ form.non_field_errors }}</div>
-                    {% endif %}
-                    {% for field in form %}
-                        {% if field.errors %}
-                            <li class="navbar-nav">
-                                <div class="text-danger font-weight-bold">{{ field.label }} :</div>
-                                <div class="errorlist navbar-nav">
-                                    {% for error in field.errors %}
-                                        {{ error }}
-                                    {% endfor %}
-                                </div>
-                            </li>
-                            <br>
-                        {% endif %}
-                    {% endfor %}
-
+                    <h4 class="my-xl-5">Are You Sure?</h4>
+                    <br><br>
                     <div class="input-group">
-                        <button type="submit" class="btn btn-dark btn-block rounded-pill mb-1 shadow">Login</button>
-                        <a type="button" class="btn btn-primary btn-block rounded-pill shadow"
-                           href="{% url 'account_reset_password' %}">Password Recovery</a>
+                        <button class="btn btn-dark btn-block rounded-pill px-4" type="submit">Log Out</button>
+                        <button class="mx-auto btn btn-primary btn-block rounded-pill  mt-2"
+                                data-dismiss='modal'>Close
+                        </button>
 
-                        <div class="mt-4">
-                            <h6 class="d-inline mr-5">Don't have an account? </h6> <a
-                                href={% url 'account_signup' %}> Register Here</a>
-                        </div>
                     </div>
                 </form>
-                      <h6 class="text-center my-3">OR</h6>
-            <a class="btn btn-block btn-grey rounded-pill shadow" href="{% provider_login_url 'google' %}">Login with Google <i class="fab fa-google text-danger ml-2" ></i></a>
             </div>
-
-        </div>
-        <div class="modal-footer ">
-            <button id="modalClose" type="button" class="btn btn-block btn-danger mx-auto rounded-pill col-11 shadow" data-dismiss ='modal'>Close</button>
         </div>
     </div>
 </div>
 </div>
-
-    <!-- Logout modal-->
-    <div id="modalLogout" class="modal fade"  tabindex="-1">
-        <div class="modal-dialog">
-        <div class="modal-content">
-        <div class="modal-header">
-            <h4 class="modal-title mx-auto">Logout</h4>
-        </div>
-        <div class="modal-body">
-            <!-- Logout form -->
-             <form class="col-10 mx-auto" method="post" action="{% url 'account_logout' %}">
-                {% csrf_token %}
-                {% if redirect_field_value %}
-                    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
-                {% endif %}
-                <h4 class="my-xl-5">Are You Sure?</h4>
-                <br><br>
-                <div class="input-group">
-                <button  class="btn btn-dark btn-block rounded-pill px-4" type="submit">Log Out</button>
-                     <button  class="mx-auto btn btn-primary btn-block rounded-pill  mt-2" data-dismiss ='modal'>Close</button>
-
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-</div>
-</div>
-<hr class="container mt-0">
+    <hr class="container mt-0">
 </header>
 
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script>
 
-</script>
 

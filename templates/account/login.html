@@ -25,20 +25,20 @@
           </div>
         </section>
 
-        <div class="col-md-4 mx-auto">
+        <div class="col-md-5 mx-auto">
 
         <form class="login" method="POST" action="{% url 'account_login' %}">
             {% csrf_token %}
         <h6>Username</h6>
             <div class="mb-3 mt-2 ">
 
-                <input class="form-control form-control-lg rounded shadow" type="text" name="login" placeholder="Username" autocomplete="username" maxlength="100" required="" id="id_login">
+                <input class="form-control form-control-lg rounded-pill shadow" type="text" name="login" placeholder="Username" autocomplete="username" maxlength="100" required="" id="id_login">
             </div>
 
             <h6 >Password</h6>
             <div class="mb-3 mt-2">
 
-                <input class="form-control form-control-lg rounded shadow" type="password" name="password" placeholder="Password" autocomplete="current-password" maxlength="100" required="" id="id_password">
+                <input class="form-control form-control-lg rounded-pill shadow" type="password" name="password" placeholder="Password" autocomplete="current-password" maxlength="100" required="" id="id_password">
             </div>
 
             <label  for="id_remember" class="form-check-label active mr-2 mb-3"><h6> Remember Me </h6> </label>
@@ -66,8 +66,8 @@
           {% endfor %}
 
             <div class="input-group">
-            <button type="submit" class="btn btn-dark btn-block rounded mb-1 shadow">Login</button>
-            <a type="button" class="btn btn-primary btn-block rounded shadow" href="{% url 'account_reset_password' %}">Password Recovery</a>
+            <button type="submit" class="btn btn-dark btn-block rounded-pill mb-1 shadow">Login</button>
+            <a type="button" class="btn btn-primary btn-block rounded-pill shadow" href="{% url 'account_reset_password' %}">Password Recovery</a>
 
                 <div class="mt-4">
                  <h6 class="d-inline mr-5">Don't have an account? </h6> <a  href={% url 'account_signup' %}> Register Here</a>
@@ -75,7 +75,7 @@
             </div>
         </form>
             <h6 class="text-center my-3">OR</h6>
-            <a class="btn btn-block btn-grey rounded shadow" href="{% provider_login_url 'google' %}">Login with Google <i class="fab fa-google text-danger ml-2" ></i></a>
+            <a class="btn btn-block btn-grey rounded-pill shadow" href="{% provider_login_url 'google' %}">Login with Google <i class="fab fa-google text-danger ml-2" ></i></a>
     </div>
     </div>
     <br><br>

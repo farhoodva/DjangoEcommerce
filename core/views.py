@@ -34,7 +34,7 @@ class CartView(LoginRequiredMixin, generic.ListView):
             qs = ShoppingCart.objects.get(user_id=self.request.user.id, ordered=False)
             return qs
         except ObjectDoesNotExist:
-            messages.info(self.request, 'No items in cart')
+            messages.info(self.request, 'You have no active cart')
 
 
 class ProductDetailView(generic.DetailView):
@@ -184,15 +184,22 @@ def remove_coupon(request):
     return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
 
 
-def ajax_search(request):
-    search_string = request.GET.get('searchTxt')
-    search_result = Item.objects.filter(title__icontains=search_string) \
-        | Item.objects.filter(price__startswith=search_string) \
-        | Item.objects.filter(description__icontains=search_string) \
-        | Item.objects.filter(category__name__icontains=search_string)
-    data = search_result.values()
-    return render(request, 'search_results.html', {'results': search_result})
-    # return JsonResponse(list(data), safe=False)
+def search(request):
+    if request.is_ajax():
+        search_string = request.GET.get('searchTxt')
+        search_results_qs = Item.objects.filter(title__icontains=search_string) \
+            | Item.objects.filter(price__startswith=search_string) \
+            | Item.objects.filter(description__icontains=search_string) \
+            | Item.objects.filter(category__name__icontains=search_string)
+        data = search_results_qs.values()
+        return render(request, 'search_results_ajax.html', {'results': search_results_qs})
+    else:
+        search_string = request.POST.get('searchTxt')
+        search_results_qs = Item.objects.filter(title__icontains=search_string) \
+                            | Item.objects.filter(price__startswith=search_string) \
+                            | Item.objects.filter(description__icontains=search_string) \
+                            | Item.objects.filter(category__name__icontains=search_string)
+        return render(request, 'search_results.html', {'results': search_results_qs})
 
 
 def ajax_load_products(request, display):

@@ -3,23 +3,27 @@
     $(document).on('click', '.wish', function (e) {
         e.preventDefault()
         const url = $(this).attr('href')
-        const item_id = $(this).attr('id')
+        const itemId = $(this).attr('id')
         $.ajax({
                 url: url,
                 success: function (data) {
 
                 if (data.added_to_wishlist === true) {
-                    $('#'+item_id).html(`<i data-toggle="tooltip" data-trigger="hover" data-placement="top" title="Remove from wishlist" class="fa fa-heart text-danger "></i>`)
-                }
+                    $('#'+itemId).html(`<i data-toggle="tooltip" data-trigger="hover" data-placement="top" title="Remove from wishlist" class="fa fa-heart text-danger "></i>`)
+                    $('[data-toggle="tooltip"]').tooltip();
+                    $('.fa-heart').on('click', function () {
+                        $(this).tooltip('hide')
+                         })
+                                }
                 else if (data.added_to_wishlist === false){
-                    $('#'+item_id).html(`<i data-toggle="tooltip" data-trigger="hover" data-placement="top" title="Add to wishlist" class="far fa-heart text-dark  "></i>`)
+                    $('#'+itemId).html(`<i data-toggle="tooltip" data-trigger="hover" data-placement="top" title="Add to wishlist" class="far fa-heart text-dark  "></i>`)
+                 $('[data-toggle="tooltip"]').tooltip();
+                 $('.fa-heart').on('click', function () {
+                        $(this).tooltip('hide')
+                        })
                 }
                 else {
-                    $('#modal').fadeIn()
-                    // {#const login =  window.confirm('YOU MUST BE LOGGED IN, LOGIN NOW?')#}
-                    // {#if(login) {#}
-                    // {#  window.location.href = 'accounts/login'#}
-                    // {#    }#}
+                    $('#modalLogin').modal('show')
 
                 }
             }
@@ -74,25 +78,33 @@
 
     //live search
     $('#search').on('keyup focus ', function () {
-        $('#search-results').fadeIn()
+        const searchBtn =  $('#searchBtn')
+        const searchResults =  $('#search-results')
+        let searchTxt = $(this).val().trim()
+        const url = $('#searchForm').attr('url')
+        if (searchTxt !== '') {
+        searchBtn.removeAttr('disabled')
+        searchBtn.removeClass('alert-primary')
+        searchBtn.addClass('btn-primary')
+        searchResults.fadeIn()
         $('#search').css({"outline": "none", "border-color": "white", "box-shadow": "0 0 4px grey"})
 
-        const url = $('#searchForm').attr('url')
-        const searchTxt = $(this).val().trim()
-        // {#console.log(searchTxt)#}
-        if (searchTxt !== '') {
             $.ajax({
                 url: url,
                 data: {
                     searchTxt: searchTxt,
                 },
                 success: function (data) {
-                    $('#search-results').html(data)
-                    $('#search-results').css({"outline": "none", "border-color": "white", "border-top-style": "none"})
+                    searchResults.html(data)
+                    searchResults.css({"outline": "none", "border-color": "white", "border-top-style": "none"})
+                    searchTxt = ''
                 }
             })
         } else {
-            $('#search-results').fadeOut()
+            searchResults.fadeOut()
+            searchBtn.attr('disabled',true)
+            searchBtn.removeClass('btn-primary')
+            searchBtn.addClass('alert-primary')
         }
     })
 
@@ -117,8 +129,6 @@
 // navbar scripts end
 
 // profile and checkout city loader ajax
-    $(document).ready(function (){
-
     $('#id_state').change(function () {
         const url = $('#form').attr('cities-url')
         const state_id = $('#id_state').val()
@@ -137,20 +147,18 @@
     )
 })
 
- })
-
 // profile and checkout city loader ajax end
 
 
+
 // detail page scripts
- $(document).ready(function (){
 
     //wishlist
     $('#wishlist').on('click', function (e) {
         e.preventDefault()
         const url = $(this).attr('href')
-
         $.ajax({
+
             url:url,
             success:function (data){
             if(data.added_to_wishlist===true){
@@ -161,14 +169,31 @@
             $('#wishlist').html('<i class="far fa-heart  mr-2"></i> Add to wishlist')
             }
             else {
-                $('#modal').fadeIn()
+                $('#modalLogin').modal('show')
             }
-              }
+              },
+
+
         })
     })
-
- })
 
 // detail page scripts end
 
 
+// form style
+        $('.form-control').on('focus',(e)=>{
+            const fieldId = $(e.target).attr('id')
+            // {#$('#label'+fieldId).removeClass('text-dark')#}
+            $('#label'+fieldId).addClass('font-weight-bold')
+            $('#'+fieldId).css({'outline' :'none', "box-shadow": "1px 1px 4px grey", 'border':0})
+        })
+        $('.form-control').on('blur',(e)=>{
+            const fieldId = $(e.target).attr('id')
+            $('#label'+fieldId).removeClass('font-weight-bold')
+            $('#'+fieldId).css({'outline' :'', "box-shadow": "none", 'border':''})
+        })
+        $('.no-border').on('focus',()=>{
+        // {#$('.no-border').css({"box-shadow": "none"})#}
+        $('.no-border').addClass("rounded")
+            })
+// form style end

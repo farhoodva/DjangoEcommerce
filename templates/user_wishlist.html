@@ -2,28 +2,26 @@
 {% block head_title %}{{ request.user.username.title }}'s Wishlist {% endblock %}
 {% block content %}
 
-
-
 <div class="container">
-         <section class="py-5 bg-light">
-          <div class="container">
-            <div class="row px-4 px-lg-5 py-lg-4 align-items-center">
-              <div class="col-lg-6">
-                <h1 class="h2 text-uppercase mb-0">Wishlist</h1>
-              </div>
-              <div class="col-lg-6 text-lg-right">
-                <nav aria-label="breadcrumb">
-                  <ol class="breadcrumb justify-content-lg-end mb-0 px-0">
-                    <li class="breadcrumb-item"><a href="/">Home</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Wishlist</li>
-                  </ol>
-                </nav>
-              </div>
-            </div>
+     <section class="py-5 bg-light">
+      <div class="container">
+        <div class="row px-4 px-lg-5 py-lg-4 align-items-center">
+          <div class="col-lg-6">
+            <h1 class="h2 text-uppercase mb-0">Wishlist</h1>
           </div>
-        </section>
-        <br>
-        <br>
+          <div class="col-lg-6 text-lg-right">
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb justify-content-lg-end mb-0 px-0">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Wishlist</li>
+              </ol>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </section>
+    <br>
+    <br>
 
 
 {% if items %}
@@ -44,8 +42,8 @@
                     <ul class="mb-0 list-inline">
 
                   <li  class="list-inline-item m-0 p-0">
-                      <a   class="wish btn-lg "  href={% url 'core:add_remove_to_wishlist' item.slug %}>
-                            <i class="fa fa-heart text-danger"></i>
+                      <a   class="userWish btn-lg "  href={% url 'core:add_remove_to_wishlist' item.slug %}>
+                            <i data-toggle="tooltip" data-placement="top"  title="Remove item" class="fa fa-trash text-danger"></i>
                        </a>
                   </li>
                         <li class="list-inline-item m-0 p-0">
@@ -79,11 +77,13 @@
         <br><br>
 
 
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+    $(function () {
+        $('.fa-trash').tooltip()
+    })
 
-
-    $('.wish').on('click', function (e) {
+    $('.userWish').on('click', function (e) {
         e.preventDefault()
         const url = $(this).attr('href')
         const item_id = $('.prod').attr('id')
@@ -99,5 +99,5 @@
 })
 
 
-    </script>
+</script>
 {% endblock %}

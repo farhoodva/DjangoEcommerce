@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
+{% block head_title %}Checkout{% endblock %}
+
 {% block content %}
-
-
 
 <div class="page-holder container">
 <section class="py-5 bg-light">
@@ -39,7 +39,7 @@
         <div class="row">
             {% for field in form %}
                 <div class="col-lg-6 form-group ">
-                    <label class="text-small text-dark">{{ field.label.upper }}</label>
+                    <label id="labelid_{{ field.name }}" class="text-small text-dark mt-3 mb-2">{{ field.label.upper }}</label>
                     {{ field }}
                     <span class="text-primary ">{{ field.errors }}</span>
                 </div>
@@ -95,9 +95,6 @@
                   {% endif %}
             </div>
           </form>
-            <form action="">
-{#        <button id="orderConfirm"  class="btn btn-dark btn-sm btn-block rounded mt-3" type="submit">Place Order</button>#}
-            </form>
         </li>
       </ul>
     </div>
@@ -109,6 +106,7 @@
 </section>
 </div>
     <br>
+
 
 
 {% endblock %}

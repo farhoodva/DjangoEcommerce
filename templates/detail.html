@@ -141,9 +141,9 @@
                     <ul class="mb-0 list-inline">
                       <li  class="list-inline-item m-0 p-0"><a  class="wish btn-lg " id="id{{ related_item.pk }}" href={% url 'core:add_remove_to_wishlist' related_item.slug %}>
                           {% if request.user in related_item.wishlist.iterator %}
-                            <i class="fa fa-heart text-danger"></i>
+                            <i data-toggle="tooltip" data-trigger="hover" data-placement="top" title="Remove from wishlist" class="fa fa-heart text-danger"></i>
                           {% else %}
-                             <i class="far fa-heart text-dark"></i>
+                             <i data-toggle="tooltip" data-trigger="hover" data-placement="top" title="Add to wishlist" class="far fa-heart text-dark"></i>
                           {% endif %}
                       </a>
                       </li>
@@ -163,13 +163,20 @@
     </div>
 
 
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script>
-        //form item quantity based on available stock
-    const vq= `{{ item.warehouse_quantity }}`
-    for (let i=1; i<=vq; i++){
-    $('select').append(`<option value="${i}">${i}</option>`)
-        }
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+})
+$('.fa-heart').on('click', function () {
+    $(this).tooltip('hide')
+})
 
-    </script>
+    //form item quantity based on available stock
+const wq= `{{ item.warehouse_quantity }}`
+for (let i=1; i<=wq; i++){
+    $('select').append(`<option value="${i}">${i}</option>`)
+    }
+
+</script>
 {% endblock %}

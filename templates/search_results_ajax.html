@@ -1,0 +1,8 @@
+{% if results %}
+{% for result in results %}
+ <li class="a nav-link "><a class="dropdown-item text-dark text-small rounded pt-1 px-1" href="{{ result.get_item_detail_url }}">
+     <img class="mr-2 rounded-circle" src={{ result.image.url }} alt="" width="50px" height="55px">{{ result.title }} </a></li>
+{% endfor %}
+{% else %}
+     <li class=" nav-link rounded text-small font-italic ">No Item matches search ...</li>
+{% endif %}

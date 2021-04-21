@@ -41,6 +41,7 @@
             {% endfor %}
     {% endif %}
 
+{#for first time page loads with AJAX after that controlled by function in main.js#}
  <script>
 $( document ).ajaxComplete(function() {
     $('[data-toggle="tooltip"]').tooltip();

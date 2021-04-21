@@ -1,6 +1,6 @@
 from django.urls import path
 from.views import HomeView, ProductDetailView, add_remove_to_wishlist, add_to_cart,\
-    remove_from_cart, CartView, remove_order_item, add_coupon, remove_coupon, ajax_search, \
+    remove_from_cart, CartView, remove_order_item, add_coupon, remove_coupon, search, \
     ajax_load_products, UserBillingView, add_to_cart_multiple
 app_name = 'core'
 
@@ -18,6 +18,6 @@ urlpatterns = [
     path('checkout/<int:pk>', UserBillingView.as_view(), name='checkout'),
     path('ajax_wishlist/<slug>', add_remove_to_wishlist, name='add_remove_to_wishlist'),
     path('ajax_load_products/<int:display>', ajax_load_products, name='ajax_load_products'),
-    path('ajax_search', ajax_search, name='ajax_search'),
+    path('search', search, name='search'),
 
 ]
