@@ -10,10 +10,10 @@ from django.utils import timezone
 from django.utils.datastructures import MultiValueDictKeyError
 from django.views import generic
 from RetailShopDjango.mixins import ProfileUpdateMixin
-from users.forms import  UserBillingEditForm
+from users.forms import UserBillingEditForm
 from .forms import AddToCartForm
 from users.models import UserProfile
-from .models import Item, Categories, OrderItem, ShoppingCart, Coupons
+from .models import Item, Categories, OrderItem, ShoppingCart, Coupons, SubCategories
 
 
 class HomeView(generic.ListView):
@@ -35,6 +35,52 @@ class CartView(LoginRequiredMixin, generic.ListView):
             return qs
         except ObjectDoesNotExist:
             messages.info(self.request, 'You have no active cart')
+
+
+class ShopView(generic.ListView):
+    model = SubCategories
+    context_object_name = 'sub_categories'
+    template_name = 'shop.html'
+
+
+class UserBillingView(ProfileUpdateMixin, SuccessMessageMixin, generic.UpdateView,):
+    model = UserProfile
+    form_class = UserBillingEditForm
+    success_url = reverse_lazy('core:home')
+    template_name = 'checkout.html'
+
+    # def get_success_url(self, **kwargs):
+    #     return reverse('core:checkout', kwargs={
+    #         'pk': str(self.request.user.id)
+    #     })
+
+    def get_context_data(self, **kwargs):
+        try:
+            cart = ShoppingCart.objects.get(user_id=self.request.user.id, ordered=False)
+            context = super(UserBillingView, self).get_context_data(**kwargs)
+            context['cart'] = cart
+            return context
+        except ObjectDoesNotExist:
+            context = super(UserBillingView, self).get_context_data(**kwargs)
+            return context
+
+    def form_valid(self, form):
+        try:
+            cart = ShoppingCart.objects.get(user_id=self.request.user.id, ordered=False)
+            cart.ordered = True
+            cart.ordered_date = timezone.now()
+            cart.save()
+            order_item_qs = OrderItem.objects.filter(user=self.request.user, order_completed=False)
+            for order_item in order_item_qs:
+                order_item.item.warehouse_quantity -= order_item.quantity
+                order_item.item.save()
+                order_item.order_completed = True
+                order_item.save()
+            messages.info(self.request, "Order Confirmed")
+            return super().form_valid(form)
+        except ObjectDoesNotExist:
+            messages.info(self.request, "You don't have an active order")
+            return redirect('core:home')
 
 
 class ProductDetailView(generic.DetailView):
@@ -194,12 +240,16 @@ def search(request):
         data = search_results_qs.values()
         return render(request, 'search_results_ajax.html', {'results': search_results_qs})
     else:
-        search_string = request.POST.get('searchTxt')
-        search_results_qs = Item.objects.filter(title__icontains=search_string) \
-                            | Item.objects.filter(price__startswith=search_string) \
-                            | Item.objects.filter(description__icontains=search_string) \
-                            | Item.objects.filter(category__name__icontains=search_string)
-        return render(request, 'search_results.html', {'results': search_results_qs})
+        sub_categories= SubCategories.objects.all()
+        try:
+            search_string = request.POST.get('searchTxt')
+            search_results_qs = Item.objects.filter(title__icontains=search_string) \
+                                | Item.objects.filter(price__startswith=search_string) \
+                                | Item.objects.filter(description__icontains=search_string) \
+                                | Item.objects.filter(category__name__icontains=search_string)
+            return render(request, 'search_results.html', {'results': search_results_qs, 'sub_cat':sub_categories})
+        except ValueError:
+            return redirect('core:home')
 
 
 def ajax_load_products(request, display):
@@ -208,42 +258,4 @@ def ajax_load_products(request, display):
     return render(request, 'product_loader.html', {'items': items})
 
 
-class UserBillingView(ProfileUpdateMixin, SuccessMessageMixin, generic.UpdateView,):
-    model = UserProfile
-    form_class = UserBillingEditForm
-    success_url = reverse_lazy('core:home')
-    template_name = 'checkout.html'
-
-    # def get_success_url(self, **kwargs):
-    #     return reverse('core:checkout', kwargs={
-    #         'pk': str(self.request.user.id)
-    #     })
-
-    def get_context_data(self, **kwargs):
-        try:
-            cart = ShoppingCart.objects.get(user_id=self.request.user.id, ordered=False)
-            context = super(UserBillingView, self).get_context_data(**kwargs)
-            context['cart'] = cart
-            return context
-        except ObjectDoesNotExist:
-            context = super(UserBillingView, self).get_context_data(**kwargs)
-            return context
-
-    def form_valid(self, form):
-        try:
-            cart = ShoppingCart.objects.get(user_id=self.request.user.id, ordered=False)
-            cart.ordered = True
-            cart.ordered_date = timezone.now()
-            cart.save()
-            order_item_qs = OrderItem.objects.filter(user=self.request.user, order_completed=False)
-            for order_item in order_item_qs:
-                order_item.item.warehouse_quantity -= order_item.quantity
-                order_item.item.save()
-                order_item.order_completed = True
-                order_item.save()
-            messages.info(self.request, "Order Confirmed")
-            return super().form_valid(form)
-        except ObjectDoesNotExist:
-            messages.info(self.request, "You don't have an active order")
-            return redirect('core:home')
 

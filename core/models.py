@@ -98,7 +98,9 @@ class OrderItem(models.Model):
         return f"{self.quantity} of {self.item.title} "
 
     def total_price(self):
-        return self.item.price * self.quantity
+        if not self.item.discount_price:
+            return self.item.price * self.quantity
+        return self.item.discount_price * self.quantity
 
 
 class ShoppingCart(models.Model):
@@ -153,7 +155,6 @@ class Coupons (models.Model):
         if created:
             id_string = str(instance.id)
             upper_alpha = "ABCDEFGHJKLMNPQRSTVWXYZ"
-            # random_str = "".join(secrets.choice(upper_alpha, k=8))
             random_str = "".join(secrets.choice(upper_alpha) for i in range(8))
             instance.name = (random_str + id_string)[-8:]
             instance.save()

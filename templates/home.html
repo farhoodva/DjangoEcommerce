@@ -12,11 +12,12 @@
         </header>
         <div class="row">
         {% for category in categories %}
+            {% if category.image %}
             <div class="col-md-4 mb-4 mb-md-3"><a class="category-item" href="shop.html">
-                <img class="img-fluid w-100 rounded"  src={{ category.image.url }} alt="">
+                <img class="img-fluid w-100 rounded"  src='{{ category.image.url }}' alt="{% static 'img/template-mac' %}">
                 <strong class="category-item-title">{{ category.name }}</strong></a>
             </div>
-
+            {% endif %}
             {% endfor %}
         </div>
     </section>

@@ -3,6 +3,7 @@ from .models import OrderItem, ShoppingCart, Item, Categories, SubCategories, Co
 from users.models import UserProfile, State, City
 
 
+
 class SubCategoryAdmin(admin.ModelAdmin):
     list_display = ['name', 'parent_category']
 

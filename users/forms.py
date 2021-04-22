@@ -24,7 +24,8 @@ class CustomSignupForm(SignupForm):
 class UserProfileEditForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ['firstname', 'lastname', 'email', 'phone_number','state', 'city', 'address_line1', 'address_line2',
+        fields = ['firstname', 'lastname', 'email', 'phone_number','state', 'city', 'address_line1',
+                  'address_line2',
                   'profile_pic']
         widgets = {
             'firstname': forms.TextInput(attrs={
@@ -89,11 +90,18 @@ class UserProfileEditForm(forms.ModelForm):
             raise ValidationError("wrong cellphone format")
         return data
 
+payment_choices = (
+    ('stripe', 'stripe'),
+    ('paypal', 'paypal')
+)
+
 
 class UserBillingEditForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ['firstname', 'lastname', 'email', 'phone_number', 'state', 'city', 'address_line1', 'address_line2']
+        fields = ['firstname', 'lastname', 'email', 'phone_number', 'state', 'city', 'address_line1',
+                  'address_line2',
+                  'payment_method']
         widgets = {
             'firstname': forms.TextInput( attrs={
                     'placeholder': 'Firstname',
@@ -110,6 +118,10 @@ class UserBillingEditForm(forms.ModelForm):
             'address_line2': forms.TextInput(attrs={
                     'placeholder': 'Address line 2',
                     'class': 'form-control ,form-control-lg, no-border',
+                    }),
+            'payment_method': forms.RadioSelect(choices=payment_choices, attrs={
+                    'class': 'form-select',
+                    'required': True
                     }),
             'phone_number': forms.NumberInput(attrs={
                     'placeholder': 'e.g 912********',
