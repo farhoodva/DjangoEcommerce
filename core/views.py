@@ -25,7 +25,6 @@ class HomeView(generic.ListView):
 
 
 class CartView(LoginRequiredMixin, generic.ListView):
-    # model = ShoppingCart
     context_object_name = 'cart'
     template_name = 'cart.html'
 
@@ -41,6 +40,44 @@ class ShopView(generic.ListView):
     model = SubCategories
     context_object_name = 'sub_categories'
     template_name = 'shop.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        items = Item.objects.all()
+        categories = Categories.objects.all()
+        context = super(ShopView, self).get_context_data(**kwargs)
+        context['categories'] = categories
+        context['items'] = items
+        return context
+
+
+class SubCatView(generic.ListView):
+    context_object_name = 'items'
+    template_name = 'shop_category.html'
+
+    def get_queryset(self):
+        try:
+            sub_cat = SubCategories.objects.get(id=self.kwargs['pk'])
+            items = Item.objects.filter(category=sub_cat)
+            return items
+        except ObjectDoesNotExist:
+            return Item.objects.all()[0:30]
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        try:
+            sub_cat_name = SubCategories.objects.get(id=self.kwargs['pk']).name
+        except ObjectDoesNotExist:
+            sub_cat_name = 'shop'
+        sub_categories = SubCategories.objects.all()
+        categories = Categories.objects.all()
+        context = super(SubCatView, self).get_context_data(**kwargs)
+        context['categories'] = categories
+        context['sub_categories'] = sub_categories
+        context['sub_cat_name'] = sub_cat_name
+        return context
+
+# def Sub_Cat_View(request, pk):
+#     items = Item.objects.filter(category_id=pk)
+#     return render(request, 'shop_category.html', {'items': items})
 
 
 class UserBillingView(ProfileUpdateMixin, SuccessMessageMixin, generic.UpdateView,):
@@ -146,32 +183,34 @@ def add_to_cart_multiple(request, slug):
             number = request.POST['item_quantity']
         except MultiValueDictKeyError:
             number = 1
-        item = get_object_or_404(Item, slug=slug)
-        order_item, created = OrderItem.objects.get_or_create(
-            user=request.user,
-            item=item,
-            order_completed=False,
+        try:
+            item = Item.objects.get(slug=slug)
+            order_item, created = OrderItem.objects.get_or_create(
+                user=request.user,
+                item=item,
+                order_completed=False,
             )
-        cart_qs = ShoppingCart.objects.filter(user=request.user, status='New')
-
-        if cart_qs.exists():
-            cart = cart_qs[0]
-            if not created:
-                order_item.quantity += int(number)
-                order_item.save()
-                messages.info(request, f"{order_item.item.title.title()} added, {order_item.quantity} in cart ")
+            cart_qs = ShoppingCart.objects.filter(user=request.user, status='New')
+            if cart_qs.exists():
+                cart = cart_qs[0]
+                if not created:
+                    order_item.quantity += int(number)
+                    order_item.save()
+                    messages.info(request, f"{order_item.item.title.title()} added, {order_item.quantity} in cart ")
+                else:
+                    order_item.quantity = int(number)
+                    order_item.save()
+                    cart.items.add(order_item)
+                    cart.save()
+                    messages.info(request, f"{order_item.item.title.title()} added, {order_item.quantity} in cart ")
             else:
-                order_item.quantity = int(number)
-                order_item.save()
+                cart = ShoppingCart.objects.create(user=request.user)
                 cart.items.add(order_item)
                 cart.save()
                 messages.info(request, f"{order_item.item.title.title()} added, {order_item.quantity} in cart ")
-        else:
-            cart = ShoppingCart.objects.create(user=request.user)
-            cart.items.add(order_item)
-            cart.save()
-            messages.info(request, f"{order_item.item.title.title()} added, {order_item.quantity} in cart ")
-        return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
+            return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
+        except ObjectDoesNotExist:
+            pass
     return redirect('account_login')
 
 
@@ -261,13 +300,19 @@ def search(request):
         return render(request, 'search_results_ajax.html', {'results': search_results_qs})
     else:
         sub_categories= SubCategories.objects.all()
+        categories = Categories.objects.all()
         try:
             search_string = request.POST.get('searchTxt')
             search_results_qs = Item.objects.filter(title__icontains=search_string) \
                                 | Item.objects.filter(price__startswith=search_string) \
                                 | Item.objects.filter(description__icontains=search_string) \
                                 | Item.objects.filter(category__name__icontains=search_string)
-            return render(request, 'search_results.html', {'results': search_results_qs, 'sub_cat':sub_categories})
+            context = {
+                'results': search_results_qs,
+                'sub_categories': sub_categories,
+                'categories': categories
+            }
+            return render(request, 'search_results.html', context)
         except ValueError:
             return redirect('core:home')
 
