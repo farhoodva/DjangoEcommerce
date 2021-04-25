@@ -38,9 +38,9 @@
      $.ajax({
         type: 'GET',
         url: `/ajax_load_products/${display}`,
-        data:{
-            'display':display
-        },
+        // data:{
+        //     'display':display
+        // },
         success: function(data) {
             $('#productlist').html(data)
         }
@@ -52,9 +52,9 @@
         $.ajax({
         type: 'GET',
         url: `/ajax_load_products/${display}`,
-        data:{
-            'display':display
-        },
+        // data:{
+        //     'display':display
+        // },
             success: function(data) {
                 $('#productlist').html(data)
             }
@@ -128,6 +128,7 @@
 
 // navbar scripts end
 
+
 // profile and checkout city loader ajax
     $('#id_state').change(function () {
         const url = $('#form').attr('cities-url')
@@ -188,6 +189,17 @@
             $('#'+fieldId).css({'outline' :'none', "box-shadow": "1px 1px 4px grey", 'border':0})
         })
         $('.form-control').on('blur',(e)=>{
+            const fieldId = $(e.target).attr('id')
+            $('#label'+fieldId).removeClass('font-weight-bold')
+            $('#'+fieldId).css({'outline' :'', "box-shadow": "none", 'border':''})
+        })
+        $('.form-select').on('focus',(e)=>{
+            const fieldId = $(e.target).attr('id')
+            // {#$('#label'+fieldId).removeClass('text-dark')#}
+            $('#label'+fieldId).addClass('font-weight-bold')
+            $('#'+fieldId).css({'outline' :'none', "box-shadow": "1px 1px 4px grey", 'border':0})
+        })
+        $('.form-select').on('blur',(e)=>{
             const fieldId = $(e.target).attr('id')
             $('#label'+fieldId).removeClass('font-weight-bold')
             $('#'+fieldId).css({'outline' :'', "box-shadow": "none", 'border':''})

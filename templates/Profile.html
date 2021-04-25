@@ -1,16 +1,17 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load i18n %}
 
 
 {% block head_title %}{{ userprofile.user.username.title }}'Profile{% endblock %}
 
 {% block content %}
-<div class="card-body  container pt-4">
+<div class="container pt-4">
          <section class="py-5 bg-light">
           <div class="container">
             <div class="row px-4 px-lg-5 py-lg-4 align-items-center">
               <div class="col-lg-6">
-                <h1 class="h2 text-uppercase mb-0">{{ userprofile.user.username.title }}</h1>
+                <h1 class="h2 text-uppercase mb-0">update your profile</h1>
               </div>
               <div class="col-lg-6 text-lg-right">
                 <nav aria-label="breadcrumb">
@@ -25,11 +26,9 @@
         </section>
         <br>
         <br>
-<div class="text-center">
-    <h4 class="">{% trans "UPDATE YOUR PROFILE" %}</h4>
-   </div>
+
      <br>
-    <div class="col-lg-8 col-sm-10 col-11 mx-auto py-5 px-lg-4">
+    <div class="card border-0 shadow-sm rounded-lg col-lg-8 col-sm-10 col-11 mx-auto py-5 px-lg-4">
     <form id="form" method="Post"  enctype="multipart/form-data" cities-url={% url 'load_cities' %} action="">
 
     {% csrf_token %}
@@ -56,11 +55,10 @@
     <br>
     <br>
 
-
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script>
-
-
-
+    const address = $('#id_address_line').parent('div')
+    address.removeClass('col-lg-6')
+    address.addClass('col-lg-12')
     </script>
 {% endblock %}

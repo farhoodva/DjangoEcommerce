@@ -11,6 +11,10 @@ def slug_generator():
     return ''.join(random.choices(string.ascii_lowercase + string.digits + string.ascii_uppercase, k=20))
 
 
+status = ['New', 'Checked-out', 'Paid', 'Failed', 'Shipped', 'Delivered', 'Returned', 'Completed']
+
+
+
 class Categories(models.Model):
     name = models.CharField(max_length=100, unique=True)
     image = models.ImageField(upload_to='img/categories', null=True, blank=True)
@@ -110,7 +114,7 @@ class ShoppingCart(models.Model):
     coupon = models.ForeignKey('core.Coupons', on_delete=models.SET_NULL, null=True, blank=True)
     start_date = models.DateTimeField(auto_now_add=True)
     ordered_date = models.DateTimeField(null=True, blank=True)
-    ordered = models.BooleanField(default=False)
+    status = models.CharField(choices=zip(status, status), default='New', max_length=50)
 
     def save(self, *args, **kwargs):
         if not self.shipping_info:

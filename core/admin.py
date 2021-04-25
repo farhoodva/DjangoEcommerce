@@ -14,7 +14,7 @@ class ItemAdmin(admin.ModelAdmin):
 
 
 class ShoppingCartAdmin(admin.ModelAdmin):
-    list_display = ['user', 'start_date', 'ordered', 'ordered_date']
+    list_display = ['user', 'start_date', 'ordered_date', 'status']
     search_fields = ['user', 'ordered']
 
 

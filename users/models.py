@@ -4,22 +4,14 @@ from django.db.models.signals import post_save
 from django.urls import reverse
 
 
-payment_choices = (
-    ('stripe', 'stripe'),
-    ('paypal', 'paypal')
-)
-
-
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     firstname = models.CharField(max_length=255, null=True, blank=True)
     lastname = models.CharField(max_length=255, null=True, blank=True)
-    address_line1 = models.CharField(max_length=255, null=True, blank=True)
-    address_line2 = models.CharField(max_length=255, null=True, blank=True)
+    address_line = models.CharField(max_length=255, null=True, blank=True)
     email = models.EmailField(null=True,blank=True)
     phone_number = models.CharField(max_length=12, null=True, blank=True)
     state = models.ForeignKey('State', on_delete=models.SET_NULL, null=True, blank=True, )
-    payment_method = models.CharField(choices=payment_choices, max_length=10, default='stripe')
     city = models.ForeignKey('City', on_delete=models.SET_NULL, null=True, blank=True)
     profile_pic = models.ImageField(blank=True, null=True, upload_to='img/profile_pics')
 

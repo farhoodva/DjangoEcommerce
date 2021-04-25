@@ -7,7 +7,7 @@ register = template.Library()
 
 @register.filter()
 def count_order(user):
-    order_qs = ShoppingCart.objects.filter(user=user, ordered=False)
+    order_qs = ShoppingCart.objects.filter(user=user, status='New')
     if order_qs.exists():
         order_qs = order_qs[0]
         return order_qs.items.count()

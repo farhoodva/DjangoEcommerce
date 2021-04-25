@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block head_title %}Checkout{% endblock %}
 
 {% block content %}
@@ -32,22 +33,85 @@
     <br>
     <div class="row">
    <!-- BILLING ADDRESS form-->
-<div class="col-lg-8 col-sm-10 card rounded border-0 shadow-sm">
+<div class="col-lg-8 col-sm-10 rounded border-0 shadow-sm">
     <form id="form" method="Post" enctype="multipart/form-data"
           cities-url={% url 'load_cities' %} action="">
         {% csrf_token %}
         <div class="row">
-            {% for field in form %}
                 <div class="col-lg-6 form-group ">
-                    <label id="labelid_{{ field.name }}" class="text-small text-dark mt-3 mb-2">{{ field.label.upper }}</label>
-                    {{ field }}
-                    <span class="text-primary ">{{ field.errors }}</span>
+                    <label id="labelid_firstname" class="text-small text-dark mt-3 mb-2">{{ form.firstname.label.upper }}</label>
+                    {{ form.firstname }}
+                    <span class="text-primary ">{{ form.firstname.errors }}</span>
                 </div>
-            {% endfor %}
-            <div class="w-100">
-                <br>
-            <button class="w-100 btn btn-block btn-primary rounded mx-auto my-4 d-block col-7" type="submit">Place order
-            </button>
+
+                <div class="col-lg-6 form-group ">
+                    <label id="labelid_lastname" class="text-small text-dark mt-3 mb-2">{{ form.lastname.label.upper }}</label>
+                    {{ form.lastname }}
+                    <span class="text-primary ">{{ form.lastname.errors }}</span>
+                </div>
+
+                <div class="col-lg-6 form-group ">
+                    <label id="labelid_email" class="text-small text-dark mt-3 mb-2">{{ form.email.label.upper }}</label>
+                    {{ form.email }}
+                    <span class="text-primary ">{{ form.email.errors }}</span>
+                </div>
+
+                <div class="col-lg-6 form-group ">
+                    <label id="labelid_phone_number" class="text-small text-dark mt-3 mb-2">{{ form.phone_number.label.upper }}</label>
+                    {{ form.phone_number }}
+                    <span class="text-primary ">{{ form.phone_number.errors }}</span>
+                </div>
+
+                <div class="col-lg-6 form-group ">
+                    <label id="labelid_state" class="text-small text-dark mt-3 mb-2">{{ form.state.label.upper }}</label>
+                    {{ form.state }}
+                    <span class="text-primary ">{{ form.state.errors }}</span>
+                </div>
+
+                <div class="col-lg-6 form-group ">
+                    <label id="labelid_city" class="text-small text-dark mt-3 mb-2">{{ form.city.label.upper }}</label>
+                    {{ form.city }}
+                    <span class="text-primary ">{{ form.city.errors }}</span>
+                </div>
+
+                <div class="col-lg-12 form-group ">
+                    <label id="labelid_address_line" class="text-small text-dark mt-3 mb-2">{{ address_line.label.upper }}</label>
+                    {{ form.address_line }}
+                    <span class="text-primary ">{{ address_line.errors }}</span>
+                </div>
+
+{#                <div class="col-4 form-group">#}
+{#                <label id="labelid_payment_method" class="text-small text-dark mt-3 mb-2 text-uppercase">Payment option</label>#}
+{#                {{ form.payment_method }}#}
+{#                </div>#}
+
+{#                <label id="labelid_payment_method" class="text-small text-dark text-uppercase mt-3 mb-2">payment method</label>#}
+{#                <div class="ml-2 ">#}
+{#                <div class="form-check">#}
+{#                  <input  class="form-check-input" type="radio" name="payment_method" id="stripe_id">#}
+{#                  <label class="form-check-label" for="stripe_id">#}
+{#                    Stripe#}
+{#                  </label>#}
+{#                </div>#}
+{#                <div class="form-check">#}
+{#                  <input  class="form-check-input" type="radio" name="payment_method" id="paypal_id" >#}
+{#                  <label class="form-check-label" for="paypal_id">#}
+{#                    Paypal#}
+{#                  </label>#}
+{#                </div>#}
+{#                    </div>#}
+                <label id="labelid_payment_method" class="text-small text-dark mt-3 mb-2 text-uppercase">Payment option</label>
+             {% for value, name in form.fields.payment_method.choices %}
+                <div class="custom-control custom-radio ml-2">
+                  <input id="{{ name }}" name="payment_method" value="{{ value }}" type="radio" class="custom-control-input" required>
+                  <label class="custom-control-label" for="{{ name }}">{{ name }}</label>
+                </div>
+                {% endfor %}
+
+                <div class="">
+                    <button class="btn btn-block btn-primary rounded mx-auto mt-4 d-block col-5" type="submit">Proceed to payment</button>
+                    <div class="text-center my-1">OR</div>
+                        <a class="btn btn-block btn-success rounded mx-auto mb-4 d-block col-5" href="/">Continue shopping</a>
                 </div>
         </div>
         <br>
@@ -91,10 +155,11 @@
               <input class="form-control rounded-top" name="code" type="text" placeholder="Enter your coupon">
               <button class="btn btn-primary btn-sm btn-block rounded-bottom" type="submit">
                   {% if cart.coupon %}
-                  <i class="fas fa-gift mr-2"></i>Change coupon</button>
+                  <i class="fas fa-gift mr-2"></i>Change coupon
                   {% else %}
-                  <i class="fas fa-gift mr-2"></i>Apply coupon</button>
+                  <i class="fas fa-gift mr-2"></i>Apply coupon
                   {% endif %}
+              </button>
             </div>
           </form>
         </li>
@@ -108,7 +173,12 @@
 </section>
 </div>
     <br>
-
+{#    <script src={%  static "vendor/jquery/jquery.min.js" %}></script>#}
+{#    <script>#}
+{#    const address = $('#id_address_line').parent('div')#}
+{#    address.removeClass('col-lg-6')#}
+{#    address.addClass('col-lg-12')#}
+{#    </script>#}
 
 
 {% endblock %}

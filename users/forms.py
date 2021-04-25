@@ -3,6 +3,11 @@ from django.core.exceptions import ValidationError
 from .models import UserProfile, City, State
 from allauth.account.forms import SignupForm
 
+payment_choices = (
+    ('Stripe', 'Stripe'),
+    ('Paypal', 'Paypal')
+)
+
 
 class CustomSignupForm(SignupForm):
     first_name = forms.CharField(max_length=30, label='First Name', required=True)
@@ -24,8 +29,7 @@ class CustomSignupForm(SignupForm):
 class UserProfileEditForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ['firstname', 'lastname', 'email', 'phone_number','state', 'city', 'address_line1',
-                  'address_line2',
+        fields = ['firstname', 'lastname', 'email', 'phone_number','state', 'city', 'address_line',
                   'profile_pic']
         widgets = {
             'firstname': forms.TextInput(attrs={
@@ -36,17 +40,13 @@ class UserProfileEditForm(forms.ModelForm):
                     'placeholder': 'Lastname',
                     'class': 'form-control ,form-control-lg, rounded',
                     }),
-            'address_line1': forms.TextInput(attrs={
-                    'placeholder': 'Address Line 1',
-                    'class': 'form-control ,form-control-lg, no-border',
-                    }),
-            'address_line2': forms.TextInput(attrs={
-                    'placeholder': 'Address line 2',
+            'address_line': forms.TextInput(attrs={
+                    'placeholder': 'Address',
                     'class': 'form-control ,form-control-lg, no-border',
                     }),
             'profile_pic': forms.FileInput(attrs={
                     'placeholder': 'profile_pic',
-                    'class': 'form-control, form-control-lg, rounded',
+                    'class': 'form-control',
                     }),
             'phone_number': forms.NumberInput(attrs={
                     'placeholder': 'e.g 912********',
@@ -63,11 +63,11 @@ class UserProfileEditForm(forms.ModelForm):
         })
         self.fields['city'].widget.attrs.update({
             'placeholder': 'City',
-            'class': 'form-control ,form-control-lg, rounded',
+            'class': 'form-select ,form-control-lg, rounded',
         })
         self.fields['state'].widget.attrs.update({
             'placeholder': 'State',
-            'class': 'form-control ,form-control-lg, rounded',
+            'class': 'form-select ,form-control-lg, rounded',
         })
         self.fields['state'].queryset = State.objects.all()
         self.fields['state'].empty_label = 'Select State'
@@ -90,18 +90,14 @@ class UserProfileEditForm(forms.ModelForm):
             raise ValidationError("wrong cellphone format")
         return data
 
-payment_choices = (
-    ('stripe', 'stripe'),
-    ('paypal', 'paypal')
-)
-
 
 class UserBillingEditForm(forms.ModelForm):
+    payment_method = forms.ChoiceField(choices=payment_choices, required=True)
+
     class Meta:
         model = UserProfile
-        fields = ['firstname', 'lastname', 'email', 'phone_number', 'state', 'city', 'address_line1',
-                  'address_line2',
-                  'payment_method']
+        fields = ['firstname', 'lastname', 'email', 'phone_number', 'state', 'city', 'address_line',
+                  ]
         widgets = {
             'firstname': forms.TextInput( attrs={
                     'placeholder': 'Firstname',
@@ -111,17 +107,12 @@ class UserBillingEditForm(forms.ModelForm):
                     'placeholder': 'Lastname',
                     'class': 'form-control ,form-control-lg, rounded',
                     }),
-            'address_line1': forms.TextInput(attrs={
-                    'placeholder': 'Address Line 1',
+            'address_line': forms.TextInput(attrs={
+                    'placeholder': 'Address',
                     'class': 'form-control ,form-control-lg, no-border',
                     }),
-            'address_line2': forms.TextInput(attrs={
-                    'placeholder': 'Address line 2',
-                    'class': 'form-control ,form-control-lg, no-border',
-                    }),
-            'payment_method': forms.RadioSelect(choices=payment_choices, attrs={
-                    'class': 'form-select',
-                    'required': True
+            'payment_method': forms.RadioSelect(choices=payment_choices,attrs={
+                    'class': 'form-check'
                     }),
             'phone_number': forms.NumberInput(attrs={
                     'placeholder': 'e.g 912********',
@@ -140,11 +131,11 @@ class UserBillingEditForm(forms.ModelForm):
         })
         self.fields['city'].widget.attrs.update({
             'placeholder': 'City',
-            'class': 'form-control ,form-control-lg, rounded',
+            'class': 'form-select ,form-control-lg, rounded',
         })
         self.fields['state'].widget.attrs.update({
             'placeholder': 'State',
-            'class': 'form-control ,form-control-lg, rounded',
+            'class': 'form-select ,form-control-lg, rounded',
             'empty_label': ' Select State'
         })
         self.fields['state'].queryset = State.objects.all()
@@ -166,3 +157,4 @@ class UserBillingEditForm(forms.ModelForm):
         if len(str(data)) != 11 or not str(data).startswith('091'):
             raise ValidationError("wrong cellphone format")
         return data
+
