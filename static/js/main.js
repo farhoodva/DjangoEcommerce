@@ -32,35 +32,33 @@
     )
 })
 
-
 // {#product laoder with back-end function#}
-        let display = 8 //initial loaded number of items
-     $.ajax({
-        type: 'GET',
-        url: `/ajax_load_products/${display}`,
-        // data:{
-        //     'display':display
-        // },
-        success: function(data) {
-            $('#productlist').html(data)
-        }
-    })
-
-
+        let display = 4 //initial loaded number of items
+    //  $.ajax({
+    //     type: 'GET',
+    //     url: `/ajax_load_products/${display}`,
+    //     // data:{
+    //     //     'display':display
+    //     // },
+    //     success: function(data) {
+    //         $('#productlist').html(data)
+    //     }
+    // })
         $('#pr-loadmore').on('click',()=>{
-        display += 4
         $.ajax({
         type: 'GET',
         url: `/ajax_load_products/${display}`,
-        // data:{
-        //     'display':display
-        // },
+        data:{
+            'display':display
+        },
             success: function(data) {
-                $('#productlist').html(data)
+                $('#productlist').append(data)
+                display += 4
             }
     })
 
     })
+
 // home page scripts end
 
 

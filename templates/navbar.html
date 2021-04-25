@@ -17,7 +17,7 @@
                         <!-- Link--><a class="nav-link active" href="/">Home</a>
                     </li>
                     <li class="nav-item">
-                        <!-- Link--><a class="nav-link" href="shop.html">Shop</a>
+                        <!-- Link--><a class="nav-link" href={% url 'core:shop_view' %}>Shop</a>
                     </li>
 
                     <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="pagesDropdown" href="#"
@@ -25,7 +25,7 @@
                         <div class="dropdown-menu mt-3" aria-labelledby="pagesDropdown">
                             <a class="dropdown-item border-0 transition-link" href="home.html">Homepage</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item border-0 transition-link" href="shop.html">Category</a>
+                            <a class="dropdown-item border-0 transition-link" href={% url 'core:shop_view' %}>Category</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item border-0 transition-link" href="cart.html">Shopping cart</a>
                             <div class="dropdown-divider"></div>

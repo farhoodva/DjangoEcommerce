@@ -33,33 +33,19 @@ Search Results
       <!-- SHOP SIDEBAR-->
       <div class="col-lg-3 order-2 order-lg-1">
         <h5 class="text-uppercase mb-4">Categories</h5>
-        <div class="py-2 px-4 bg-dark text-white mb-3"><strong class="small text-uppercase font-weight-bold">Fashion &amp; Acc</strong></div>
+          {% for category in categories %}
+        <div class="py-2 px-4 bg-success-light rounded text-dark mb-3"><strong class="small text-uppercase font-weight-bold"><a href={{ category.get_cat_view_url }}>{{ category.name}}</a></strong></div>
         <ul class="list-unstyled small text-muted pl-lg-4 font-weight-normal">
-          <li class="mb-2"><a class="reset-anchor" href="#">Women's T-Shirts</a></li>
-          <li class="mb-2"><a class="reset-anchor" href="#">Men's T-Shirts</a></li>
-          <li class="mb-2"><a class="reset-anchor" href="#">Dresses</a></li>
-          <li class="mb-2"><a class="reset-anchor" href="#">Novelty socks</a></li>
-          <li class="mb-2"><a class="reset-anchor" href="#">Women's sunglasses</a></li>
-          <li class="mb-2"><a class="reset-anchor" href="#">Men's sunglasses</a></li>
+                {% if category.sub_categories.exists %}
+                    {% for sub in category.sub_categories.all %}
+                    <li class="mb-2"><a class="text-dark" href={{ sub.get_category_view_url }}>{{ sub.name }}</a></li>
+                    {% endfor %}
+                {% else %}
+                    <li class="mb-2"><span class="text-dark" href="#">Nothing to show</span></li>
+                {% endif %}
         </ul>
-        <div class="py-2 px-4 bg-light mb-3"><strong class="small text-uppercase font-weight-bold">Health &amp; Beauty</strong></div>
-        <ul class="list-unstyled small text-muted pl-lg-4 font-weight-normal">
-          <li class="mb-2"><a class="reset-anchor" href="#">Shavers</a></li>
-          <li class="mb-2"><a class="reset-anchor" href="#">bags</a></li>
-          <li class="mb-2"><a class="reset-anchor" href="#">Cosmetic</a></li>
-          <li class="mb-2"><a class="reset-anchor" href="#">Nail Art</a></li>
-          <li class="mb-2"><a class="reset-anchor" href="#">Skin Masks &amp; Peels</a></li>
-          <li class="mb-2"><a class="reset-anchor" href="#">Korean cosmetics</a></li>
-        </ul>
-        <div class="py-2 px-4 bg-light mb-3"><strong class="small text-uppercase font-weight-bold">Electronics</strong></div>
-        <ul class="list-unstyled small text-muted pl-lg-4 font-weight-normal mb-5">
-          <li class="mb-2"><a class="reset-anchor" href="#">Electronics</a></li>
-          <li class="mb-2"><a class="reset-anchor" href="#">USB Flash drives</a></li>
-          <li class="mb-2"><a class="reset-anchor" href="#">Headphones</a></li>
-          <li class="mb-2"><a class="reset-anchor" href="#">Portable speakers</a></li>
-          <li class="mb-2"><a class="reset-anchor" href="#">Cell Phone bluetooth headsets</a></li>
-          <li class="mb-2"><a class="reset-anchor" href="#">Keyboards</a></li>
-        </ul>
+          {% endfor %}
+
         <h6 class="text-uppercase mb-4">Price range</h6>
         <div class="price-range pt-4 mb-5">
           <div id="range"></div>
@@ -112,7 +98,7 @@ Search Results
         </div>
       </div>
       <!-- SHOP LISTING-->
-      <div class="col-lg-9 order-1 order-lg-2 mb-5 mb-lg-0 bg-light rounded pt-1">
+      <div class="col-lg-9 order-1 order-lg-2 mb-5 mb-lg-0 rounded pt-1">
         <div class="row mb-3 align-items-center">
           <div class="col-lg-6 mb-2 mb-lg-0">
               {% if results %}
@@ -145,7 +131,7 @@ Search Results
                 <div class="position-relative mb-3">
                  <div class="badge text-white badge-">
                     </div>
-                <a class="d-block" href={% url 'core:product_detail' item.slug %}>
+                <a class="d-block" href={{ item.get_item_detail_url }}>
                     <img class="img-fluid w-100 rounded" src={{ item.image.url }} alt="...">
                 </a>
                 <div class="product-overlay">
@@ -161,7 +147,7 @@ Search Results
                       </a>
                   </li>
                         <li class="list-inline-item mr-0">
-                            <a class="btn btn-sm btn-outline-dark" href={% url 'core:product_detail' item.slug %}>
+                            <a class="btn btn-sm btn-outline-dark" href={{ item.get_item_detail_url }}>
                                 <i class="fas fa-expand"></i>
                             </a>
                         </li>
@@ -197,49 +183,6 @@ Search Results
           </div>
         </section>
       </div>
-      <footer class="bg-dark text-white">
-        <div class="container py-4">
-          <div class="row py-5">
-            <div class="col-md-4 mb-3 mb-md-0">
-              <h6 class="text-uppercase mb-3">Customer services</h6>
-              <ul class="list-unstyled mb-0">
-                <li><a class="footer-link" href="#">Help &amp; Contact Us</a></li>
-                <li><a class="footer-link" href="#">Returns &amp; Refunds</a></li>
-                <li><a class="footer-link" href="#">Online Stores</a></li>
-                <li><a class="footer-link" href="#">Terms &amp; Conditions</a></li>
-              </ul>
-            </div>
-            <div class="col-md-4 mb-3 mb-md-0">
-              <h6 class="text-uppercase mb-3">Company</h6>
-              <ul class="list-unstyled mb-0">
-                <li><a class="footer-link" href="#">What We Do</a></li>
-                <li><a class="footer-link" href="#">Available Services</a></li>
-                <li><a class="footer-link" href="#">Latest Posts</a></li>
-                <li><a class="footer-link" href="#">FAQs</a></li>
-              </ul>
-            </div>
-            <div class="col-md-4">
-              <h6 class="text-uppercase mb-3">Social media</h6>
-              <ul class="list-unstyled mb-0">
-                <li><a class="footer-link" href="#">Twitter</a></li>
-                <li><a class="footer-link" href="#">Instagram</a></li>
-                <li><a class="footer-link" href="#">Tumblr</a></li>
-                <li><a class="footer-link" href="#">Pinterest</a></li>
-              </ul>
-            </div>
-          </div>
-          <div class="border-top pt-4" style="border-color: #1d1d1d !important">
-            <div class="row">
-              <div class="col-lg-6">
-                <p class="small text-muted mb-0">&copy; 2020 All rights reserved.</p>
-              </div>
-              <div class="col-lg-6 text-lg-right">
-                <p class="small text-muted mb-0">Template designed by <a class="text-white reset-anchor" href="https://bootstraptemple.com/p/bootstrap-ecommerce">Bootstrap Temple</a></p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </footer>
     </div>
 {% endblock %}
 

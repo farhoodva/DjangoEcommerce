@@ -14,7 +14,6 @@ def slug_generator():
 status = ['New', 'Checked-out', 'Paid', 'Failed', 'Shipped', 'Delivered', 'Returned', 'Completed']
 
 
-
 class Categories(models.Model):
     name = models.CharField(max_length=100, unique=True)
     image = models.ImageField(upload_to='img/categories', null=True, blank=True)
@@ -27,10 +26,15 @@ class Categories(models.Model):
     def __str__(self):
         return self.name
 
+    def get_cat_view_url(self):
+        return reverse('core:cat_view', kwargs={
+            'pk':self.pk
+        })
+
 
 class SubCategories(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    parent_category = models.ForeignKey(Categories, on_delete=models.CASCADE)
+    parent_category = models.ForeignKey(Categories, on_delete=models.CASCADE, related_name='sub_categories')
 
     class Meta:
         ordering = ['id']
@@ -38,6 +42,11 @@ class SubCategories(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_category_view_url(self):
+        return reverse('core:sub_cat_view', kwargs={
+            'pk': self.pk
+        })
 
 
 class Item(models.Model):
