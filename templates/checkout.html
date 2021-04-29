@@ -9,7 +9,7 @@
 <div class="container">
     <div class="row px-4 px-lg-5 py-lg-4 align-items-center">
         <div class="col-lg-6">
-            <h1 class="h2 text-uppercase mb-0">CHECKOUT</h1>
+            <h1 class="h2 text-uppercase mb-0">Confirm your details</h1>
     </div>
     <div class="col-lg-6 text-lg-right">
         <nav aria-label="breadcrumb">
@@ -29,7 +29,6 @@
     <br>
 
     <h2 class="h5 text-uppercase mb-4">Billing details</h2>
-    <h6 class="text-small">Complete billing info and order </h6>
     <br>
     <div class="row">
    <!-- BILLING ADDRESS form-->
@@ -79,27 +78,6 @@
                     {{ form.address_line }}
                     <span class="text-primary ">{{ address_line.errors }}</span>
                 </div>
-
-{#                <div class="col-4 form-group">#}
-{#                <label id="labelid_payment_method" class="text-small text-dark mt-3 mb-2 text-uppercase">Payment option</label>#}
-{#                {{ form.payment_method }}#}
-{#                </div>#}
-
-{#                <label id="labelid_payment_method" class="text-small text-dark text-uppercase mt-3 mb-2">payment method</label>#}
-{#                <div class="ml-2 ">#}
-{#                <div class="form-check">#}
-{#                  <input  class="form-check-input" type="radio" name="payment_method" id="stripe_id">#}
-{#                  <label class="form-check-label" for="stripe_id">#}
-{#                    Stripe#}
-{#                  </label>#}
-{#                </div>#}
-{#                <div class="form-check">#}
-{#                  <input  class="form-check-input" type="radio" name="payment_method" id="paypal_id" >#}
-{#                  <label class="form-check-label" for="paypal_id">#}
-{#                    Paypal#}
-{#                  </label>#}
-{#                </div>#}
-{#                    </div>#}
                 <label id="labelid_payment_method" class="text-small text-dark mt-3 mb-2 text-uppercase">Payment option</label>
              {% for value, name in form.fields.payment_method.choices %}
                 <div class="custom-control custom-radio ml-2">
@@ -108,11 +86,17 @@
                 </div>
                 {% endfor %}
 
-                <div class="">
-                    <button class="btn btn-block btn-primary rounded mx-auto mt-4 d-block col-5" type="submit">Proceed to payment</button>
-                    <div class="text-center my-1">OR</div>
-                        <a class="btn btn-block btn-success rounded mx-auto mb-4 d-block col-5" href="/">Continue shopping</a>
-                </div>
+                 <div class="juicy-peach-gradient px-4 py-3 mb-3 mt-4">
+                    <div class="row align-items-center text-center">
+                      <div class="col-md-6 mb-3 mb-md-0 text-md-left"><a class="btn btn-link p-0 text-dark btn-sm" href={% url 'core:shop_view' %}><i class="fas fa-long-arrow-alt-left mr-2"> </i>Continue shopping</a></div>
+                      <div class="col-md-6 text-md-right"><button type="submit" class="btn btn-outline-dark btn-sm" >Proceed to payment<i class="fas fa-long-arrow-alt-right ml-2"></i></button></div>
+                     </div>
+                    </div>
+
+{#                <div class="input-group my-4">#}
+{#                    <button class="btn alert-primary rounded mx-auto col-lg-5" type="submit">Proceed to payment</button>#}
+{#                        <a class="btn  alert-success rounded mx-auto col-lg-5" href="/">Continue shopping</a>#}
+{#                </div>#}
         </div>
         <br>
     </form>

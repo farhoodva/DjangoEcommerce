@@ -1,19 +1,25 @@
+import stripe
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.utils.datastructures import MultiValueDictKeyError
 from django.views import generic
+from django.views.decorators.csrf import csrf_exempt
+
 from RetailShopDjango.mixins import ProfileUpdateMixin
 from users.forms import UserBillingEditForm
 from .forms import AddToCartForm
 from users.models import UserProfile
 from .models import Item, Categories, OrderItem, ShoppingCart, Coupons, SubCategories
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 def ajax_load_products(request, display):
@@ -138,31 +144,23 @@ class UserBillingView(ProfileUpdateMixin, SuccessMessageMixin, generic.UpdateVie
     def form_valid(self, form):
         try:
             cart = ShoppingCart.objects.get(user_id=self.request.user.id, status='New')
-            # cart.status = 'Checked-out'
-            cart.ordered_date = timezone.now()
-            cart.save()
-            print(form.cleaned_data)
-            order_item_qs = OrderItem.objects.filter(user=self.request.user, order_completed=False)
             if form.cleaned_data['payment_method'] == 'Stripe':
-                for order_item in order_item_qs:
-                    order_item.item.warehouse_quantity -= order_item.quantity
-                    order_item.item.save()
-                    order_item.order_completed = True
-                    order_item.save()
                 super().form_valid(form)
-                messages.info(self.request, 'stripe')
-                return redirect('core:home')
+                context = {
+                    'cart': cart,
+                    'stripe': settings.STRIPE_PUBLISHABLE_KEY
+                }
+                cart.status = 'Checked-out'
+                cart.ordered_date = timezone.now()
+                cart.save()
+                return render(self.request, 'stripe_payment.html', context)
+
             elif form.cleaned_data['payment_method'] == 'Paypal':
-                for order_item in order_item_qs:
-                    order_item.item.warehouse_quantity -= order_item.quantity
-                    order_item.item.save()
-                    order_item.order_completed = True
-                    order_item.save()
+                cart.status = 'Checked-out'
+                cart.ordered_date = timezone.now()
+                cart.save()
                 super().form_valid(form)
-                a = self.request.POST.get('payment_method')
-                print(a)
-                messages.info(self.request, 'paypal')
-                return redirect('core:home')
+                # return redirect('core:home')
             else:
                 cart.status = 'New'
                 cart.save()
@@ -172,6 +170,75 @@ class UserBillingView(ProfileUpdateMixin, SuccessMessageMixin, generic.UpdateVie
         except ObjectDoesNotExist:
             messages.info(self.request, "You don't have an active order")
             return redirect('core:home')
+
+
+class CreateCheckoutSession(generic.View):
+    def post(self, request, *args, **kwargs):
+        try:
+            YOUR_DOMAIN = 'http://127.0.0.1:8000'
+            cart = ShoppingCart.objects.get(pk=self.kwargs['pk'])
+            checkout_session = stripe.checkout.Session.create(
+                payment_method_types=['card'],
+                line_items=[
+                    {
+                        'price_data': {
+                            'currency': 'usd',
+                            'unit_amount': int(cart.get_total_order_price()*100),
+                            'product_data': {
+                                'name': 'Total order amount:',
+                                # 'images': ['https://i.imgur.com/EHyR2nP.png'],
+                            },
+                        },
+                        'quantity': 1,
+                    },
+                ],
+                metadata={
+                    'user_id': self.request.user.id,
+                    'cart_pk': self.kwargs['pk']
+                },
+                mode='payment',
+                success_url=YOUR_DOMAIN + '/home',
+                cancel_url=YOUR_DOMAIN + '/home',
+            )
+            return JsonResponse({'id': checkout_session.id})
+        except Exception as e:
+            return JsonResponse({'error': str(e)}), 403
+
+
+@csrf_exempt
+def stripe_webhook(request):
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+    endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
+    payload = request.body
+    sig_header = request.META['HTTP_STRIPE_SIGNATURE']
+    event = None
+
+    try:
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, endpoint_secret
+        )
+    except ValueError as e:
+        # Invalid payload
+        return HttpResponse(status=400)
+    except stripe.error.SignatureVerificationError as e:
+        # Invalid signature
+        return HttpResponse(status=400)
+
+    # Handle the checkout.session.completed event
+    if event['type'] == 'checkout.session.completed':
+        session = event['data']['object']
+        print("Payment was successful.")
+        cart = ShoppingCart.objects.get(pk=session['metadata'].cart_pk, status='Checked-out')
+        cart.status = 'Paid'
+        cart.save()
+        order_item_qs = OrderItem.objects.filter(user_id=session['metadata'].user_id, order_completed=False)
+        for order_item in order_item_qs:
+            order_item.item.warehouse_quantity -= order_item.quantity
+            order_item.item.save()
+            order_item.order_completed = True
+            order_item.save()
+
+    return HttpResponse(status=200)
 
 
 class ProductDetailView(generic.DetailView):
@@ -212,7 +279,7 @@ def add_remove_to_wishlist(request, slug):
 
 # @login_required()
 def add_to_cart_multiple(request, slug):
-    if  request.user.is_authenticated:
+    if request.user.is_authenticated:
         try:
             number = request.POST['item_quantity']
         except MultiValueDictKeyError:

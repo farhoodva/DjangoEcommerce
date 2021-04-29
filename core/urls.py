@@ -1,7 +1,8 @@
 from django.urls import path
 from.views import HomeView, ProductDetailView, add_remove_to_wishlist, add_to_cart,\
     remove_from_cart, CartView, remove_order_item, add_coupon, remove_coupon, search, \
-    ajax_load_products, UserBillingView, add_to_cart_multiple, ShopView, SubCatView, CatView
+    ajax_load_products, UserBillingView, add_to_cart_multiple, ShopView, SubCatView, CatView,\
+    CreateCheckoutSession, stripe_webhook
 app_name = 'core'
 
 urlpatterns = [
@@ -15,6 +16,8 @@ urlpatterns = [
     path('add_coupon/', add_coupon, name='add_coupon'),
     path('remove_coupon/', remove_coupon, name='remove_coupon'),
     path('Cart/', CartView.as_view(), name='cart_view'),
+    path('stripe/<int:pk>', CreateCheckoutSession.as_view(), name='stripe_checkout'),
+    path('webhooks/stripe/', stripe_webhook, name='stripe_webhook'),
     path('SubCatView/<int:pk>', SubCatView.as_view(), name='sub_cat_view'),
     path('CatView/<int:pk>', CatView.as_view(), name='cat_view'),
     path('Shop/', ShopView.as_view(), name='shop_view'),
