@@ -150,17 +150,20 @@ class UserBillingView(ProfileUpdateMixin, SuccessMessageMixin, generic.UpdateVie
                     'cart': cart,
                     'stripe': settings.STRIPE_PUBLISHABLE_KEY
                 }
-                cart.status = 'Checked-out'
+                # cart.status = 'Checked-out'
                 cart.ordered_date = timezone.now()
                 cart.save()
-                return render(self.request, 'stripe_payment.html', context)
+                return render(self.request, 'payment.html', context)
 
             elif form.cleaned_data['payment_method'] == 'Paypal':
-                cart.status = 'Checked-out'
+                super().form_valid(form)
+                # cart.status = 'Checked-out'
                 cart.ordered_date = timezone.now()
                 cart.save()
-                super().form_valid(form)
-                # return redirect('core:home')
+                context = {
+                    'cart': cart
+                }
+                return render(self.request, 'paypal_payment.html', context)
             else:
                 cart.status = 'New'
                 cart.save()
@@ -226,8 +229,8 @@ def stripe_webhook(request):
 
     # Handle the checkout.session.completed event
     if event['type'] == 'checkout.session.completed':
-        session = event['data']['object']
         print("Payment was successful.")
+        session = event['data']['object']
         cart = ShoppingCart.objects.get(pk=session['metadata'].cart_pk, status='Checked-out')
         cart.status = 'Paid'
         cart.save()
@@ -237,7 +240,19 @@ def stripe_webhook(request):
             order_item.item.save()
             order_item.order_completed = True
             order_item.save()
+    return HttpResponse(status=200)
 
+
+def paypal_checkout_complete(request, pk):
+    cart = ShoppingCart.objects.get(pk=pk)
+    cart.status = 'Paid'
+    cart.save()
+    order_item_qs = OrderItem.objects.filter(user_id=cart.user_id, order_completed=False)
+    for order_item in order_item_qs:
+        order_item.item.warehouse_quantity -= order_item.quantity
+        order_item.item.save()
+        order_item.order_completed = True
+        order_item.save()
     return HttpResponse(status=200)
 
 
