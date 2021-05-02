@@ -1,4 +1,12 @@
 
+//tooltips
+ $('[data-toggle="tooltip"]').tooltip();
+ $('.fa-heart').on('click', function () {
+ $(this).tooltip('hide')
+                         })
+
+//end tooltips
+
 // home page scripts
     $(document).on('click', '.wish', function (e) {
         e.preventDefault()
@@ -207,3 +215,18 @@
         $('.no-border').addClass("rounded")
             })
 // form style end
+
+
+//shop variants
+
+    const changeDisplayLarger = $("#largeDisplay")
+    const changeDisplaySmaller = $("#smallDisplay")
+    const productDisplay = $(".prods")
+    changeDisplayLarger.on('click',()=>{
+        productDisplay.removeClass('col-lg-4 col-xl-4 col-sm-6')
+        productDisplay.addClass('col-6')
+    })
+    changeDisplaySmaller.on('click',()=>{
+        productDisplay.removeClass('col-6')
+        productDisplay.addClass('col-lg-4 col-xl-4 col-sm-6')
+    })

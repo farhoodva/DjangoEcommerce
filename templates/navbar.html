@@ -127,89 +127,91 @@
 
 <!-- Login modal-->
 <div id="modalLogin" class="modal fade" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title mx-auto">LOGIN</h4>
-            </div>
-            <div class="modal-body">
-                <!-- Login form -->
-                <div class="col-12 mx-auto">
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title mx-auto">LOGIN</h4>
+        </div>
+        <div class="modal-body">
+            <!-- Login form -->
+            <div class="col-12 mx-auto">
 
-                    <form class="login" method="POST" action="{% url 'account_login' %}">
-                        {% csrf_token %}
+            <form class="login" method="POST" action="{% url 'account_login' %}">
+                {% csrf_token %}
 
-                        <h6>Username</h6>
-                        <div class="mb-3 mt-2 ">
+                <h6>Username</h6>
+                <div class="mb-3 mt-2 ">
 
-                            <input class="form-control form-control-lg rounded-pill shadow" type="text"
-                                   name="login"
-                                   placeholder="Username" autocomplete="username" maxlength="100" required=""
-                                   id="id_login">
-                        </div>
-
-                        <h6>Password</h6>
-                        <div class="mb-3 mt-2">
-
-                            <input class="form-control form-control-lg rounded-pill shadow" type="password"
-                                   name="password"
-                                   placeholder="Password" autocomplete="current-password" maxlength="100"
-                                   required="" id="id_password">
-                        </div>
-
-                        <label for="id_remember" class="form-check-label active mr-2 mb-3"><h6> Remember
-                            Me </h6></label>
-                        <input type="checkbox" class="form-check-inline" name="remember" id="id_remember">
-
-                        {% if redirect_field_value %}
-                            <input type="hidden" name="{{ redirect_field_name }}"
-                                   value="{{ redirect_field_value }}"/>
-                        {% endif %}
-
-                        {% if form.non_field_errors %}
-                            <div class=" text-danger font-weight-bold">{{ form.non_field_errors }}</div>
-                        {% endif %}
-                        {% for field in form %}
-                            {% if field.errors %}
-                                <li class="navbar-nav">
-                                    <div class="text-danger font-weight-bold">{{ field.label }} :</div>
-                                    <div class="errorlist navbar-nav">
-                                        {% for error in field.errors %}
-                                            {{ error }}
-                                        {% endfor %}
-                                    </div>
-                                </li>
-                                <br>
-                            {% endif %}
-                        {% endfor %}
-
-                        <div class="input-group">
-                            <button type="submit" class="btn btn-dark btn-block rounded-pill mb-1 shadow">
-                                Login
-                            </button>
-                            <a type="button" class="btn btn-primary btn-block rounded-pill shadow"
-                               href="{% url 'account_reset_password' %}">Password Recovery</a>
-
-                            <div class="mt-4">
-                                <h6 class="d-inline mr-5">Don't have an account? </h6> <a
-                                    href={% url 'account_signup' %}> Register Here</a>
-                            </div>
-                        </div>
-                    </form>
-                    <h6 class="text-center my-3">OR</h6>
-                    <a class="btn btn-block btn-grey rounded-pill shadow"
-                       href="{% provider_login_url 'google' %}">Login with Google <i
-                            class="fab fa-google text-danger ml-2"></i></a>
+                    <input class="form-control form-control-lg rounded-pill shadow" type="text"
+                           name="login"
+                           placeholder="Username" autocomplete="username" maxlength="100" required=""
+                           id="id_login">
                 </div>
 
+                <h6>Password</h6>
+                <div class="mb-3 mt-2">
+
+                    <input class="form-control form-control-lg rounded-pill shadow" type="password"
+                           name="password"
+                           placeholder="Password" autocomplete="current-password" maxlength="100"
+                           required="" id="id_password">
+                </div>
+
+                <label for="id_remember" class="form-check-label active mr-2 mb-3"><h6> Remember
+                    Me </h6></label>
+                <input type="checkbox" class="form-check-inline" name="remember" id="id_remember">
+
+                {% if redirect_field_value %}
+                    <input type="hidden" name="{{ redirect_field_name }}"
+                           value="{{ redirect_field_value }}"/>
+                {% endif %}
+
+                {% if form.non_field_errors %}
+                    <div class=" text-danger font-weight-bold">{{ form.non_field_errors }}</div>
+                {% endif %}
+                {% for field in form %}
+                    {% if field.errors %}
+                        <li class="navbar-nav">
+                            <div class="text-danger font-weight-bold">{{ field.label }} :</div>
+                            <div class="errorlist navbar-nav">
+                                {% for error in field.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        </li>
+                        <br>
+                    {% endif %}
+                {% endfor %}
+
+                <div class="input-group">
+                    <button type="submit" class="btn btn-dark btn-block rounded-pill mb-1 shadow">
+                        Login
+                    </button>
+                    <a type="button" class="btn btn-primary btn-block rounded-pill shadow"
+                       href="{% url 'account_reset_password' %}">Password Recovery</a>
+
+
+                </div>
+            </form>
+            <br>
+            <div class="d-flex">
+             <span class="font-weight-bold">Don't have an account? </span>
+             <a class="ml-auto mr-1 text-decoration-none" href={% url 'account_signup' %}> Register Here</a>
             </div>
-            <div class="modal-footer ">
-                <button id="modalClose" type="button"
-                        class="btn btn-block btn-danger mx-auto rounded-pill col-11 shadow"
-                        data-dismiss='modal'>Close
-                </button>
-            </div>
+            <h6 class="text-center my-3">OR</h6>
+            <a class="btn btn-block btn-grey rounded-pill shadow"
+               href="{% provider_login_url 'google' %}">Login with Google <i
+                    class="fab fa-google text-danger ml-2"></i></a>
         </div>
+
+        </div>
+        <div class="modal-footer ">
+            <button id="modalClose" type="button"
+                    class="btn btn-block btn-danger mx-auto rounded-pill col-11 shadow"
+                    data-dismiss='modal'>Close
+            </button>
+        </div>
+    </div>
     </div>
 </div>
 

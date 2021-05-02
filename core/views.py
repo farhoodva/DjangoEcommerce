@@ -12,7 +12,6 @@ from django.utils import timezone
 from django.utils.datastructures import MultiValueDictKeyError
 from django.views import generic
 from django.views.decorators.csrf import csrf_exempt
-
 from RetailShopDjango.mixins import ProfileUpdateMixin
 from users.forms import UserBillingEditForm
 from .forms import AddToCartForm
