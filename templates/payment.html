@@ -29,7 +29,7 @@ Order overview
     <div class="row">
       <!-- CART TABLE-->
 
-        <span class="table-responsive mb-4 col-lg-10 mx-auto"></span>
+        <div class="table-responsive mb-4 col-8">
         <table class="table">
           <thead class="bg-light">
             <tr>
@@ -49,22 +49,27 @@ Order overview
              <td class="align-middle border-0">
                 <p class="mb-0  "><span class="text-success"></span>{{forloop.counter}} </p>
               </td>
+
               <th class="pl-0 border-0" scope="row">
                 <div class="media align-items-center"><a class="reset-anchor d-block animsition-link" href="{{ item.item.get_item_detail_url }}"><img src={{ item.item.image.url }} alt="..." width="70"/></a>
                   <div class="media-body ml-3"><strong class="h6"><a class="reset-anchor animsition-link" href="{{ item.item.get_item_detail_url }}">{{ item.item.title }}</a></strong></div>
                 </div>
               </th>
+
               <td class="align-middle border-0">
                 <p class="mb-0 small "><span class="text-success">$</span>{{item.item.price}}</p>
               </td>
+
               <td class="align-middle border-0">
                 <span class="px-3">
                      {{item.quantity}}
                 </span>
               </td>
+
               <td class="align-middle border-0">
                 <p class="mb-0 small">${{ item.total_price }}</p>
               </td>
+
               <td class="align-middle border-0">
               </td>
 
@@ -76,9 +81,9 @@ Order overview
           {% endif %}
           </tbody>
         </table>
-      </div>
+        </div>
         <!-- ORDER TOTAL-->
-      <div class="container col-lg-8 mb-4">
+      <div class="container col-4 mb-4">
       <div class="card border-0 rounded-0 p-lg-4 bg-light">
         <div class="card-body">
           <h5 class="text-uppercase mb-4">Cart total</h5>
@@ -89,7 +94,7 @@ Order overview
             <li class="d-flex align-items-center justify-content-between mb-4"><strong class="text-uppercase small font-weight-bold">Total</strong><span class="text-success">${{ cart.get_total_order_price }}</span></li>
             <li>
 
-            <button id="checkOut" class="btn btn-outline-dark btn-sm btn-block col-lg-4 mx-auto rounded" type="submit">Pay</button>
+            <button id="checkOut" class="btn btn-outline-primary btn-sm btn-block col-lg-10 mx-auto rounded" type="submit">Pay</button>
 
 
             </li>
@@ -98,6 +103,7 @@ Order overview
       </div>
       </div>
     </div>
+</div>
 {% csrf_token %}
 
 <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>

@@ -41,7 +41,7 @@
 
                     <li class="nav-item">
                         <a class="nav-link" href={% url 'core:cart_view' %}> <i
-                                class="fas fa-dolly-flatbed mr-1 text-gray"></i>Cart
+                                class="fas fa-dolly-flatbed mr-1 text-dark"></i>Cart
                             {% if request.user.is_authenticated %}
                                 <span class="text-danger ml-1">({{ request.user|count_order }})</span>
                             {% else %}
@@ -67,23 +67,25 @@
 
         <div class="dropdown-menu mt-3" aria-labelledby="pagesDropdown">
         <div class="dropdown-item">Welcome
-        {% if not user.userprofile.firstname %}
-            {{ user.username.title }}
-        {% else %}
             {{ user.userprofile.firstname.title }}
-    {% endif %}
-    </div>
-    <div class="dropdown-divider"></div>
-        <a class="dropdown-item border-0 transition-link"
-        href={{ user.userprofile.get_profile_update_url }}>
-        Manage your profile
-        <i class="fas fa-user-alt ml-1 text-primary"></i>
-        </a>
+        </div>
+        <div class="dropdown-divider"></div>
 
-    <div class="dropdown-divider"></div>
+         <a class="dropdown-item border-0 transition-link"
+        href={{ user.userprofile.get_profile_update_url }}>
+        <i class="fas fa-user-alt mr-1 text-dark"></i>
+        profile
+        </a>
+        <div class="dropdown-divider"></div>
+
+        <a class="dropdown-item" href={% url 'core:purchase_history' %}>
+            <i class="fas fa-dolly-flatbed mr-1 text-dark"></i>
+            Purchase History
+        </a>
+        <div class="dropdown-divider"></div>
 
         <a class="dropdown-item border-0 transition-link" href={% url 'user_wishlist' %}>
-        <i class="far fa-heart mr-1 mb-0"></i> <span class="text-danger ml-2">({{ request.user|count_wishlist }})</span>
+        <i class="far fa-heart text-danger mr-1 mb-0"></i> <span class="text-danger ml-2">({{ request.user|count_wishlist }})</span>
         </a>
 
     <div class="dropdown-divider"></div>
@@ -104,146 +106,146 @@
         </nav>
 
 
-        {#live search#}
-        <div id="searchForm" class="result col-lg-6 col-sm-8 mx-auto mb-1 mt-1" tabindex="0"
-             url={% url 'core:search' %} >
-            <form method="post" action={% url 'core:search' %}>
-                {% csrf_token %}
-            <div class="input-group">
-
-                <input id="search" name="searchTxt" class="form-control rounded-left mb-1 text-left" autocomplete="off"
-                       placeholder="Type to search...!" type="text">
-                <div class="input-group-append">
-                    <button id="searchBtn" class="btn-sm alert-primary rounded-right mb-1 " disabled type="submit" style="border: 0">Search</button>
-                </div>
-
-            </div>
-                </form>
-            <div id="search-results" class="card rounded  position-absolute shadow z-index-50" style="width: 94.0%; display: none">
-
-            </div>
-        </div>
-
-
-<!-- Login modal-->
-<div id="modalLogin" class="modal fade" tabindex="-1">
-<div class="modal-dialog">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h4 class="modal-title mx-auto">LOGIN</h4>
-        </div>
-        <div class="modal-body">
-            <!-- Login form -->
-            <div class="col-12 mx-auto">
-
-            <form class="login" method="POST" action="{% url 'account_login' %}">
-                {% csrf_token %}
-
-                <h6>Username</h6>
-                <div class="mb-3 mt-2 ">
-
-                    <input class="form-control form-control-lg rounded-pill shadow" type="text"
-                           name="login"
-                           placeholder="Username" autocomplete="username" maxlength="100" required=""
-                           id="id_login">
-                </div>
-
-                <h6>Password</h6>
-                <div class="mb-3 mt-2">
-
-                    <input class="form-control form-control-lg rounded-pill shadow" type="password"
-                           name="password"
-                           placeholder="Password" autocomplete="current-password" maxlength="100"
-                           required="" id="id_password">
-                </div>
-
-                <label for="id_remember" class="form-check-label active mr-2 mb-3"><h6> Remember
-                    Me </h6></label>
-                <input type="checkbox" class="form-check-inline" name="remember" id="id_remember">
-
-                {% if redirect_field_value %}
-                    <input type="hidden" name="{{ redirect_field_name }}"
-                           value="{{ redirect_field_value }}"/>
-                {% endif %}
-
-                {% if form.non_field_errors %}
-                    <div class=" text-danger font-weight-bold">{{ form.non_field_errors }}</div>
-                {% endif %}
-                {% for field in form %}
-                    {% if field.errors %}
-                        <li class="navbar-nav">
-                            <div class="text-danger font-weight-bold">{{ field.label }} :</div>
-                            <div class="errorlist navbar-nav">
-                                {% for error in field.errors %}
-                                    {{ error }}
-                                {% endfor %}
-                            </div>
-                        </li>
-                        <br>
-                    {% endif %}
-                {% endfor %}
-
+<!-- Live search-->
+    <div id="searchForm" class="result col-lg-6 col-sm-8 mx-auto mb-1 mt-1" tabindex="0"
+                 url={% url 'core:search' %} >
+                <form method="post" action={% url 'core:search' %}>
+                    {% csrf_token %}
                 <div class="input-group">
-                    <button type="submit" class="btn btn-dark btn-block rounded-pill mb-1 shadow">
-                        Login
-                    </button>
-                    <a type="button" class="btn btn-primary btn-block rounded-pill shadow"
-                       href="{% url 'account_reset_password' %}">Password Recovery</a>
 
+                    <input id="search" name="searchTxt" class="form-control rounded-left mb-1 text-left" autocomplete="off"
+                           placeholder="Type to search...!" type="text">
+                    <div class="input-group-append">
+                        <button id="searchBtn" class="btn-sm alert-primary rounded-right mb-1 " disabled type="submit" style="border: 0">Search</button>
+                    </div>
 
                 </div>
-            </form>
-            <br>
-            <div class="d-flex">
-             <span class="font-weight-bold">Don't have an account? </span>
-             <a class="ml-auto mr-1 text-decoration-none" href={% url 'account_signup' %}> Register Here</a>
+                    </form>
+                <div id="search-results" class="card rounded  position-absolute shadow z-index-50" style="width: 94.0%; display: none">
+
+                </div>
             </div>
-            <h6 class="text-center my-3">OR</h6>
-            <a class="btn btn-block btn-grey rounded-pill shadow"
-               href="{% provider_login_url 'google' %}">Login with Google <i
-                    class="fab fa-google text-danger ml-2"></i></a>
-        </div>
 
-        </div>
-        <div class="modal-footer ">
-            <button id="modalClose" type="button"
-                    class="btn btn-block btn-danger mx-auto rounded-pill col-11 shadow"
-                    data-dismiss='modal'>Close
-            </button>
-        </div>
-    </div>
-    </div>
-</div>
-
-<!-- Logout modal-->
-<div id="modalLogout" class="modal fade" tabindex="-1">
+    <!-- Login modal-->
+    <div id="modalLogin" class="modal fade" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title mx-auto">Logout</h4>
+                <h4 class="modal-title mx-auto">LOGIN</h4>
             </div>
             <div class="modal-body">
-                <!-- Logout form -->
-                <form class="col-10 mx-auto" method="post" action="{% url 'account_logout' %}">
+                <!-- Login form -->
+                <div class="col-12 mx-auto">
+
+                <form class="login" method="POST" action="{% url 'account_login' %}">
                     {% csrf_token %}
+
+                    <h6>Username</h6>
+                    <div class="mb-3 mt-2 ">
+
+                        <input class="form-control form-control-lg rounded-pill shadow" type="text"
+                               name="login"
+                               placeholder="Username" autocomplete="username" maxlength="100" required=""
+                               id="id_login">
+                    </div>
+
+                    <h6>Password</h6>
+                    <div class="mb-3 mt-2">
+
+                        <input class="form-control form-control-lg rounded-pill shadow" type="password"
+                               name="password"
+                               placeholder="Password" autocomplete="current-password" maxlength="100"
+                               required="" id="id_password">
+                    </div>
+
+                    <label for="id_remember" class="form-check-label active mr-2 mb-3"><h6> Remember
+                        Me </h6></label>
+                    <input type="checkbox" class="form-check-inline" name="remember" id="id_remember">
+
                     {% if redirect_field_value %}
                         <input type="hidden" name="{{ redirect_field_name }}"
                                value="{{ redirect_field_value }}"/>
                     {% endif %}
-                    <h4 class="my-xl-5">Are You Sure?</h4>
-                    <br><br>
+
+                    {% if form.non_field_errors %}
+                        <div class=" text-danger font-weight-bold">{{ form.non_field_errors }}</div>
+                    {% endif %}
+                    {% for field in form %}
+                        {% if field.errors %}
+                            <li class="navbar-nav">
+                                <div class="text-danger font-weight-bold">{{ field.label }} :</div>
+                                <div class="errorlist navbar-nav">
+                                    {% for error in field.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            </li>
+                            <br>
+                        {% endif %}
+                    {% endfor %}
+
                     <div class="input-group">
-                        <button class="btn btn-dark btn-block rounded-pill px-4" type="submit">Log Out</button>
-                        <button class="mx-auto btn btn-primary btn-block rounded-pill  mt-2"
-                                data-dismiss='modal'>Close
+                        <button type="submit" class="btn btn-dark btn-block rounded-pill mb-1 shadow">
+                            Login
                         </button>
+                        <a type="button" class="btn btn-primary btn-block rounded-pill shadow"
+                           href="{% url 'account_reset_password' %}">Password Recovery</a>
+
 
                     </div>
                 </form>
+                <br>
+                <div class="d-flex">
+                 <span class="font-weight-bold">Don't have an account? </span>
+                 <a class="ml-auto mr-1 text-decoration-none" href={% url 'account_signup' %}> Register Here</a>
+                </div>
+                <h6 class="text-center my-3">OR</h6>
+                <a class="btn btn-block btn-grey rounded-pill shadow"
+                   href="{% provider_login_url 'google' %}">Login with Google <i
+                        class="fab fa-google text-danger ml-2"></i></a>
+            </div>
+
+            </div>
+            <div class="modal-footer ">
+                <button id="modalClose" type="button"
+                        class="btn btn-block btn-danger mx-auto rounded-pill col-11 shadow"
+                        data-dismiss='modal'>Close
+                </button>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!-- Logout modal-->
+    <div id="modalLogout" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title mx-auto">Logout</h4>
+                </div>
+                <div class="modal-body">
+                    <!-- Logout form -->
+                    <form class="col-10 mx-auto" method="post" action="{% url 'account_logout' %}">
+                        {% csrf_token %}
+                        {% if redirect_field_value %}
+                            <input type="hidden" name="{{ redirect_field_name }}"
+                                   value="{{ redirect_field_value }}"/>
+                        {% endif %}
+                        <h4 class="my-xl-5">Are You Sure?</h4>
+                        <br><br>
+                        <div class="input-group">
+                            <button class="btn btn-dark btn-block rounded-pill px-4" type="submit">Log Out</button>
+                            <button class="mx-auto btn btn-primary btn-block rounded-pill  mt-2"
+                                    data-dismiss='modal'>Close
+                            </button>
+
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
+
 </div>
     <hr class="container mt-0">
 </header>

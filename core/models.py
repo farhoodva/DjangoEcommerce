@@ -6,8 +6,17 @@ from users.models import UserProfile
 from django.db.models.signals import post_save
 from django.urls import reverse
 
+payment_choices = (
+    ('stripe', 'stripe'),
+    ('paypal', 'paypal')
+)
+
 
 def slug_generator():
+    return ''.join(random.choices(string.ascii_lowercase + string.digits + string.ascii_uppercase, k=20))
+
+
+def ref_code_generator():
     return ''.join(random.choices(string.ascii_lowercase + string.digits + string.ascii_uppercase, k=20))
 
 
@@ -118,8 +127,10 @@ class OrderItem(models.Model):
 
 class ShoppingCart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    ref_code = models.CharField(max_length=100, unique=True, blank=True, null=True)
     shipping_info = models.ForeignKey('users.UserProfile', on_delete=models.SET_NULL, null=True, blank=True)
     items = models.ManyToManyField(OrderItem)
+    payment = models.ForeignKey('core.Payment', on_delete=models.SET_NULL, null=True, blank=True)
     coupon = models.ForeignKey('core.Coupons', on_delete=models.SET_NULL, null=True, blank=True)
     start_date = models.DateTimeField(auto_now_add=True)
     ordered_date = models.DateTimeField(null=True, blank=True)
@@ -130,6 +141,14 @@ class ShoppingCart(models.Model):
             self.shipping_info = UserProfile.objects.get(user=self.user)
             super(ShoppingCart, self).save()
         super(ShoppingCart, self).save()
+
+    @classmethod
+    def post_create(cls, sender, instance, created, *args, **kwargs):
+        if created:
+            id_string = str(instance.id)
+            random_str = ref_code_generator()
+            instance.ref_code = (random_str + id_string)
+            instance.save()
 
     def __str__(self):
         return self.user.username
@@ -146,6 +165,22 @@ class ShoppingCart(models.Model):
                 return int(total - total / self.coupon.amount)
         else:
             return total
+
+    def get_cart_detail_url(self):
+        return reverse('core:cart_detail_view', kwargs={
+            'pk': self.pk
+        })
+
+
+class Payment(models.Model):
+    payment_type = models.CharField(choices=payment_choices, max_length=20)
+    charge_id = models.CharField(max_length=50)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
+    amount = models.FloatField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username}/{self.payment_type}/{self.charge_id} "
 
 
 class Coupons (models.Model):
@@ -174,4 +209,5 @@ class Coupons (models.Model):
 
 
 post_save.connect(Coupons.post_create, sender=Coupons)
+post_save.connect(ShoppingCart.post_create, sender=ShoppingCart)
 

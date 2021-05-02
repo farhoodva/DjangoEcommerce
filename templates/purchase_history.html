@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block head_title %}{{ request.user.username }} {% endblock %}
+<style>
+
+
+</style>
+{% block content %}
+    <div class="container">
+
+    <section class="py-5 mb-5 bg-light">
+    <div class="row px-4 px-lg-5 py-lg-4 align-items-center">
+        <div class="col-lg-6">
+            <h1 class="h2 text-uppercase mb-0">Purchase history</h1>
+    </div>
+    <div class="col-lg-6 text-lg-right">
+        <nav aria-label="breadcrumb">
+        <ol class="breadcrumb justify-content-lg-end mb-0 px-0">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Purchase history</li>
+        </ol>
+        </nav>
+    </div>
+    </div>
+
+    </section>
+
+    <div class="table-responsive table-hover mx-auto mb-4 col-lg-11">
+        <table class="table">
+          <thead class="bg-light mb-1">
+            <tr>
+              <th class="border-0" scope="col"> <strong class="text-small text-uppercase">#</strong></th>
+              <th class="border-0" scope="col"> <strong class="text-small text-uppercase">Reference code</strong></th>
+              <th class="border-0" scope="col"> <strong class="text-small text-uppercase">Order Date</strong></th>
+              <th class="border-0" scope="col"> <strong class="text-small text-uppercase">Items</strong></th>
+              <th class="border-0" scope="col"> <strong class="text-small text-uppercase">Total</strong></th>
+              <th class="border-0" scope="col"> <strong class="text-small text-uppercase">Payment method</strong></th>
+            </tr>
+          </thead>
+          <tbody>
+
+          {% if carts %}
+           {% for cart in carts %}
+
+            <tr class="border-bottom solid primary-color">
+              <td class="align-middle border-0">
+                <p class="mb-0  "><span class="text-success"></span>{{forloop.counter}} </p>
+              </td>
+
+              <td class="pl-0 border-0" scope="row">
+                <div class="align-items-center">
+                  <div class="text-small ml-3"><a class="reset-anchor d-block animsition-link" href="{{ cart.get_cart_detail_url }}"><span class="">{{ cart.ref_code }}</span></a></div>
+                </div>
+              </td>
+
+              <td class="align-middle border-0">
+                <p class="mb-0 small "><span class=""></span>{{cart.ordered_date}}</p>
+              </td>
+
+              <td class="align-middle border-0">
+               {{ cart.items.count }}
+              </td>
+
+              <td class="align-middle border-0">
+                <p class="mb-0 small">${{ cart.get_total_order_price }}</p>
+              </td>
+
+              <td class="align-middle border-0">
+                <p class="mb-0 small">{{ cart.payment.payment_type.upper }}</p>
+              </td>
+
+            </tr>
+
+              {% endfor %}
+          {% else %}
+
+          {% endif %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <br>
+{% endblock %}

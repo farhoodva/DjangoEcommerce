@@ -1,4 +1,5 @@
 import stripe
+from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -16,7 +17,7 @@ from RetailShopDjango.mixins import ProfileUpdateMixin
 from users.forms import UserBillingEditForm
 from .forms import AddToCartForm
 from users.models import UserProfile
-from .models import Item, Categories, OrderItem, ShoppingCart, Coupons, SubCategories
+from .models import Item, Categories, OrderItem, ShoppingCart, Coupons, SubCategories, Payment
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -47,6 +48,26 @@ class CartView(LoginRequiredMixin, generic.ListView):
             return qs
         except ObjectDoesNotExist:
             messages.info(self.request, 'You have no active cart')
+
+
+class PurchaseHistoryView(LoginRequiredMixin, generic.ListView):
+    context_object_name = 'carts'
+    template_name = 'purchase_history.html'
+
+    def get_queryset(self):
+        try:
+            qs = ShoppingCart.objects.filter(user_id=self.request.user.id, status='Paid')
+            return qs
+        except ObjectDoesNotExist:
+            messages.info(self.request, 'You have no orders')
+
+
+def cart_detail_view(request, pk):
+    try:
+        cart = ShoppingCart.objects.get(pk=pk)
+    except ObjectDoesNotExist:
+        messages.warning(request, 'Order does not exist')
+        return redirect('core:home')
 
 
 class ShopView(generic.ListView):
@@ -114,21 +135,12 @@ class CatView(generic.ListView):
         context['cat_name'] = cat_name
         return context
 
-# def Sub_Cat_View(request, pk):
-#     items = Item.objects.filter(category_id=pk)
-#     return render(request, 'shop_category.html', {'items': items})
-
 
 class UserBillingView(ProfileUpdateMixin, SuccessMessageMixin, generic.UpdateView,):
     model = UserProfile
     form_class = UserBillingEditForm
     success_url = reverse_lazy('core:home')
     template_name = 'checkout.html'
-
-    # def get_success_url(self, **kwargs):
-    #     return reverse('core:checkout', kwargs={
-    #         'pk': str(self.request.user.id)
-    #     })
 
     def get_context_data(self, *args, **kwargs):
         try:
@@ -177,7 +189,7 @@ class UserBillingView(ProfileUpdateMixin, SuccessMessageMixin, generic.UpdateVie
 class CreateCheckoutSession(generic.View):
     def post(self, request, *args, **kwargs):
         try:
-            YOUR_DOMAIN = 'http://127.0.0.1:8000'
+            your_domain = 'http://127.0.0.1:8000'
             cart = ShoppingCart.objects.get(pk=self.kwargs['pk'])
             checkout_session = stripe.checkout.Session.create(
                 payment_method_types=['card'],
@@ -199,8 +211,8 @@ class CreateCheckoutSession(generic.View):
                     'cart_pk': self.kwargs['pk']
                 },
                 mode='payment',
-                success_url=YOUR_DOMAIN + '/home',
-                cancel_url=YOUR_DOMAIN + '/home',
+                success_url=your_domain + '/home',
+                cancel_url=your_domain + '/home',
             )
             return JsonResponse({'id': checkout_session.id})
         except Exception as e:
@@ -209,12 +221,13 @@ class CreateCheckoutSession(generic.View):
 
 @csrf_exempt
 def stripe_webhook(request):
+    print(1)
     stripe.api_key = settings.STRIPE_SECRET_KEY
     endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
     payload = request.body
     sig_header = request.META['HTTP_STRIPE_SIGNATURE']
     event = None
-
+    print(123)
     try:
         event = stripe.Webhook.construct_event(
             payload, sig_header, endpoint_secret
@@ -228,10 +241,18 @@ def stripe_webhook(request):
 
     # Handle the checkout.session.completed event
     if event['type'] == 'checkout.session.completed':
-        print("Payment was successful.")
         session = event['data']['object']
-        cart = ShoppingCart.objects.get(pk=session['metadata'].cart_pk, status='Checked-out')
+        print(session)
+        cart = ShoppingCart.objects.get(pk=session['metadata'].cart_pk, status='New')
         cart.status = 'Paid'
+        payment = Payment.objects.create(
+            payment_type='stripe',
+            charge_id=session['payment_intent'],
+            user=cart.user,
+            amount=cart.get_total_order_price(),
+            )
+        payment.save()
+        cart.payment = payment
         cart.save()
         order_item_qs = OrderItem.objects.filter(user_id=session['metadata'].user_id, order_completed=False)
         for order_item in order_item_qs:
@@ -239,12 +260,27 @@ def stripe_webhook(request):
             order_item.item.save()
             order_item.order_completed = True
             order_item.save()
+        customer_email = cart.user.email
+        send_mail(
+            'FSTORE',
+            f'You can check your order details in your profile using your order reference code:{cart.ref_code} ',
+            'from@example.com',
+            [customer_email],
+            fail_silently=False,
+        )
     return HttpResponse(status=200)
 
 
 def paypal_checkout_complete(request, pk):
     cart = ShoppingCart.objects.get(pk=pk)
     cart.status = 'Paid'
+    payment = Payment.objects.create(
+        payment_type='stripe',
+        charge_id=cart.id,  # TODO: find out how to add paypal charge id
+        user=cart.user,
+        amount=cart.get_total_order_price(),
+    )
+    payment.save()
     cart.save()
     order_item_qs = OrderItem.objects.filter(user_id=cart.user_id, order_completed=False)
     for order_item in order_item_qs:
@@ -411,7 +447,7 @@ def search(request):
             | Item.objects.filter(price__startswith=search_string) \
             | Item.objects.filter(description__icontains=search_string) \
             | Item.objects.filter(category__name__icontains=search_string)
-        data = search_results_qs.values()
+        # data = search_results_qs.values()
         return render(request, 'search_results_ajax.html', {'results': search_results_qs})
     else:
         sub_categories = SubCategories.objects.all()
@@ -419,9 +455,9 @@ def search(request):
         try:
             search_string = request.POST.get('searchTxt')
             search_results_qs = Item.objects.filter(title__icontains=search_string) \
-                                | Item.objects.filter(price__startswith=search_string) \
-                                | Item.objects.filter(description__icontains=search_string) \
-                                | Item.objects.filter(category__name__icontains=search_string)
+                | Item.objects.filter(price__startswith=search_string) \
+                | Item.objects.filter(description__icontains=search_string) \
+                | Item.objects.filter(category__name__icontains=search_string)
             context = {
                 'results': search_results_qs,
                 'sub_categories': sub_categories,
@@ -430,7 +466,3 @@ def search(request):
             return render(request, 'search_results.html', context)
         except ValueError:
             return redirect('core:home')
-
-
-
-

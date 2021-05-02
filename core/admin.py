@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import OrderItem, ShoppingCart, Item, Categories, SubCategories, Coupons
+from .models import OrderItem, ShoppingCart, Item, Categories, SubCategories, Coupons, Payment
 from users.models import UserProfile, State, City
 
 
@@ -30,6 +30,7 @@ class CouponAdmin(admin.ModelAdmin):
 
 admin.site.register(UserProfile)
 admin.site.register(State)
+admin.site.register(Payment)
 admin.site.register(City)
 admin.site.register(Categories)
 admin.site.register(OrderItem, OrderItemAdmin)
