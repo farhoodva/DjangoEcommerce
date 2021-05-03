@@ -56,15 +56,16 @@ class PurchaseHistoryView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         try:
-            qs = ShoppingCart.objects.filter(user_id=self.request.user.id, status='Paid')
-            return qs
+            qs = ShoppingCart.objects.filter(user_id=self.request.user.id).exclude(status='New')
+            return qs.order_by('-ordered_date')
         except ObjectDoesNotExist:
             messages.info(self.request, 'You have no orders')
 
 
-def cart_detail_view(request, pk):
+def cart_detail_view(request, ref_code):
     try:
-        cart = ShoppingCart.objects.get(pk=pk)
+        cart = ShoppingCart.objects.get(ref_code=ref_code)
+        return render(request, 'purchase_detail_view.html', {'cart':cart})
     except ObjectDoesNotExist:
         messages.warning(request, 'Order does not exist')
         return redirect('core:home')

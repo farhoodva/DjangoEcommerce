@@ -33,6 +33,7 @@
               <th class="border-0" scope="col"> <strong class="text-small text-uppercase">Order Date</strong></th>
               <th class="border-0" scope="col"> <strong class="text-small text-uppercase">Items</strong></th>
               <th class="border-0" scope="col"> <strong class="text-small text-uppercase">Total</strong></th>
+              <th class="border-0" scope="col"> <strong class="text-small text-uppercase">Status</strong></th>
               <th class="border-0" scope="col"> <strong class="text-small text-uppercase">Payment method</strong></th>
             </tr>
           </thead>
@@ -65,6 +66,10 @@
               </td>
 
               <td class="align-middle border-0">
+                <p class="mb-0 small">{{ cart.status.upper }}</p>
+              </td>
+
+              <td class="align-middle border-0">
                 <p class="mb-0 small">{{ cart.payment.payment_type.upper }}</p>
               </td>
 
@@ -76,6 +81,14 @@
           {% endif %}
           </tbody>
         </table>
+
+     <!-- CART NAV-->
+      <div class="container bg-light px-4 py-3 my-5">
+        <div class="row align-items-center text-center">
+          <div class="col-md-6 mb-3 mb-md-0 text-md-left"><a class="btn btn-link p-0 text-dark btn-sm" href="{% url 'core:home' %}"><i class="fas fa-long-arrow-alt-left mr-2"> </i>Back</a></div>
+        </div>
+      </div>
+
       </div>
     </div>
     <br>

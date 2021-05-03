@@ -168,7 +168,7 @@ class ShoppingCart(models.Model):
 
     def get_cart_detail_url(self):
         return reverse('core:cart_detail_view', kwargs={
-            'pk': self.pk
+            'ref_code': self.ref_code
         })
 
 
