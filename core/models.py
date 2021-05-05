@@ -106,6 +106,16 @@ class Item(models.Model):
             'slug': self.slug
         })
 
+    def average_rating(self):
+        sum_rating = 0
+        average_rating = 0
+        if self.reviews.exists():
+            for review in self.reviews.all():
+                sum_rating += int(review.rating)
+            average_rating = (sum_rating // self.reviews.count())
+            return average_rating
+        return 0
+
 
 class OrderItem(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -296,7 +296,7 @@ def paypal_checkout_complete(request, ref_code):
 class ProductDetailView(generic.DetailView):
     model = Item
     context_object_name = 'item'
-    template_name = 'detail.html'
+    template_name = 'Product_detail.html'
 
     def get_context_data(self, *args, **kwargs):
         form = AddToCartForm()
