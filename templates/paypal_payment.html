@@ -147,20 +147,22 @@ Order overview
                     // Show a success message to the buyer
                          $.ajax({
                              type: 'Post',
-                             url: `{% url 'core:paypal_checkout' cart.pk %}`,
+                             url: `{% url 'core:paypal_checkout' cart.ref_code %}`,
                               headers:{
                                     'X-CSRFToken': csrftoken
                              },
-
+                             data:{
+                                 'payment_id':data.payerID  //should be changed to paymentID in deployment
+                             }
                                      });
                         {#fetch('{% url 'core:paypal_checkout' cart.pk %}',{#}
-                            // method: 'POST',
-                            // headers:{
-                                  //  'Content-type':'application-json',
-                                   // 'X-CSRFToken': csrftoken
-                           //  },
-                           //  body:JSON.stringify({'cart_id':cart_pk})
-                      //   })
+                        {#     method: 'POST',#}
+                        {#    headers:{#}
+                        {#            'Content-type':'application-json',#}
+                        {#           'X-CSRFToken': csrftoken#}
+                        {#     },#}
+                        {#     body:JSON.stringify({'payment_id':data.PayerID})#}
+                        {# })#}
                     {#alert('Transaction completed by ' + details.payer.name.given_name + '!');#}
                     $('#alertModal').modal('show')
                 })

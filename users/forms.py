@@ -111,7 +111,7 @@ class UserBillingEditForm(forms.ModelForm):
                     'placeholder': 'Address',
                     'class': 'form-control ,form-control-lg, no-border',
                     }),
-            'payment_method': forms.RadioSelect(choices=payment_choices,attrs={
+            'payment_method': forms.RadioSelect(choices=payment_choices, attrs={
                     'class': 'form-check'
                     }),
             'phone_number': forms.NumberInput(attrs={

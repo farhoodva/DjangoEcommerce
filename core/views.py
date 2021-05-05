@@ -15,14 +15,15 @@ from django.views import generic
 from django.views.decorators.csrf import csrf_exempt
 from RetailShopDjango.mixins import ProfileUpdateMixin
 from users.forms import UserBillingEditForm
-from .forms import AddToCartForm
+from .forms import AddToCartForm, AddReviewForm
 from users.models import UserProfile
-from .models import Item, Categories, OrderItem, ShoppingCart, Coupons, SubCategories, Payment
+from .models import Item, Categories, OrderItem, ShoppingCart, Coupons, SubCategories, Payment, Reviews
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 def ajax_load_products(request, display):
+    print(display)
     # display = request.GET.get('display')
     items = Item.objects.all().order_by('pk')[display:display+4]
     return render(request, 'product_loader.html', {'items': items})
@@ -30,7 +31,7 @@ def ajax_load_products(request, display):
 
 class HomeView(generic.View):
     def get(self, display):
-        display = 4  # initial number of items
+        display = 8  # initial number of items
         context = {
             'items': Item.objects.all().order_by('pk')[0:display],
             'categories': Categories.objects.all()
@@ -187,6 +188,7 @@ class UserBillingView(ProfileUpdateMixin, SuccessMessageMixin, generic.UpdateVie
             return redirect('core:home')
 
 
+#  STRIPE
 class CreateCheckoutSession(generic.View):
     def post(self, request, *args, **kwargs):
         try:
@@ -222,13 +224,11 @@ class CreateCheckoutSession(generic.View):
 
 @csrf_exempt
 def stripe_webhook(request):
-    print(1)
     stripe.api_key = settings.STRIPE_SECRET_KEY
     endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
     payload = request.body
     sig_header = request.META['HTTP_STRIPE_SIGNATURE']
     event = None
-    print(123)
     try:
         event = stripe.Webhook.construct_event(
             payload, sig_header, endpoint_secret
@@ -243,7 +243,6 @@ def stripe_webhook(request):
     # Handle the checkout.session.completed event
     if event['type'] == 'checkout.session.completed':
         session = event['data']['object']
-        print(session)
         cart = ShoppingCart.objects.get(pk=session['metadata'].cart_pk, status='New')
         cart.status = 'Paid'
         payment = Payment.objects.create(
@@ -272,16 +271,18 @@ def stripe_webhook(request):
     return HttpResponse(status=200)
 
 
-def paypal_checkout_complete(request, pk):
-    cart = ShoppingCart.objects.get(pk=pk)
+def paypal_checkout_complete(request, ref_code):
+    payment_id = request.POST.get('payment_id')
+    cart = ShoppingCart.objects.get(ref_code=ref_code)
     cart.status = 'Paid'
     payment = Payment.objects.create(
-        payment_type='stripe',
-        charge_id=cart.id,  # TODO: find out how to add paypal charge id
+        payment_type='paypal',
+        charge_id=payment_id + cart.pk,  # remove cart.pk in deployment
         user=cart.user,
         amount=cart.get_total_order_price(),
     )
     payment.save()
+    cart.payment = payment
     cart.save()
     order_item_qs = OrderItem.objects.filter(user_id=cart.user_id, order_completed=False)
     for order_item in order_item_qs:
@@ -299,11 +300,13 @@ class ProductDetailView(generic.DetailView):
 
     def get_context_data(self, *args, **kwargs):
         form = AddToCartForm()
+        review_form = AddReviewForm()
         item = Item.objects.get(slug=self.kwargs['slug'])
         items = Item.objects.filter(category__pk=item.category.pk).exclude(pk=item.pk)
         context = super(ProductDetailView, self).get_context_data(**kwargs)
         context['items'] = items
         context['form'] = form
+        context['review_form'] = review_form
         return context
 
 
@@ -405,6 +408,37 @@ def remove_from_cart(request, slug):
         cart.items.remove(order_item)
         order_item.delete()
     return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
+
+
+# class ReviewCreateView(LoginRequiredMixin, SuccessMessageMixin, generic.CreateView):
+#     model = Reviews
+#     from_class = AddReviewForm
+#     success_message = 'Comment added successfully'
+#
+#     def get_success_url(self,*args,**kwargs):
+#         item = Item.objects.get(slug= self.kwargs['slug'])
+#         return item.get_item_detail_url()
+#     def form_valid(self, form):
+        # pass
+
+@login_required()
+def add_review(request, slug):
+    item = get_object_or_404(Item, slug=slug)
+    try:
+        Reviews.objects.get(item=item, user=request.user)
+        messages.warning(request, 'You have already reviewed this product')
+        return redirect('core:product_detail', item.slug)
+    except ObjectDoesNotExist:
+        form = AddReviewForm(request.POST or None)
+        if form.is_valid():
+            print(form.data)
+            form.instance.user = request.user
+            form.instance.item = item
+            form.instance.rating = form.cleaned_data['rating']
+            form.instance.positive_exp = form.cleaned_data['positive_exp']
+            form.save()
+            messages.success(request, 'Review submitted successfully')
+            return redirect('core:product_detail', item.slug)
 
 
 def remove_order_item(request, slug):

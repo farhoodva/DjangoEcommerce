@@ -1,8 +1,21 @@
 from django import forms
-
+from .models import Reviews
 # choices = []
 # for i in range(1, 31):
 #     choices += str(i),
+
+ratings = [
+    ('1', '1'),
+    ('2', '2'),
+    ('3', '3'),
+    ('4', '4'),
+    ('5', '5'),
+]
+exp_choices = [
+    ('Yes', 'Yes'),
+    ('No', 'No'),
+    ('Not sure', 'Not sure'),
+]
 
 
 class AddToCartForm(forms.Form):
@@ -13,3 +26,32 @@ class AddToCartForm(forms.Form):
     #     'class': 'form-control  text-small',
     #         }))
 
+
+class AddReviewForm(forms.ModelForm):
+    rating = forms.ChoiceField(choices=ratings, required=True)
+    positive_exp = forms.ChoiceField(choices=exp_choices, required=True)
+
+    class Meta:
+        model = Reviews
+        fields = ['review',]
+        widgets = {
+            'review': forms.Textarea(attrs={
+                'placeholder': "Type your review",
+                'class': 'form-control no-border',
+                'required': True,
+                'rows': 4
+            }),
+            'rating': forms.RadioSelect(choices=ratings, attrs={
+                    'class': 'form-check'
+                    }),
+
+            'positive_exp': forms.RadioSelect(choices=exp_choices, attrs={
+                'class': 'form-check',
+            })
+
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['review'].required = True
+        self.fields['rating'].required = True

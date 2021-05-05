@@ -37,7 +37,7 @@ class Categories(models.Model):
 
     def get_cat_view_url(self):
         return reverse('core:cat_view', kwargs={
-            'pk':self.pk
+            'pk': self.pk
         })
 
 
@@ -67,14 +67,14 @@ class Item(models.Model):
     image_4 = models.ImageField(upload_to='img/Items', null=True, blank=True)
     discount_price = models.FloatField(blank=True, null=True)
     warehouse_quantity = models.PositiveIntegerField()
-    description = models.CharField(max_length=255, null=True)
+    description = models.TextField(max_length=255, null=True)
     category = models.ForeignKey(SubCategories, on_delete=models.SET_DEFAULT, default=1)
     wishlist = models.ManyToManyField(User, related_name='wishlist', blank=True)
     slug = models.SlugField(blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slug_generator()
+            self.slug = slug_generator() + str(self.pk)
             super(Item, self).save()
         super(Item, self).save()
 
@@ -206,6 +206,21 @@ class Coupons (models.Model):
             random_str = "".join(secrets.choice(upper_alpha) for i in range(8))
             instance.name = (random_str + id_string)[-8:]
             instance.save()
+
+
+class Reviews(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='reviews')
+    review = models.TextField(max_length=500)
+    positive_exp = models.CharField(max_length=15, null=True, blank=True)
+    rating = models.PositiveIntegerField(null=True, blank=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name_plural = "Reviews"
+
+    def __str__(self):
+        return self.item.title + ' by ' + self.user.username
 
 
 post_save.connect(Coupons.post_create, sender=Coupons)

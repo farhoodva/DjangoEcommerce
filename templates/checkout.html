@@ -79,7 +79,7 @@
                     <span class="text-primary ">{{ address_line.errors }}</span>
                 </div>
                 <label id="labelid_payment_method" class="text-small text-dark mt-3 mb-2 text-uppercase">Payment option</label>
-             {% for value, name in form.fields.payment_method.choices %}
+                {% for value, name in form.fields.payment_method.choices %}
                 <div class="custom-control custom-radio ml-2">
                   <input id="{{ name }}" name="payment_method" value="{{ value }}" type="radio" class="custom-control-input" required>
                   <label class="custom-control-label" for="{{ name }}">{{ name }}</label>

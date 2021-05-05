@@ -2,7 +2,8 @@ from django.urls import path
 from.views import HomeView, ProductDetailView, add_remove_to_wishlist, add_to_cart,\
     remove_from_cart, CartView, remove_order_item, add_coupon, remove_coupon, search, \
     ajax_load_products, UserBillingView, add_to_cart_multiple, ShopView, SubCatView, CatView,\
-    CreateCheckoutSession, stripe_webhook, paypal_checkout_complete, cart_detail_view, PurchaseHistoryView
+    CreateCheckoutSession, stripe_webhook, paypal_checkout_complete, cart_detail_view, PurchaseHistoryView,\
+    add_review
 app_name = 'core'
 
 urlpatterns = [
@@ -15,12 +16,13 @@ urlpatterns = [
     path('remove_order_item/<slug>', remove_order_item, name='remove_order_item'),
     path('add_coupon/', add_coupon, name='add_coupon'),
     path('remove_coupon/', remove_coupon, name='remove_coupon'),
+    path('add_review/<slug>', add_review, name='add_review'),
     path('Cart/', CartView.as_view(), name='cart_view'),
     path('cart_detail_view/<ref_code>', cart_detail_view, name='cart_detail_view'),
     path('purchase_history/', PurchaseHistoryView.as_view(), name='purchase_history'),
     path('stripe/<int:pk>', CreateCheckoutSession.as_view(), name='stripe_checkout'),
     path('webhooks/stripe/', stripe_webhook, name='stripe_webhook'),
-    path('paypal_checkout/<int:pk>', paypal_checkout_complete, name='paypal_checkout'),
+    path('paypal_checkout/<ref_code>', paypal_checkout_complete, name='paypal_checkout'),
     path('SubCatView/<int:pk>', SubCatView.as_view(), name='sub_cat_view'),
     path('CatView/<int:pk>', CatView.as_view(), name='cat_view'),
     path('Shop/', ShopView.as_view(), name='shop_view'),

@@ -41,7 +41,7 @@
 })
 
 // {#product laoder with back-end function#}
-        let display = 4 //initial loaded number of items
+        let display = 8 //initial loaded number of items
     //  $.ajax({
     //     type: 'GET',
     //     url: `/ajax_load_products/${display}`,
@@ -56,9 +56,9 @@
         $.ajax({
         type: 'GET',
         url: `/ajax_load_products/${display}`,
-        data:{
-            'display':display
-        },
+        // data:{
+        //     'display':display
+        // },
             success: function(data) {
                 $('#productlist').append(data)
                 display += 4
