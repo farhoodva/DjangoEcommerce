@@ -158,7 +158,44 @@
 
 </div>
 </div>
+    <script src={%  static "vendor/jquery/jquery.min.js" %}></script>
     <script>
+// {#product laoder with back-end function#}
+        let display = 8 //initial loaded number of items
+    //  $.ajax({
+    //     type: 'GET',
+    //     url: `/ajax_load_products/${display}`,
+    //     // data:{
+    //     //     'display':display
+    //     // },
+    //     success: function(data) {
+    //         $('#productlist').html(data)
+    //     }
+    // })
+        const loadMoreButton = $('#pr-loadmore')
+        const item_count = '{{item_count}}'
+        loadMoreButton.on('click',()=>{
+        loadMoreButton.text("Loading...")
+
+        $.ajax({
+        type: 'GET',
+        url: `/ajax_load_products/${display}`,
+        // data:{
+        //     'display':display
+        // },
+            success: function(data) {
+            if(display < item_count){
+                $('#productlist').append(data)
+                loadMoreButton.text('Load More')
+                display += 4
+                }
+            else {
+                loadMoreButton.text('End')
+            }
+            }
+    })
+
+    })
 
     </script>
 

@@ -23,7 +23,6 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 def ajax_load_products(request, display):
-    print(display)
     # display = request.GET.get('display')
     items = Item.objects.all().order_by('pk')[display:display+4]
     return render(request, 'product_loader.html', {'items': items})
@@ -31,10 +30,12 @@ def ajax_load_products(request, display):
 
 class HomeView(generic.View):
     def get(self, display):
+        item_count = Item.objects.count()
         display = 8  # initial number of items
         context = {
             'items': Item.objects.all().order_by('pk')[0:display],
-            'categories': Categories.objects.all()
+            'categories': Categories.objects.all(),
+            'item_count': item_count
         }
         return render(self.request, 'home.html', context)
 

@@ -26,11 +26,11 @@
       <div class="col-lg-3 order-2 order-lg-1">
         <h5 class="text-uppercase mb-4">Categories</h5>
           {% for category in categories %}
-        <div class="py-2 px-4 bg-success-light rounded text-dark mb-3"><strong class="small text-uppercase font-weight-bold"><a href={{ category.get_cat_view_url }}>{{ category.name}}</a></strong></div>
+        <div class="py-2 px-4 bg-light rounded mb-3"><strong class="small text-uppercase font-weight-bold"><a class="text-decoration-none text-dark " href={{ category.get_cat_view_url }}>{{ category.name}}</a></strong></div>
         <ul class="list-unstyled small text-muted pl-lg-4 font-weight-normal">
                 {% if category.sub_categories.exists %}
                     {% for sub in category.sub_categories.all %}
-                    <li class="mb-2"><a class="text-dark" href={{ sub.get_category_view_url }}>{{ sub.name }}</a></li>
+                    <li class="mb-2"><a class="text-dark text-decoration-none" href={{ sub.get_category_view_url }}>{{ sub.name }}</a></li>
                     {% endfor %}
                 {% else %}
                     <li class="mb-2"><span class="text-dark" href="#">Nothing to show</span></li>

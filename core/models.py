@@ -110,9 +110,10 @@ class Item(models.Model):
         sum_rating = 0
         average_rating = 0
         if self.reviews.exists():
-            for review in self.reviews.all():
-                sum_rating += int(review.rating)
-            average_rating = (sum_rating // self.reviews.count())
+            # for review in self.reviews.all():
+            #     sum_rating += int(review.rating)
+            sum_rating = sum(int(review.rating) for review in self.reviews.all())  # this is the pro way!
+            average_rating = (sum_rating // self.reviews.count())  # one / for float and add |floatformat:1 to html
             return average_rating
         return 0
 

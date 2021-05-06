@@ -40,32 +40,44 @@
     )
 })
 
-// {#product laoder with back-end function#}
-        let display = 8 //initial loaded number of items
-    //  $.ajax({
-    //     type: 'GET',
-    //     url: `/ajax_load_products/${display}`,
-    //     // data:{
-    //     //     'display':display
-    //     // },
-    //     success: function(data) {
-    //         $('#productlist').html(data)
-    //     }
-    // })
-        $('#pr-loadmore').on('click',()=>{
-        $.ajax({
-        type: 'GET',
-        url: `/ajax_load_products/${display}`,
-        // data:{
-        //     'display':display
-        // },
-            success: function(data) {
-                $('#productlist').append(data)
-                display += 4
-            }
-    })
-
-    })
+// // {#product laoder with back-end function#}
+//         let display = 8 //initial loaded number of items
+//     //  $.ajax({
+//     //     type: 'GET',
+//     //     url: `/ajax_load_products/${display}`,
+//     //     // data:{
+//     //     //     'display':display
+//     //     // },
+//     //     success: function(data) {
+//     //         $('#productlist').html(data)
+//     //     }
+//     // })
+//         const loadMoreButton = $('#pr-loadmore')
+//         const item_count = '{{item_count}}'
+//         loadMoreButton.on('click',()=>{
+//         loadMoreButton.text("Loading...")
+//
+//         $.ajax({
+//         type: 'GET',
+//         url: `/ajax_load_products/${display}`,
+//         // data:{
+//         //     'display':display
+//         // },
+//             success: function(data) {
+//             if(display < item_count){
+//                 console.log(display,item_count)
+//                 $('#productlist').append(data)
+//                 loadMoreButton.text('Load More')
+//                 display += 4
+//                 }
+//             else {
+//                 console.log(item_count)
+//                 loadMoreButton.text('End')
+//             }
+//             }
+//     })
+//
+//     })
 
 // home page scripts end
 
@@ -94,13 +106,14 @@
         searchBtn.addClass('btn-primary')
         searchResults.fadeIn()
         $('#search').css({"outline": "none", "border-color": "white", "box-shadow": "0 0 4px grey"})
-
             $.ajax({
+                type: 'GET',
                 url: url,
                 data: {
                     searchTxt: searchTxt,
                 },
                 success: function (data) {
+                    $('#spinner').hide()
                     searchResults.html(data)
                     searchResults.css({"outline": "none", "border-color": "white", "border-top-style": "none"})
                     searchTxt = ''
@@ -183,6 +196,15 @@
 
         })
     })
+    const ReviewForm = $('#reviewForm')
+    const Toggle = $('#reviewFormToggle')
+    ReviewForm.hide()
+    Toggle.on('click',(e)=>{
+        e.preventDefault()
+        ReviewForm.slideDown('slow')
+        Toggle.hide()
+    })
+
 
 // detail page scripts end
 

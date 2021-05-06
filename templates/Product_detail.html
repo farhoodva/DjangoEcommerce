@@ -54,6 +54,7 @@
                     <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
                     <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
                 {% else %}
+                    {{ item.average_rating }}
                     No rating yet
                 {% endif %}
             </ul>
@@ -132,7 +133,7 @@
             </div>
             {% endfor %}
           </div>
-
+            <br><br>
           <!-- DETAILS TABS-->
           <ul class="nav nav-tabs border-0" id="myTab" role="tablist">
             <li class="nav-item"><a class="nav-link bg-white text-dark border-0" id="reviews-tab" data-toggle="tab" href="#reviews" role="tab" aria-controls="reviews" aria-selected="false">Reviews</a></li>
@@ -215,11 +216,11 @@
 
                 <!--Reviews-->
                  <div class="col-lg-8">
-                     <div id="border" style="border-bottom: solid 1px gainsboro"></div>
-                    <h6 class="d-flex my-5 text-uppercase">Customer reviews</h6>
-                    {% if item.reviews.exists %}
+                     <div id="border" style="border-bottom: solid 1px darkgray"></div>
+                    <h6 class="d-flex my-5 text-muted text-uppercase">Customer reviews</h6>
+                    <span></span>
                      {% for review in item.reviews.all %}
-                     <div class="media mb-3 mt-1 py-4" style="border-bottom: darkgray solid 0.5px">
+                     <div class="media mb-3 mt-1 py-4" style="border-bottom: darkgray solid 1px">
                      {% if review.user.userprofile.profile_pic %}
                       <img class="rounded-circle" src="{{ review.user.userprofile.profile_pic.url }}" alt="" width="50">
                       {% else %}
@@ -227,9 +228,10 @@
                      {% endif %}
                          <div class="media-body ml-3 mb-2">
 
-                            <h6 class="mb-0 text-uppercase">{{ review.user.first_name}} {{ review.user.last_name}} </h6>
-                            <p class="small text-muted mb-0 text-uppercase">{{ review.timestamp }}</p>
+                            <p class="mb-0">{{ review.user.first_name.title}} {{ review.user.last_name.title}} </p>
+                            <p class="small text-muted mb-0 text-uppercase">ON: {{ review.timestamp }}</p>
                             <ul class="list-inline mb-1 text-xs">
+                                Score :
                                 {% if review.rating == 1 %}
                                     <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
                                 {% elif review.rating == 2 %}
@@ -254,7 +256,7 @@
                                 {% endif %}
 
                             </ul>
-                            <p class="text-small mb-3 text-muted">{{ review.review }}</p>
+                            <p class="text-small my-2 text-muted">{{ review.review }}</p>
 
                          {% if review.positive_exp == 'Yes' %}
                          <p class="text-small mb-0 text-muted">I recommend this product! <i class="fas fa-thumbs-up ml-2 text-success"></i></p>
@@ -265,10 +267,9 @@
                          {% endif %}
                           </div>
                       </div>
-                    {% endfor %}
-                    {% else %}
+                    {% empty %}
                     <p class="text-small mb-0 text-decoration-none text-uppercase " >No reviews yet</p>
-                    {% endif %}
+                    {% endfor %}
                   </div>
                 </div>
               </div>
@@ -288,12 +289,6 @@
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script>
-$(function () {
-    $('[data-toggle="tooltip"]').tooltip()
-})
-$('.fa-heart').on('click', function () {
-    $(this).tooltip('hide')
-})
 
     //form item quantity based on available stock
 const wq= `{{ item.warehouse_quantity }}`
@@ -305,17 +300,6 @@ const wq= `{{ item.warehouse_quantity }}`
         $('#id_item_quantity').append(`<option value="${i}">${i}</option>`)
         }
     }
-const ReviewForm = $('#reviewForm')
-const Toggle = $('#reviewFormToggle')
-const Border = $('#border')
-Border.hide()
-ReviewForm.hide()
-Toggle.on('click',(e)=>{
-    e.preventDefault()
-    ReviewForm.slideDown('slow')
-    Border.fadeIn()
-    Toggle.hide()
-})
 
 
 

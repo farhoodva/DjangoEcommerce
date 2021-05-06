@@ -105,24 +105,29 @@
 
 
 <!-- Live search-->
-    <div id="searchForm" class="result col-lg-6 col-sm-8 mx-auto mb-1 mt-1" tabindex="0"
-                 url={% url 'core:search' %} >
-                <form method="post" action={% url 'core:search' %}>
-                    {% csrf_token %}
-                <div class="input-group">
+    <div id="searchForm" class="result col-lg-6 col-sm-8 mx-auto mb-1 mt-1" tabindex="0" url={% url 'core:search' %} >
 
-                    <input id="search" name="searchTxt" class="form-control rounded-left mb-1 text-left" autocomplete="off"
-                           placeholder="Type to search...!" type="text">
-                    <div class="input-group-append">
-                        <button id="searchBtn" class="btn-sm alert-primary rounded-right mb-1 " disabled type="submit" style="border: 0">Search</button>
-                    </div>
+        <form method="post" action={% url 'core:search' %}>
+                {% csrf_token %}
+            <div class="input-group">
 
+                <input id="search" name="searchTxt" class="form-control rounded-left mb-1 text-left" autocomplete="off"
+                       placeholder="Type to search...!" type="text">
+                <div class="input-group-append">
+                    <button id="searchBtn" class="btn-sm alert-primary rounded-right mb-1 " disabled type="submit" style="border: 0">Search</button>
                 </div>
-                    </form>
-                <div id="search-results" class="card rounded  position-absolute shadow z-index-50" style="width: 94.0%; display: none">
 
-                </div>
             </div>
+        </form>
+            <div id="search-results" class="card rounded  position-absolute shadow z-index-50" style="width: 94.0%; display: none">
+{#                   <div class="text-center">#}
+                  <div id="spinner" class="spinner-border my-3 mx-auto" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+{#                   </div>#}
+            </div>
+    </div>
+
 
     <!-- Login modal-->
     <div id="modalLogin" class="modal fade" tabindex="-1">
