@@ -46,10 +46,13 @@
         {% if items %}
             {% for item in items %}
             <!-- PRODUCT-->
-          <div class="prods col-xl-4 col-lg-4 col-sm-6 mt-4 border-bottom border-grey">
+          <div class="prods col-xl-4 col-lg-4 col-sm-6 mt-4 border-bottom border-grey shadow-sm">
             <div class="product text-center">
                 <div class="position-relative mb-3">
                  <div class="badge text-white badge-">
+                     {% if item.discount_price %}
+                     <span class="badge-danger rounded">SALE</span>
+                     {% endif %}
                     </div>
                 <a class="d-block" href={{ item.get_item_detail_url }}>
                     <img class="img-fluid w-100 rounded" src={{ item.image.url }} alt="...">
@@ -75,7 +78,12 @@
                 </div>
             </div>
             <h6><a class="reset-anchor" href="Product_detail.html">{{ item.title}}</a></h6>
+            {% if item.discount_price %}
+            <span class="small text-muted text-break"><del>${{ item.price }}</del></span>
+            <span class=" text-success">${{ item.discount_price }}</span>
+            {% else %}
             <p class="small text-muted">${{ item.price }}</p>
+            {% endif %}
         </div>
         </div>
             {% endfor %}
