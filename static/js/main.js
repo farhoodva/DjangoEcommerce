@@ -113,7 +113,7 @@
                     searchTxt: searchTxt,
                 },
                 success: function (data) {
-                    $('#spinner').hide()
+                    $('#spinnerSearch').hide()
                     searchResults.html(data)
                     searchResults.css({"outline": "none", "border-color": "white", "border-top-style": "none"})
                     searchTxt = ''

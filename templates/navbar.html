@@ -8,13 +8,35 @@
             <button class="navbar-toggler navbar-toggler-right " type="button" data-toggle="collapse"
                     data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                     aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-            <a class="navbar-brand ml-3 mx-lg-auto mx-md-auto mx-sm-auto " href="/"><span
-                    class="font-weight-bold text-uppercase text-dark">FSTORE</span></a>
+
+            <!-- Live search-->
+            <div id="searchForm" class="navbar-brand result col-lg-7 col-sm-8 z-index-50" tabindex="1"  url={% url 'core:search' %} >
+
+                    <form method="post" action={% url 'core:search' %}>
+                            {% csrf_token %}
+                        <div class="input-group">
+
+                            <input id="search" name="searchTxt" class="form-control rounded-left mb-1 text-left" autocomplete="off"
+                                   placeholder="Search" type="text">
+                            <div class="input-group-append">
+                                <button id="searchBtn" class="btn-sm alert-primary rounded-right mb-1 px-4" disabled type="submit" style="border: 0"><i class="fa fa-search"></i></button>
+                            </div>
+
+                        </div>
+                    </form>
+                        <div id="search-results" class="card rounded  position-absolute shadow z-index-50" style="width: 94.0%; display: none">
+                              <div id="spinnerSearch" class="spinner-border my-3 mx-auto" role="status">
+                                <span class="sr-only">Loading...</span>
+                              </div>
+                        </div>
+                </div>
+            {#            <a class="navbar-brand ml-3 mx-lg-auto mx-md-auto mx-sm-auto " href="/"><span#}
+            {#                    class="font-weight-bold text-uppercase text-dark">FSTORE</span></a>#}
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <!-- Link--><a class="nav-link active" href="/">Home</a>
+                        <!-- Link--><a class="nav-link active" href="/">FSTORE</a>
                     </li>
                     <li class="nav-item">
                         <!-- Link--><a class="nav-link" href={% url 'core:shop_view' %}>Shop</a>
@@ -102,31 +124,6 @@
     {% endif %}
     </span>
         </nav>
-
-
-<!-- Live search-->
-    <div id="searchForm" class="result col-lg-6 col-sm-8 mx-auto mb-1 mt-1" tabindex="0" url={% url 'core:search' %} >
-
-        <form method="post" action={% url 'core:search' %}>
-                {% csrf_token %}
-            <div class="input-group">
-
-                <input id="search" name="searchTxt" class="form-control rounded-left mb-1 text-left" autocomplete="off"
-                       placeholder="Type to search...!" type="text">
-                <div class="input-group-append">
-                    <button id="searchBtn" class="btn-sm alert-primary rounded-right mb-1 " disabled type="submit" style="border: 0">Search</button>
-                </div>
-
-            </div>
-        </form>
-            <div id="search-results" class="card rounded  position-absolute shadow z-index-50" style="width: 94.0%; display: none">
-{#                   <div class="text-center">#}
-                  <div id="spinner" class="spinner-border my-3 mx-auto" role="status">
-                    <span class="sr-only">Loading...</span>
-                  </div>
-{#                   </div>#}
-            </div>
-    </div>
 
 
     <!-- Login modal-->

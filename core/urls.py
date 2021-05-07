@@ -3,7 +3,7 @@ from.views import HomeView, ProductDetailView, add_remove_to_wishlist, add_to_ca
     remove_from_cart, CartView, remove_order_item, add_coupon, remove_coupon, search, \
     ajax_load_products, UserBillingView, add_to_cart_multiple, ShopView, SubCatView, CatView,\
     CreateCheckoutSession, stripe_webhook, paypal_checkout_complete, cart_detail_view, PurchaseHistoryView,\
-    add_review
+    add_review, ajax_load_products_sorted
 app_name = 'core'
 
 urlpatterns = [
@@ -29,6 +29,7 @@ urlpatterns = [
     path('checkout/<int:pk>', UserBillingView.as_view(), name='checkout'),
     path('ajax_wishlist/<slug>', add_remove_to_wishlist, name='add_remove_to_wishlist'),
     path('ajax_load_products/<int:display>', ajax_load_products, name='ajax_load_products'),
+    path('ajax_load_sorted_products/<value>', ajax_load_products_sorted, name='ajax_load_products_sorted'),
     path('search', search, name='search'),
 
 ]

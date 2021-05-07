@@ -19,9 +19,10 @@
           </div>
           <div class="col-lg-6">
             <ul class="list-inline d-flex align-items-center justify-content-lg-end mb-0">
-              <li class="list-inline-item text-small text-dark mr-3">Sort by : </li>
-              <li  class="list-inline-item text-small text-muted mr-3"><a id="priceDescend" class="text-decoration-none text-muted" href="/">Price: Descending</a></li>
-              <li class="list-inline-item text-small text-muted mr-3"><a id="priceAscend" class="text-decoration-none text-muted" href="/">Price: Ascending</a></li>
+{#              <li class="list-inline-item text-small text-dark mr-3">Sort by=> </li>#}
+                <span class="text-small text-muted mr-2">Price:</span>
+              <li  class="list-inline-item text-small text-muted mr-3"><a id="priceDescend" class="reset-anchor" href="#"> Descending</a></li>
+              <li class="list-inline-item text-small text-muted mr-3"><a id="priceAscend" class="reset-anchor" href="#"> Ascending</a></li>
 {#              <li class="text-small text-muted">Sort by : </li>#}
 {#                <li class="list-inline-item mr-1">#}
 {#                <select class="selectpicker ml-auto" name="sorting" data-width="200" data-style="bs-select-form-control" data-title="Default sorting">#}
@@ -34,7 +35,14 @@
             </ul>
           </div>
         </div>
-        <div class="row">
+        <div id="sortedList" class="row">
+
+        <!-- SPINNER-->
+        <div id="spinnerSort" class="col-12 text-center my-5" style="display: none">
+            <div class="spinner-border" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+        </div>
         {% if items %}
             {% for item in items %}
             <!-- PRODUCT-->
@@ -96,6 +104,49 @@
         </section>
       </div>
     </div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+    const descendBtn = $('#priceDescend')
+    const ascendBtn = $('#priceAscend')
+    const list = $('#sortedList')
+    const spinnerSort = $('#spinnerSort')
+    url =
+    ascendBtn.on('click', (e)=>{
+      e.preventDefault()
+      spinnerSort.show()
+      const value = "price"
+      $.ajax({
+          type: 'GET',
+          url: `/ajax_load_sorted_products/${value}`,
+          data : {
+              'cat_name': `{{ cat_name }}`,
+              'type': 'category'
+          },
+          success:function(data){
+              list.html(data)
+          }
+      })
+    })
+    descendBtn.on('click', (e)=>{
+      e.preventDefault()
+      spinnerSort.show()
+      const value = '-price'
+      $.ajax({
+          type: 'GET',
+          url: `/ajax_load_sorted_products/${value}`,
+          data : {
+              'cat_name': `{{ cat_name }}`,
+              'type': 'category'
+          },
+          success:function (data){
+              list.html(data)
+          }
+      })
+    })
+
+</script>
+
 {% endblock %}
 
 

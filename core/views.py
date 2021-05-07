@@ -23,9 +23,25 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 def ajax_load_products(request, display):
-    # display = request.GET.get('display')
+     # cat_name = request.GET.get('cat_name')
     items = Item.objects.all().order_by('pk')[display:display+4]
-    return render(request, 'product_loader.html', {'items': items})
+    return render(request, 'ajax_product_loader.html', {'items': items})
+
+
+def ajax_load_products_sorted(request, value):
+    try:
+        cat_name = request.GET.get('cat_name')
+        cat_type = request.GET.get('type')
+        if cat_type == 'category':
+            items = Item.objects.filter(category__parent_category__name=cat_name).order_by(value)
+            return render(request, 'ajax_product_loader.html', {'items': items})
+        elif cat_type == 'sub_category':
+            items = Item.objects.filter(category__name=cat_name).order_by(value)
+            return render(request, 'ajax_product_loader.html', {'items': items})
+    except ObjectDoesNotExist:
+        pass
+    items = Item.objects.all().order_by(value)
+    return render(request, 'ajax_product_loader.html', {'items': items})
 
 
 class HomeView(generic.View):

@@ -48,6 +48,16 @@ $('[data-toggle="tooltip"]').tooltip();
  $('.fa-heart').on('click', function () {
     $(this).tooltip('hide')
 })
-
+    const changeDisplayLarger = $("#smallDisplay")
+    const changeDisplaySmaller = $("#largeDisplay")
+    const productDisplay = $(".prods")
+    changeDisplayLarger.on('click',()=>{
+        productDisplay.removeClass('col-lg-4 col-xl-4 col-sm-6')
+        productDisplay.addClass('col-6')
+    })
+    changeDisplaySmaller.on('click',()=>{
+        productDisplay.removeClass('col-6')
+        productDisplay.addClass('col-lg-4 col-xl-4 col-sm-6')
+    })
 });
 </script>
