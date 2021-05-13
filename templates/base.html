@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Martel+Sans:wght@300;400;800&amp;display=swap">
     <link rel="stylesheet" href={% static "css/style.blue.css"%}  id="theme-stylesheet" >
     <link rel="stylesheet" href={% static "css/custom.css"%}>
-    <link rel="stylesheet" href={% static "js/countries.json"%}>
+{#    <link rel="stylesheet" href={% static "js/countries.json"%}>#}
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     <link rel="shortcut icon" href={% static "img/favicon.png"%}>
 
@@ -58,18 +58,17 @@
     border-right: 0;
 
 }
-    body{
-        {#background-color:rgba(224,230,215,0.07);#}
-    }
+
 </style>
 
 </head>
-{% include 'navbar.html' %}
+
 
 <body>
+{% include 'navbar.html' %}
 {% if messages  %}
     {% for message in messages %}
-<div id="alert"  class="alert alert-success alert-dismissible fade show  container " style="position: absolute; top: 8em; right: 0; left: 0" >
+<div id="alert"  class="alert alert-success alert-dismissible slideInRight" style="position: absolute; top: 4.7rem; right: 2rem; ;z-index: 10; width: 350px;height: 100px"  >
    {{ message|safe }}
   <button  type="button" class="close flex-center"  data-dismiss="alert" aria-label="Close">
     <span aria-hidden="true" >&times;</span>

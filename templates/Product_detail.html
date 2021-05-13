@@ -59,10 +59,11 @@
                 {% endif %}
             </ul>
 
-
               <h1>{{ item.title}}</h1>
                 {% if item.discount_price %}
-              <p class="text-muted lead">${{item.discount_price}}</p>
+              <del class="text-muted">${{item.price}}</del>
+              <p class="text-success lead">${{item.discount_price}}</p>
+
                 {% else %}
               <p class="text-muted lead">${{item.price}}</p>
                 {% endif %}
@@ -110,10 +111,16 @@
 
             <!-- PRODUCT-->
             {% for related_item in items %}
-            <div class="col-lg-2 col-sm-4">
+            <div class="col-lg-2 col-sm-4 shadow-sm mx-1">
               <div class="product text-center skel-loader">
-                <div class="d-block mb-3 position-relative"><a class="d-block" href={{ related_item.get_item_detail_url }}><img class="img-fluid w-100" src={{ related_item.image.url }} alt="..."></a>
-                  <div class="product-overlay">
+                <div class="d-block mb-3 position-relative">
+                    <div class="badge text-white badge-">
+                        {% if related_item.discount_price %}
+                        <span class="badge-danger rounded">SALE</span>
+                        {% endif %}
+                     </div>
+                    <a class="d-block" href={{ related_item.get_item_detail_url }}><img class="img-fluid w-100" src={{ related_item.image.url }} alt="..."></a>
+                    <div class="product-overlay">
                     <ul class="mb-0 list-inline">
                       <li  class="list-inline-item m-0 p-0"><a  class="wish btn-lg " id="id{{ related_item.pk }}" href={% url 'core:add_remove_to_wishlist' related_item.slug %}>
                           {% if request.user in related_item.wishlist.iterator %}
@@ -128,7 +135,12 @@
                   </div>
                 </div>
                 <h6> <a class="reset-anchor" href="Product_detail.html">{{ related_item.title}}</a></h6>
-                <p class="small text-muted">${{ related_item.price }}</p>
+                {% if related_item.discount_price %}
+            <span class="small text-muted text-break"><del>${{ related_item.price }}</del></span>
+            <span class=" text-success">${{ related_item.discount_price }}</span>
+            {% else %}
+            <p class="small text-muted">${{ related_item.price }}</p>
+            {% endif %}
               </div>
             </div>
             {% endfor %}

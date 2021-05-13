@@ -24,15 +24,7 @@
                 <span class="text-small text-muted mr-2">Price:</span>
               <li  class="list-inline-item text-small text-muted mr-3"><a id="priceDescend" class="reset-anchor" href="#"> Descending</a></li>
               <li class="list-inline-item text-small text-muted mr-3"><a id="priceAscend" class="reset-anchor" href="#"> Ascending</a></li>
-{#              <li class="text-small text-muted">Sort by : </li>#}
-{#                <li class="list-inline-item mr-1">#}
-{#                <select class="selectpicker ml-auto" name="sorting" data-width="200" data-style="bs-select-form-control" data-title="Default sorting">#}
-{#                  <option value="default">Default sorting</option>#}
-{#                  <option value="popularity">Popularity</option>#}
-{#                  <option value="low-high">Price: Low to High</option>#}
-{#                  <option value="high-low">Price: High to Low</option>#}
-{#                </select>#}
-{#              </li>#}
+              <li class="list-inline-item text-small text-muted mr-3"><a id="priceDiscount" class="reset-anchor" href="#"> Discounted</a></li>
             </ul>
           </div>
         </div>
@@ -116,6 +108,7 @@
 <script>
     const descendBtn = $('#priceDescend')
     const ascendBtn = $('#priceAscend')
+    const discountBtn = $('#priceDiscount')
     const list = $('#sortedList')
     const spinnerSort = $('#spinnerSort')
     url =
@@ -146,6 +139,23 @@
               'cat_name': `{{ sub_cat_name }}`,
               'type': 'sub_category'
           },
+          success:function (data){
+              list.html(data)
+          }
+      })
+    })
+
+     discountBtn.on('click', (e)=>{
+      e.preventDefault()
+      spinnerSort.show()
+      const value = 'discounted'
+      $.ajax({
+          type: 'GET',
+          url: `/ajax_load_sorted_products/${value}`,
+          data : {
+              'cat_name': `{{ sub_cat_name }}`,
+              'type': 'sub_category'
+              },
           success:function (data){
               list.html(data)
           }

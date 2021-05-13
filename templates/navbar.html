@@ -1,16 +1,16 @@
 {% load socialaccount %}
 {% load static %}
 {% load tags %}
-<header class="header bg-white">
-    <div class="container px-0 px-lg-3 ">
-        <nav class="navbar navbar-expand-lg navbar-light  sticky py-3 px-lg-0">
+{#<header class="header bg-white">#}
+{#    <div class="container px-0 px-lg-3 ">#}
+        <nav class="container navbar navbar-expand-lg navbar-light  sticky-top py-3 px-lg-0">
 
-            <button class="navbar-toggler navbar-toggler-right " type="button" data-toggle="collapse"
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
                     data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                     aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
 
             <!-- Live search-->
-            <div id="searchForm" class="navbar-brand result col-lg-7 col-sm-8 z-index-50" tabindex="1"  url={% url 'core:search' %} >
+            <div id="searchForm" class="navbar-brand result col-lg-7 col-sm-8 z-index-50 order-last px-0 mr-0" tabindex="1"  url={% url 'core:search' %} >
 
                     <form method="post" action={% url 'core:search' %}>
                             {% csrf_token %}
@@ -246,9 +246,10 @@
         </div>
     </div>
 
-</div>
+{#</div>#}
     <hr class="container mt-0">
-</header>
+<br>
+{#</header>#}
 
 
 

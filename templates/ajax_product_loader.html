@@ -47,6 +47,10 @@
             </div>
 
             {% endfor %}
+    {% else %}
+    <div class="d-flex mt-5">
+    <h3 class="mx-auto mt-5">No Products on sale in this category</h3>
+    </div>
     {% endif %}
 
 {#for first time page loads with AJAX after that controlled by function in main.js#}

@@ -1,5 +1,8 @@
 import secrets
 import random, string
+from io import BytesIO
+from django.core.files import File
+from PIL import Image
 from django.db import models
 from django.contrib.auth.models import User
 from users.models import UserProfile
@@ -18,6 +21,19 @@ def slug_generator():
 
 def ref_code_generator():
     return ''.join(random.choices(string.ascii_lowercase + string.digits + string.ascii_uppercase, k=20))
+
+
+# How to create thumbnail automatically
+def make_thumbnail(image, size=(719, 791, )):
+    img = Image.open(image)
+    img.convert('RGB')
+    img.thumbnail(size)
+
+    thumb_io = BytesIO()
+    img.save(thumb_io, 'JPEG', quality=85)
+
+    thumbnail = File(thumb_io, name=image.name)
+    return thumbnail
 
 
 status = ['New', 'Checked-out', 'Paid', 'Failed', 'Shipped', 'Delivered', 'Returned', 'Completed']
@@ -60,12 +76,13 @@ class SubCategories(models.Model):
 
 class Item(models.Model):
     title = models.CharField(max_length=100)
-    price = models.FloatField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
     image = models.ImageField(upload_to='img/Items')
     image_2 = models.ImageField(upload_to='img/Items', null=True, blank=True)
     image_3 = models.ImageField(upload_to='img/Items', null=True, blank=True)
     image_4 = models.ImageField(upload_to='img/Items', null=True, blank=True)
-    discount_price = models.FloatField(blank=True, null=True)
+    # thumbnail = models.ImageField(upload_to='img/Items/thumbnails', null=True, blank=True)
+    discount_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     warehouse_quantity = models.PositiveIntegerField()
     description = models.TextField(max_length=255, null=True)
     category = models.ForeignKey(SubCategories, on_delete=models.SET_DEFAULT, default=1)
@@ -75,7 +92,10 @@ class Item(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slug_generator() + str(self.pk)
-            super(Item, self).save()
+            self.save()
+        # if not self.thumbnail:
+        #     self.thumbnail = make_thumbnail(image=self.image)
+        #     self.save()
         super(Item, self).save()
 
     def __str__(self):
@@ -107,8 +127,8 @@ class Item(models.Model):
         })
 
     def average_rating(self):
-        sum_rating = 0
-        average_rating = 0
+        # sum_rating = 0
+        # average_rating = 0
         if self.reviews.exists():
             # for review in self.reviews.all():
             #     sum_rating += int(review.rating)

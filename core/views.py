@@ -29,19 +29,32 @@ def ajax_load_products(request, display):
 
 
 def ajax_load_products_sorted(request, value):
+
     try:
         cat_name = request.GET.get('cat_name')
         cat_type = request.GET.get('type')
         if cat_type == 'category':
-            items = Item.objects.filter(category__parent_category__name=cat_name).order_by(value)
-            return render(request, 'ajax_product_loader.html', {'items': items})
+            if value == 'discounted':
+                items = Item.objects.filter(category__parent_category__name=cat_name).filter(discount_price__isnull=False)
+                return render(request, 'ajax_product_loader.html', {'items': items})
+            else:
+                items = Item.objects.filter(category__parent_category__name=cat_name).order_by(value)
+                return render(request, 'ajax_product_loader.html', {'items': items})
         elif cat_type == 'sub_category':
-            items = Item.objects.filter(category__name=cat_name).order_by(value)
-            return render(request, 'ajax_product_loader.html', {'items': items})
+            if value == 'discounted':
+                items = Item.objects.filter(category__name=cat_name).filter(discount_price__isnull=False)
+                return render(request, 'ajax_product_loader.html', {'items': items})
+            else:
+                items = Item.objects.filter(category__name=cat_name).order_by(value)
+                return render(request, 'ajax_product_loader.html', {'items': items})
     except ObjectDoesNotExist:
         pass
-    items = Item.objects.all().order_by(value)
-    return render(request, 'ajax_product_loader.html', {'items': items})
+    if value == 'discounted':
+        items = Item.objects.filter(discount_price__isnull=False)
+        return render(request, 'ajax_product_loader.html', {'items': items})
+    else:
+        items = Item.objects.all().order_by(value)
+        return render(request, 'ajax_product_loader.html', {'items': items})
 
 
 class HomeView(generic.View):
@@ -420,6 +433,7 @@ def remove_from_cart(request, slug):
     if order_item.quantity > 1:
         order_item.quantity -= 1
         order_item.save()
+        messages.info(request, f"{order_item.item.title.title()} removed, {order_item.quantity} in cart ")
     else:
         cart = cart_qs[0]
         cart.items.remove(order_item)
