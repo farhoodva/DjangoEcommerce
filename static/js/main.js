@@ -252,3 +252,27 @@
         productDisplay.removeClass('col-6')
         productDisplay.addClass('col-lg-4 col-xl-4 col-sm-6')
     })
+
+
+
+// sidebar
+const toggleIcon = $('#toggle-icon')
+const toggleClose = $('#toggle-icon-close')
+const sidebar = $('.sidebar')
+const sideUi = $('#side')
+
+toggleIcon.on('click', ()=>{
+    toggleIcon.hide()
+    toggleClose.fadeIn()
+    // sidebar.slideToggle()
+    sideUi.fadeIn()
+    sidebar.width('100%')
+})
+
+toggleClose.on('click', ()=>{
+    toggleIcon.fadeIn()
+    toggleClose.hide()
+    sideUi.fadeOut()
+     // sidebar.slideToggle()
+    sidebar.width('0')
+})

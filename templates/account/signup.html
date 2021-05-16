@@ -32,10 +32,9 @@
         {% endblocktrans %}</h6>
 </div>
     <br>
-    <div class="col-5 mx-auto">
+    <div class="col-11 col-xl-8 col-lg-8 col-sm-10 mx-auto px-0">
         <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
             {% csrf_token %}
-{#        {{ form }}#}
              <h6 class="text-small">Username</h6>
             <div class="mb-3 mt-2 ">
 
