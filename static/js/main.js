@@ -262,6 +262,7 @@ const sidebar = $('.sidebar')
 const sideUi = $('#side')
 
 toggleIcon.on('click', ()=>{
+    console.log(132)
     toggleIcon.hide()
     toggleClose.fadeIn()
     // sidebar.slideToggle()

@@ -3,315 +3,451 @@
 {% block head_title %}{{ item.title }}{% endblock %}
 {% block content %}
 
-    <div class="page-holder bg-light">
+{#<img id="detail-background"  src="{% static '/img/add-to-cart.png' %}" width="950px" height="auto" alt=""#}
+{#style=#}
+{#"position: absolute ;#}
+{#bottom: 280px;#}
+{#right: 190px;#}
+{#opacity: 0.7;#}
+{#z-index: 0;#}
+{#">#}
 
-      <section class="py-5">
-        <div class="container">
-          <div class="row mb-5">
-            <div class="col-lg-6">
-              <!-- PRODUCT SLIDER-->
-              <div class="row m-sm-0">
-                <div class="col-sm-2 p-sm-0 order-2 order-sm-1 mt-2 mt-sm-0">
-                  <div class="owl-thumbs d-flex flex-row flex-sm-column" data-slider-id="1">
-                    <div class="owl-thumb-item flex-fill mb-2 mr-2 mr-sm-0"><img class="w-100" src={{ item.image.url }} alt="..."></div>
-                    <div class="owl-thumb-item flex-fill mb-2 mr-2 mr-sm-0"><img class="w-100" src={{ item.image.url }} alt="..."></div>
-                    <div class="owl-thumb-item flex-fill mb-2 mr-2 mr-sm-0"><img class="w-100" src={{ item.image.url }} alt="..."></div>
-                    <div class="owl-thumb-item flex-fill mb-2"><img class="w-100" src={{ item.image.url }} alt="..."></div>
-                  </div>
-                </div>
-                <div class="col-sm-10 order-1 order-sm-2">
-                  <div class="owl-carousel product-slider" data-slider-id="1"><a class="d-block" href={{ item.image.url }} data-lightbox="product" title="Product item 1"><img class="img-fluid" src={{ item.image.url }} alt="..."></a><a class="d-block" href={{ item.image.url }} data-lightbox="product" title="Product item 2"><img class="img-fluid" src={{ item.image.url }} alt="..."></a><a class="d-block" href={{ item.image.url }} data-lightbox="product" title="Product item 3"><img class="img-fluid" src={{ item.image.url }} alt="..."></a><a class="d-block" href={{ item.image.url }} data-lightbox="product" title="Product item 4"><img class="img-fluid" src={{ item.image.url }} alt="..."></a></div>
-                </div>
-              </div>
-            </div>
-            <!-- PRODUCT DETAILS-->
-            <div class="col-lg-6">
+{#<div class="page-holder bg-light">#}
 
-               <ul class="list-inline mb-1 text-xs">
-                {% if item.average_rating == 1 %}
-                     <span class="mr-2">Avg rating based on <span class="text-primary">{{ item.reviews.count }}</span> reviews:</span>
-                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                {% elif item.average_rating == 2 %}
-                     <span class="mr-2">Avg rating based on <span class="text-primary">{{ item.reviews.count }}</span> reviews:</span>
-                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                {% elif item.average_rating == 3 %}
-                     <span class="mr-2">Avg rating based on <span class="text-primary">{{ item.reviews.count }}</span> reviews:</span>
-                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                {% elif item.average_rating == 4 %}
-                    <span class="mr-2">Avg rating based on <span class="text-primary">{{ item.reviews.count }}</span> reviews:</span>
-                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                {% elif item.average_rating == 5 %}
-                     <span class="mr-2">Avg rating based on <span class="text-primary">{{ item.reviews.count }}</span> reviews:</span>
-                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                {% else %}
-                    {{ item.average_rating }}
-                    No rating yet
-                {% endif %}
-            </ul>
+<section id="detail-background" style="padding: 400px 600px;
+		background-image: url({% static '/img/add-to-cart.png' %});
+		background-size: contain;
+		background-repeat: no-repeat;
+		position: absolute;
+		bottom: 180px;
+		right: 0;
+		">
 
-              <h1>{{ item.title}}</h1>
-                {% if item.discount_price %}
-              <del class="text-muted">${{item.price}}</del>
-              <p class="text-success lead">${{item.discount_price}}</p>
+</section>
+<section class="py-5">
 
-                {% else %}
-              <p class="text-muted lead">${{item.price}}</p>
-                {% endif %}
-               <form method="post" action={{ item.add_to_cart_multiple }}>
-                   {% csrf_token %}
-                <div class="row align-items-stretch mb-4">
-                <div class="col-sm-5 pr-sm-0">
-                  <div class="border d-flex align-items-center justify-content-between py-1 px-3 bg-white border-white rounded-left"><span class="small text-uppercase text-gray mr-4 no-select">Quantity</span>
-                      <div class="quantity round">
-                          {{form.item_quantity}}
-                    </div>
-                  </div>
-                </div>
+<div class="container">
+<div class="row mb-5 py-5" >
+<div class="col-lg-6">
+	<!-- PRODUCT SLIDER-->
+	<div class="row m-sm-0">
+		<div class="col-sm-2 p-sm-0 order-2 order-sm-1 mt-2 mt-sm-0">
+			<div class="owl-thumbs d-flex flex-row flex-sm-column" data-slider-id="1">
+				<div class="owl-thumb-item flex-fill mb-2 mr-2 mr-sm-0"><img class="w-100"
+																			 src={{ item.image.url }} alt="...">
+				</div>
+				<div class="owl-thumb-item flex-fill mb-2 mr-2 mr-sm-0"><img class="w-100"
+																			 src={{ item.image.url }} alt="...">
+				</div>
+				<div class="owl-thumb-item flex-fill mb-2 mr-2 mr-sm-0"><img class="w-100"
+																			 src={{ item.image.url }} alt="...">
+				</div>
+				<div class="owl-thumb-item flex-fill mb-2"><img class="w-100"
+																src={{ item.image.url }} alt="...">
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-10 order-1 order-sm-2">
+			<div class="owl-carousel product-slider" data-slider-id="1"><a class="d-block"
+																		   href={{ item.image.url }} data-lightbox="product"
+																		   title="Product item 1"><img
+					class="img-fluid" src={{ item.image.url }} alt="..."></a><a class="d-block"
+																				href={{ item.image.url }} data-lightbox="product"
+																				title="Product item 2"><img
+					class="img-fluid" src={{ item.image.url }} alt="..."></a><a class="d-block"
+																				href={{ item.image.url }} data-lightbox="product"
+																				title="Product item 3"><img
+					class="img-fluid" src={{ item.image.url }} alt="..."></a><a class="d-block"
+																				href={{ item.image.url }} data-lightbox="product"
+																				title="Product item 4"><img
+					class="img-fluid" src={{ item.image.url }} alt="..."></a></div>
+		</div>
+	</div>
+</div>
+<!-- PRODUCT DETAILS-->
+<div class="col-lg-6">
 
-            <div class="col-sm-3 pl-sm-0">
-                    <button id="addToCart" type="submit" class="btn btn-dark btn-sm btn-block h-100 d-flex align-items-center rounded-right justify-content-center px-0" >Add to cart</button>
-                </div>
-              </div>
-            </form>
-            {% if not request.user in item.wishlist.iterator %}
-                <a id="wishlist" class="nav-link text-dark p-0 mb-4" href={% url 'core:add_remove_to_wishlist' item.slug %}><i class="far fa-heart mr-2"></i>Add to wish list</a>
+	<ul class="list-inline mb-1 text-xs">
+		{% if item.average_rating == 1 %}
+			<span class="mr-2">Avg rating based on <span
+					class="text-primary">{{ item.reviews.count }}</span> reviews:</span>
+			<li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
+		{% elif item.average_rating == 2 %}
+			<span class="mr-2">Avg rating based on <span
+					class="text-primary">{{ item.reviews.count }}</span> reviews:</span>
+			<li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
+			<li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
+		{% elif item.average_rating == 3 %}
+			<span class="mr-2">Avg rating based on <span
+					class="text-primary">{{ item.reviews.count }}</span> reviews:</span>
+			<li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
+			<li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
+			<li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
+		{% elif item.average_rating == 4 %}
+			<span class="mr-2">Avg rating based on <span
+					class="text-primary">{{ item.reviews.count }}</span> reviews:</span>
+			<li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
+			<li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
+			<li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
+			<li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
+		{% elif item.average_rating == 5 %}
+			<span class="mr-2">Avg rating based on <span
+					class="text-primary">{{ item.reviews.count }}</span> reviews:</span>
+			<li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
+			<li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
+			<li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
+			<li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
+			<li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
+		{% else %}
+			{{ item.average_rating }}
+			No rating yet
+		{% endif %}
+	</ul>
 
-            {% else %}
-                <a id="wishlist" class="nav-link text-dark p-0 mb-4" href={% url 'core:add_remove_to_wishlist' item.slug %}><i class="fa fa-heart text-danger mr-2"></i>Remove from wish list</a>
-                {% endif %}
+	<h1>{{ item.title }}</h1>
+	{% if item.discount_price %}
+		<del class="text-muted">${{ item.price }}</del>
+		<p class="text-success lead">${{ item.discount_price }}</p>
 
-                <div class="border-0 w-75 mb-5">
-                    {{ item.description }}
-                </div>
-              <ul class="list-unstyled small d-inline-block">
-                  {% if item.warehouse_quantity >= 1 %}
-                <li class="px-3 py-2 mb-1 bg-white"><strong class="text-uppercase text-success">In stock</strong></li>
-                  {% else %}
-                <li class="px-3 py-2 mb-1 bg-white"><strong class="text-uppercase text-danger">Currently Unavailable</strong></li>
-                  {% endif %}
-                <li class="px-3 py-2 mb-1 bg-white text-muted"><strong class="text-uppercase text-dark">Category:</strong><a class="reset-anchor ml-2" href="{{ item.category.get_category_view_url }}">{{ item.category}}</a></li>
-                <li class="px-3 py-2 mb-1 bg-white text-muted"><strong class="text-uppercase text-dark">Tags:</strong><a class="reset-anchor ml-2" href="#">Innovation</a></li>
-              </ul>
-            </div>
-          </div>
-            <br>
-           <!-- RELATED PRODUCTS-->
-           <h2 class="h5 d-flex text-uppercase my-4 mx-auto">Related products</h2>
-           <div class="row">
+	{% else %}
+		<p class="text-muted lead">${{ item.price }}</p>
+	{% endif %}
+	<form method="post" action={{ item.add_to_cart_multiple }}>
+		{% csrf_token %}
+		<div class="row align-items-stretch mb-4">
+			<div class="col-sm-5 pr-sm-0">
+				<div class="border d-flex align-items-center justify-content-between py-1 px-3 bg-white border-white rounded-left">
+					<span class="small text-uppercase text-gray mr-4 no-select">Quantity</span>
+					<div class="quantity round">
+						{{ form.item_quantity }}
+					</div>
+				</div>
+			</div>
 
-            <!-- PRODUCT-->
-            {% for related_item in items %}
-            <div class="col-lg-2 col-sm-4 shadow-sm mx-1">
-              <div class="product text-center skel-loader">
-                <div class="d-block mb-3 position-relative">
-                    <div class="badge text-white badge-">
-                        {% if related_item.discount_price %}
-                        <span class="badge-danger rounded">SALE</span>
-                        {% endif %}
-                     </div>
-                    <a class="d-block" href={{ related_item.get_item_detail_url }}><img class="img-fluid w-100" src={{ related_item.image.url }} alt="..."></a>
-                    <div class="product-overlay">
-                    <ul class="mb-0 list-inline">
-                      <li  class="list-inline-item m-0 p-0"><a  class="wish btn-lg " id="id{{ related_item.pk }}" href={% url 'core:add_remove_to_wishlist' related_item.slug %}>
-                          {% if request.user in related_item.wishlist.iterator %}
-                            <i data-toggle="tooltip" data-trigger="hover" data-placement="top" title="Remove from wishlist" class="fa fa-heart text-danger"></i>
-                          {% else %}
-                             <i data-toggle="tooltip" data-trigger="hover" data-placement="top" title="Add to wishlist" class="far fa-heart text-dark"></i>
-                          {% endif %}
-                      </a>
-                      </li>
-                      <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" href="{{ related_item.get_add_to_cart_url }}">Add to cart</a></li>
-                    </ul>
-                  </div>
-                </div>
-                <h6> <a class="reset-anchor" href="Product_detail.html">{{ related_item.title}}</a></h6>
-                {% if related_item.discount_price %}
-            <span class="small text-muted text-break"><del>${{ related_item.price }}</del></span>
-            <span class=" text-success">${{ related_item.discount_price }}</span>
-            {% else %}
-            <p class="small text-muted">${{ related_item.price }}</p>
-            {% endif %}
-              </div>
-            </div>
-            {% endfor %}
-          </div>
-            <br><br>
-          <!-- DETAILS TABS-->
-          <ul class="nav nav-tabs border-0" id="myTab" role="tablist">
-            <li class="nav-item"><a class="nav-link bg-white text-dark border-0" id="reviews-tab" data-toggle="tab" href="#reviews" role="tab" aria-controls="reviews" aria-selected="false">Reviews</a></li>
-            <li class="nav-item"><a class="nav-link bg-dark text-white" id="description-tab" data-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="true">Description</a></li>
-          </ul>
-          <div class="tab-content mb-5" id="myTabContent">
-            <div class="tab-pane fade show active" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
-              <div class="p-4 p-lg-5 bg-white">
+			<div class="col-sm-3 pl-sm-0">
+				<button id="addToCart" type="submit"
+						class="btn btn-dark btn-sm btn-block h-100 d-flex align-items-center rounded-right justify-content-center px-0">
+					Add to cart
+				</button>
+			</div>
 
-                <div class="row">
-                <!--Review form-->
-                <div class="col-8 mb-4 ">
-                  {% if request.user.is_authenticated %}
-                      <a id="reviewFormToggle" class="text-uppercase text-small text-decoration-none btn btn-dark" href="">Add your review</a>
-                      {% if not request.user in item.reviews.iterator %}
-                      <form id="reviewForm" class="shadow-sm pb-2 pl-1" action="{%  url 'core:add_review' item.slug %}" method="post">
-                      {% csrf_token %}
-                         <div class="col-lg-12 form-group my-4">
-                            {{ review_form.review }}
-                            <span class="text-primary ">{{ review_form.review.errors }}</span>
-                         </div>
-                      <div class="row">
-                      <div class="col-lg-6">
-                      <label id="id_rating" class="text-small text-dark mt-3 mb-2 text-uppercase">rating</label>
-                        {% for value, name in review_form.fields.rating.choices %}
-                        <div class="custom-control custom-radio ml-2">
-                          <input id="{{ name }}" name="rating" value="{{ value }}" type="radio" class="custom-control-input" required>
-                          <label class="custom-control-label text-small" for="{{ name }}">
-                              <ul class="list-inline mb-1 text-xs">
-                                {% if value == '1' %}
-                                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                                {% elif value == '2' %}
-                                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                                {% elif value == '3' %}
-                                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                                {% elif value == '4' %}
-                                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                                {% elif value == '5' %}
-                                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
+		</div>
+	</form>
+	{% if not request.user in item.wishlist.iterator %}
+		<a id="wishlist" class="nav-link text-dark p-0 mb-4"
+		   href={% url 'core:add_remove_to_wishlist' item.slug %}><i class="far fa-heart mr-2"></i>Add
+			to wish list</a>
 
-                                {% endif %}
+	{% else %}
+		<a id="wishlist" class="nav-link text-dark p-0 mb-4"
+		   href={% url 'core:add_remove_to_wishlist' item.slug %}><i
+				class="fa fa-heart text-danger mr-2"></i>Remove from wish list</a>
+	{% endif %}
 
-                            </ul>
+	<div class="border-0 w-75 mb-5">
+		{{ item.description }}
+	</div>
+	<ul class="list-unstyled small d-inline-block">
+		{% if item.warehouse_quantity >= 1 %}
+			<li class="px-3 py-2 mb-1 bg-white"><strong class="text-uppercase text-success">In
+				stock</strong></li>
+		{% else %}
+			<li class="px-3 py-2 mb-1 bg-white"><strong class="text-uppercase text-danger">Currently
+				Unavailable</strong></li>
+		{% endif %}
+		<li class="px-3 py-2 mb-1 bg-white text-muted"><strong class="text-uppercase text-dark">Category:</strong><a
+				class="reset-anchor ml-2"
+				href="{{ item.category.get_category_view_url }}">{{ item.category }}</a></li>
+		<li class="px-3 py-2 mb-1 bg-white text-muted"><strong class="text-uppercase text-dark">Tags:</strong><a
+				class="reset-anchor ml-2" href="#">Innovation</a></li>
+	</ul>
+</div>
+</div>
+<br>
+<!-- RELATED PRODUCTS-->
+<h2 class="h5 d-flex text-uppercase my-4 mx-auto">Related products</h2>
+<div class="row">
 
-                          </label>
-                        </div>
-                        {% endfor %}
-                      <span class="text-primary ">{{ review_form.rating.errors }}</span>
-                        </div>
-                         <div class="col-lg-6 form-group">
-                             <label id="label_positive_exp" class="text-small text-uppercase text-dark mt-3 mb-2">Do You recommend this product?</label>
-                            {% for value, name in review_form.fields.positive_exp.choices %}
-                            <div class="custom-control custom-radio ml-2">
-                              <input id="{{ name }}" name="positive_exp" value="{{ value }}" type="radio" class="custom-control-input" required>
-                              <label class="custom-control-label text-small" for="{{ name }}">{{ name }}</label>
-                            </div>
-                            {% endfor %}
-                            <span class="text-primary ">{{ review_form.positive_exp.errors }}</span>
-                         </div>
-                        </div>
-                          <br>
-                         <button type="submit" class="btn btn-block btn-dark col-lg-4 mt-2 mb-3 mx-auto">Submit</button>
-                      </form>
-                      {% else %}
+<!-- PRODUCT-->
+{% for related_item in items %}
+	<div class="col-lg-2 col-sm-4 shadow-sm mx-1">
+		<div class="product text-center skel-loader">
+			<div class="d-block mb-3 position-relative">
+				<div class="badge text-white badge-">
+					{% if related_item.discount_price %}
+						<span class="badge-danger rounded">SALE</span>
+					{% endif %}
+				</div>
+				<a class="d-block" href={{ related_item.get_item_detail_url }}><img
+						class="img-fluid w-100" src={{ related_item.image.url }} alt="..."></a>
+				<div class="product-overlay">
+					<ul class="mb-0 list-inline">
+						<li class="list-inline-item m-0 p-0"><a class="wish btn-lg "
+																id="id{{ related_item.pk }}"
+																href={% url 'core:add_remove_to_wishlist' related_item.slug %}>
+							{% if request.user in related_item.wishlist.iterator %}
+								<i data-toggle="tooltip" data-trigger="hover" data-placement="top"
+								   title="Remove from wishlist" class="fa fa-heart text-danger"></i>
+							{% else %}
+								<i data-toggle="tooltip" data-trigger="hover" data-placement="top"
+								   title="Add to wishlist" class="far fa-heart text-dark"></i>
+							{% endif %}
+						</a>
+						</li>
+						<li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark"
+																href="{{ related_item.get_add_to_cart_url }}">Add
+							to cart</a></li>
+					</ul>
+				</div>
+			</div>
+			<h6><a class="reset-anchor" href="Product_detail.html">{{ related_item.title }}</a></h6>
+			{% if related_item.discount_price %}
+				<span class="small text-muted text-break"><del>${{ related_item.price }}</del></span>
+				<span class=" text-success">${{ related_item.discount_price }}</span>
+			{% else %}
+				<p class="small text-muted">${{ related_item.price }}</p>
+			{% endif %}
+		</div>
+	</div>
+{% endfor %}
+</div>
+<br><br>
+	<!-- DETAILS TABS-->
+	<ul class="nav nav-tabs border-0"  id="myTab" role="tablist" >
+		<li class="nav-item"><a class="nav-link bg-white text-dark border-0" id="reviews-tab"
+								data-toggle="tab" href="#reviews" role="tab" aria-controls="reviews"
+								aria-selected="false">Reviews</a></li>
+		<li class="nav-item"><a class="nav-link bg-dark text-white" id="description-tab" data-toggle="tab"
+								href="#description" role="tab" aria-controls="description"
+								aria-selected="true">Description</a></li>
+	</ul>
 
-                      {% endif %}
-                  {% endif %}
-                </div>
-                 <br>
+	<div class="tab-content mb-5 z-index-50" id="myTabContent" >
+	<div class="tab-pane fade show active" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
+	<div class="p-4 p-lg-5 bg-white">
 
-                <!--Reviews-->
-                 <div class="col-lg-8">
-                     <div id="border" style="border-bottom: solid 1px darkgray"></div>
-                    <h6 class="d-flex my-5 text-muted text-uppercase">Customer reviews</h6>
-                    <span></span>
-                     {% for review in item.reviews.all %}
-                     <div class="media mb-3 mt-1 py-4" style="border-bottom: darkgray solid 1px">
-                     {% if review.user.userprofile.profile_pic %}
-                      <img class="rounded-circle" src="{{ review.user.userprofile.profile_pic.url }}" alt="" width="50">
-                      {% else %}
-                      <img class="rounded-circle" src="{% static "img/customer-1.png" %}" alt="" width="50">
-                     {% endif %}
-                         <div class="media-body ml-3 mb-2">
+		<div class="row">
+			<!--Review form-->
+			<div class="col-8 mb-4 ">
+				{% if request.user.is_authenticated %}
+					<a id="reviewFormToggle"
+					   class="text-uppercase text-small text-decoration-none btn btn-dark" href="">Add
+						your review</a>
+					{% if not request.user in item.reviews.iterator %}
+						<form id="reviewForm" class="shadow-sm pb-2 pl-1"
+							  action="{% url 'core:add_review' item.slug %}" method="post">
+							{% csrf_token %}
+							<div class="col-lg-12 form-group my-4">
+								{{ review_form.review }}
+								<span class="text-primary ">{{ review_form.review.errors }}</span>
+							</div>
+							<div class="row">
+								<div class="col-lg-6">
+									<label id="id_rating"
+										   class="text-small text-dark mt-3 mb-2 text-uppercase">rating</label>
+									{% for value, name in review_form.fields.rating.choices %}
+										<div class="custom-control custom-radio ml-2">
+											<input id="{{ name }}" name="rating" value="{{ value }}"
+												   type="radio" class="custom-control-input"
+												   required>
+											<label class="custom-control-label text-small"
+												   for="{{ name }}">
+												<ul class="list-inline mb-1 text-xs">
+													{% if value == '1' %}
+														<li class="list-inline-item m-0"><i
+																class="fas fa-star text-warning"></i>
+														</li>
+													{% elif value == '2' %}
+														<li class="list-inline-item m-0"><i
+																class="fas fa-star text-warning"></i>
+														</li>
+														<li class="list-inline-item m-0"><i
+																class="fas fa-star text-warning"></i>
+														</li>
+													{% elif value == '3' %}
+														<li class="list-inline-item m-0"><i
+																class="fas fa-star text-warning"></i>
+														</li>
+														<li class="list-inline-item m-0"><i
+																class="fas fa-star text-warning"></i>
+														</li>
+														<li class="list-inline-item m-0"><i
+																class="fas fa-star text-warning"></i>
+														</li>
+													{% elif value == '4' %}
+														<li class="list-inline-item m-0"><i
+																class="fas fa-star text-warning"></i>
+														</li>
+														<li class="list-inline-item m-0"><i
+																class="fas fa-star text-warning"></i>
+														</li>
+														<li class="list-inline-item m-0"><i
+																class="fas fa-star text-warning"></i>
+														</li>
+														<li class="list-inline-item m-0"><i
+																class="fas fa-star text-warning"></i>
+														</li>
+													{% elif value == '5' %}
+														<li class="list-inline-item m-0"><i
+																class="fas fa-star text-warning"></i>
+														</li>
+														<li class="list-inline-item m-0"><i
+																class="fas fa-star text-warning"></i>
+														</li>
+														<li class="list-inline-item m-0"><i
+																class="fas fa-star text-warning"></i>
+														</li>
+														<li class="list-inline-item m-0"><i
+																class="fas fa-star text-warning"></i>
+														</li>
+														<li class="list-inline-item m-0"><i
+																class="fas fa-star text-warning"></i>
+														</li>
 
-                            <p class="mb-0">{{ review.user.first_name.title}} {{ review.user.last_name.title}} </p>
-                            <p class="small text-muted mb-0 text-uppercase">ON: {{ review.timestamp }}</p>
-                            <ul class="list-inline mb-1 text-xs">
-                                Score :
-                                {% if review.rating == 1 %}
-                                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                                {% elif review.rating == 2 %}
-                                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                                {% elif review.rating == 3 %}
-                                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                                {% elif review.rating == 4 %}
-                                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                                {% elif review.rating == 5 %}
-                                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                                    <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
+													{% endif %}
 
-                                {% endif %}
+												</ul>
 
-                            </ul>
-                            <p class="text-small my-2 text-muted">{{ review.review }}</p>
+											</label>
+										</div>
+									{% endfor %}
+									<span class="text-primary ">{{ review_form.rating.errors }}</span>
+								</div>
+								<div class="col-lg-6 form-group">
+									<label id="label_positive_exp"
+										   class="text-small text-uppercase text-dark mt-3 mb-2">Do
+										You recommend this product?</label>
+									{% for value, name in review_form.fields.positive_exp.choices %}
+										<div class="custom-control custom-radio ml-2">
+											<input id="{{ name }}" name="positive_exp"
+												   value="{{ value }}" type="radio"
+												   class="custom-control-input" required>
+											<label class="custom-control-label text-small"
+												   for="{{ name }}">{{ name }}</label>
+										</div>
+									{% endfor %}
+									<span class="text-primary ">{{ review_form.positive_exp.errors }}</span>
+								</div>
+							</div>
+							<br>
+							<button type="submit"
+									class="btn btn-block btn-dark col-lg-4 mt-2 mb-3 mx-auto">Submit
+							</button>
+						</form>
+					{% else %}
 
-                         {% if review.positive_exp == 'Yes' %}
-                         <p class="text-small mb-0 text-muted">I recommend this product! <i class="fas fa-thumbs-up ml-2 text-success"></i></p>
-                         {% elif review.positive_exp == 'No' %}
-                         <p class="text-small mb-0 text-muted">I do not recommend this product! <i class="fas fa-thumbs-down ml-2 text-danger"></i></p>
-                         {% elif review.positive_exp == 'Not sure' %}
-                         <p class="text-small mb-0 text-muted">I'm not sure about this product</p>
-                         {% endif %}
-                          </div>
-                      </div>
-                    {% empty %}
-                    <p class="text-small mb-0 text-decoration-none text-uppercase " >No reviews yet</p>
-                    {% endfor %}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="tab-pane fade " id="description" role="tabpanel" aria-labelledby="description-tab">
-              <div class="p-4 p-lg-5 bg-white">
-               <h4 class="text-small mb-0 text-uppercase ">{{ item.description }}</h4>
-              </div>
-            </div>
-          </div>
+					{% endif %}
+				{% endif %}
+			</div>
+			<br>
 
-        </div>
+			<!--Reviews-->
+			<div class="col-lg-8">
+				<div id="border" style="border-bottom: solid 1px darkgray"></div>
+				<h6 class="d-flex my-5 text-muted text-uppercase">Customer reviews</h6>
+				<span></span>
+				{% for review in item.reviews.all %}
+					<div class="media mb-3 mt-1 py-4" style="border-bottom: darkgray solid 1px">
+						{% if review.user.userprofile.profile_pic %}
+							<img class="rounded-circle"
+								 src="{{ review.user.userprofile.profile_pic.url }}" alt=""
+								 width="50">
+						{% else %}
+							<img class="rounded-circle" src="{% static "img/customer-1.png" %}"
+								 alt="" width="50">
+						{% endif %}
+						<div class="media-body ml-3 mb-2">
 
-      </section>
-    </div>
+							<p class="mb-0">{{ review.user.first_name.title }} {{ review.user.last_name.title }} </p>
+							<p class="small text-muted mb-0 text-uppercase">
+								ON: {{ review.timestamp }}</p>
+							<ul class="list-inline mb-1 text-xs">
+								Score :
+								{% if review.rating == 1 %}
+									<li class="list-inline-item m-0"><i
+											class="fas fa-star text-warning"></i></li>
+								{% elif review.rating == 2 %}
+									<li class="list-inline-item m-0"><i
+											class="fas fa-star text-warning"></i></li>
+									<li class="list-inline-item m-0"><i
+											class="fas fa-star text-warning"></i></li>
+								{% elif review.rating == 3 %}
+									<li class="list-inline-item m-0"><i
+											class="fas fa-star text-warning"></i></li>
+									<li class="list-inline-item m-0"><i
+											class="fas fa-star text-warning"></i></li>
+									<li class="list-inline-item m-0"><i
+											class="fas fa-star text-warning"></i></li>
+								{% elif review.rating == 4 %}
+									<li class="list-inline-item m-0"><i
+											class="fas fa-star text-warning"></i></li>
+									<li class="list-inline-item m-0"><i
+											class="fas fa-star text-warning"></i></li>
+									<li class="list-inline-item m-0"><i
+											class="fas fa-star text-warning"></i></li>
+									<li class="list-inline-item m-0"><i
+											class="fas fa-star text-warning"></i></li>
+								{% elif review.rating == 5 %}
+									<li class="list-inline-item m-0"><i
+											class="fas fa-star text-warning"></i></li>
+									<li class="list-inline-item m-0"><i
+											class="fas fa-star text-warning"></i></li>
+									<li class="list-inline-item m-0"><i
+											class="fas fa-star text-warning"></i></li>
+									<li class="list-inline-item m-0"><i
+											class="fas fa-star text-warning"></i></li>
+									<li class="list-inline-item m-0"><i
+											class="fas fa-star text-warning"></i></li>
+
+								{% endif %}
+
+							</ul>
+							<p class="text-small my-2 text-muted">{{ review.review }}</p>
+
+							{% if review.positive_exp == 'Yes' %}
+								<p class="text-small mb-0 text-muted">I recommend this product! <i
+										class="fas fa-thumbs-up ml-2 text-success"></i></p>
+							{% elif review.positive_exp == 'No' %}
+								<p class="text-small mb-0 text-muted">I do not recommend this
+									product! <i class="fas fa-thumbs-down ml-2 text-danger"></i></p>
+							{% elif review.positive_exp == 'Not sure' %}
+								<p class="text-small mb-0 text-muted">I'm not sure about this
+									product</p>
+							{% endif %}
+						</div>
+					</div>
+				{% empty %}
+					<p class="text-small mb-0 text-decoration-none text-uppercase ">No reviews
+						yet</p>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+</div>
+<div class="tab-pane fade " id="description" role="tabpanel" aria-labelledby="description-tab">
+	<div class="p-4 p-lg-5 bg-white">
+		<h4 class="text-small mb-0 text-uppercase ">{{ item.description }}</h4>
+	</div>
+</div>
+</div>
+
+</div>
+
+</section>
+{#</div>#}
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script>
 
-    //form item quantity based on available stock
-const wq= `{{ item.warehouse_quantity }}`
-    if(wq ==='0') {
-        $('#addToCart').addClass('disabled')
-    }
-    else{
-    for (let i=1; i<=wq; i++){
-        $('#id_item_quantity').append(`<option value="${i}">${i}</option>`)
-        }
-    }
-
+//form item quantity based on available stock
+const wq = `{{ item.warehouse_quantity }}`
+if (wq === '0') {
+$('#addToCart').addClass('disabled')
+} else {
+for (let i = 1; i <= wq; i++) {
+$('#id_item_quantity').append(`<option value="${i}">${i}</option>`)
+}
+}
 
 
 </script>

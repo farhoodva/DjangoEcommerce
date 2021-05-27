@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block head_title %}
 {{ cat_name }}
 {% endblock %}
@@ -82,9 +83,8 @@
         {% else %}
 
             <div class="text-center mx-auto">
-            <br><br><br>
-            <br><br><br>
-            <h3 class="">Nothing to display</h3>
+			<img class="img-fluid w-75" src="{% static '/img/cat-empty.png'  %}" alt="">
+            <h4 class="text-uppercase">Category currently empty</h4>
             </div>
         {% endif %}
                 <!-- PAGINATION-->
@@ -111,7 +111,6 @@
     const discountBtn = $('#priceDiscount')
     const list = $('#sortedList')
     const spinnerSort = $('#spinnerSort')
-    url =
     ascendBtn.on('click', (e)=>{
       e.preventDefault()
       spinnerSort.show()

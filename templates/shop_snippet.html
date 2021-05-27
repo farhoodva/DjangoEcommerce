@@ -33,7 +33,7 @@
                     <li class="mb-2"><a class="text-dark text-decoration-none" href={{ sub.get_category_view_url }}>{{ sub.name }}</a></li>
                     {% endfor %}
                 {% else %}
-                    <li class="mb-2"><span class="text-dark" href="#">Nothing to show</span></li>
+                    <li class="mb-2"><span class="text-danger font-weight-bold" href="#">Unavailable</span></li>
                 {% endif %}
         </ul>
           {% endfor %}

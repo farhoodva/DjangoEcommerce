@@ -123,21 +123,29 @@
 
 
 	<div class="sidebar">
-			<ul id="side"style="display: none">
+			<ul id="side" style="display: none">
 				<li class=""><a class="" href="{% url 'core:home' %}">Homepage</a></li>
 				<hr>
 				<li class=""><a class="mr-3" href={% url 'core:shop_view' %}>Shop</a></li>
 				{% if request.user.is_authenticated %}
 				<hr>
-				<li class=""><a class=""
-						   href="{% url 'core:checkout' user.userprofile.pk %}">Checkout</a>
+				<li class="">
+					<a class="" href="{% url 'core:checkout' user.userprofile.pk %}">Checkout</a>
+				</li>
+				{% else %}
+					<hr>
+				<li>
+				<a  href={% url 'account_login' %}>
+					<i class="pr-1 fas fa-user-alt text-success"></i>
+					Login
+				</a>
 				</li>
 				{% endif %}
 			</ul>
 	<div id="toggle-icon-close" class="toggle-close position-absolute"><i class="fas fa-window-close fa-2x text-danger"></i></div>
 	</div>
 
-<header class="header bg-white sticky-top py-3">
+<header class="header bg-white pt-3">
 	<div id="toggle-icon" class="toggle position-absolute"><i class="fas fa-bars fa-2x text-dark"></i></div>
 	<nav class="c-nav container d-flex justify-content-between align-items-center py-1 pb-2">
 
@@ -166,7 +174,7 @@
 		</div>
 
 		<!-- Live search-->
-		<div id="searchForm" class="c-search result z-index-50 col-xl-7 col-md-5" style="align-self: center" tabindex="1"
+		<div id="searchForm" class="c-search result z-index-50 col-xl-7 col-md-5 col-sm-12" style="align-self: center" tabindex="1"
 			 url={% url 'core:search' %}>
 
 			<form method="post" action={% url 'core:search' %}>
@@ -270,5 +278,4 @@
 
 
 	<hr class="container mt-0">
-	{#	<br>#}
 </header>
